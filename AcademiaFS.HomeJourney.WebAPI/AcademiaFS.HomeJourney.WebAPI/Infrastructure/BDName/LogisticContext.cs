@@ -15,7 +15,9 @@ namespace Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {
+
             modelBuilder.ApplyConfiguration(new UsuarioMap());
+
         }
     }
 }

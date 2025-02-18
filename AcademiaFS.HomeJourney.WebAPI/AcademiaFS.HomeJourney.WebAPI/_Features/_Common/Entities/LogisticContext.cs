@@ -15,47 +15,7 @@ public partial class LogisticContext : DbContext
     {
     }
 
-    public virtual DbSet<Cargo> Cargos { get; set; }
 
-    public virtual DbSet<Ciudade> Ciudades { get; set; }
-
-    public virtual DbSet<Colaboradore> Colaboradores { get; set; }
-
-    public virtual DbSet<Colaboradoressucursale> Colaboradoressucursales { get; set; }
-
-    public virtual DbSet<Departamento> Departamentos { get; set; }
-
-    public virtual DbSet<Estado> Estados { get; set; }
-
-    public virtual DbSet<Estadoscivile> Estadosciviles { get; set; }
-
-    public virtual DbSet<Moneda> Monedas { get; set; }
-
-    public virtual DbSet<Paise> Paises { get; set; }
-
-    public virtual DbSet<Pantalla> Pantallas { get; set; }
-
-    public virtual DbSet<Pantallasrole> Pantallasroles { get; set; }
-
-    public virtual DbSet<Persona> Personas { get; set; }
-
-    public virtual DbSet<Role> Roles { get; set; }
-
-    public virtual DbSet<Serviciostransporte> Serviciostransportes { get; set; }
-
-    public virtual DbSet<Solicitudesviaje> Solicitudesviajes { get; set; }
-
-    public virtual DbSet<Sucursale> Sucursales { get; set; }
-
-    public virtual DbSet<Transportista> Transportistas { get; set; }
-
-    public virtual DbSet<Usuario> Usuarios { get; set; }
-
-    public virtual DbSet<Valoracionesviaje> Valoracionesviajes { get; set; }
-
-    public virtual DbSet<Viaje> Viajes { get; set; }
-
-    public virtual DbSet<Viajesdetalle> Viajesdetalles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -65,7 +25,7 @@ public partial class LogisticContext : DbContext
     {
         modelBuilder.UseCollation("Modern_Spanish_100_CI_AS");
 
-        modelBuilder.Entity<Cargo>(entity =>
+        modelBuilder.Entity<Cargos>(entity =>
         {
             entity.HasKey(e => e.CargoId).HasName("PK_Cargos_Cargo_id");
 
@@ -75,7 +35,7 @@ public partial class LogisticContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Ciudade>(entity =>
+        modelBuilder.Entity<Ciudades>(entity =>
         {
             entity.HasKey(e => e.CiudadId).HasName("PK_Ciudades_Ciudad_id");
 

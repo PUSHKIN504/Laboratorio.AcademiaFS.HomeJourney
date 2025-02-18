@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Cargo
+public partial class Cargos
 {
     public int CargoId { get; set; }
 

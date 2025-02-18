@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Ciudade
+public partial class Ciudades
 {
     public int CiudadId { get; set; }
 
