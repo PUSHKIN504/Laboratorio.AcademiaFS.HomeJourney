@@ -1,0 +1,6 @@
+@AcademiaFS.HomeJourney.WebAPI_HostAddress = http://localhost:5230
+
+GET {{AcademiaFS.HomeJourney.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
