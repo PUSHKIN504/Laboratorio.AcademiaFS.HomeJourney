@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Persona
+public partial class Personas
 {
     public int PersonaId { get; set; }
 
@@ -33,13 +33,13 @@ public partial class Persona
 
     public virtual Ciudades Ciudad { get; set; } = null!;
 
-    public virtual Colaboradore? Colaboradore { get; set; }
+    public virtual Colaboradorses? Colaboradore { get; set; }
 
-    public virtual Estadoscivile? Estadocivil { get; set; }
+    public virtual Estadosciviles? Estadocivil { get; set; }
 
-    public virtual Transportista? Transportista { get; set; }
+    public virtual Transportistas? Transportista { get; set; }
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 }

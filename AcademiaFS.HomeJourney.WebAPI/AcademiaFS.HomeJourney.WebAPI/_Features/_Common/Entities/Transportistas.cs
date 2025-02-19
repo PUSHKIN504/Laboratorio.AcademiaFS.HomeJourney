@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Transportista
+public partial class Transportistas
 {
     public int TransportistaId { get; set; }
 
@@ -25,13 +25,13 @@ public partial class Transportista
 
     public int? MonedaId { get; set; }
 
-    public virtual Persona Persona { get; set; } = null!;
+    public virtual Personas Persona { get; set; } = null!;
 
-    public virtual Serviciostransporte Serviciotransporte { get; set; } = null!;
+    public virtual Serviciostransportes Serviciotransporte { get; set; } = null!;
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 
-    public virtual ICollection<Viaje> Viajes { get; set; } = new List<Viaje>();
+    public virtual ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
 }

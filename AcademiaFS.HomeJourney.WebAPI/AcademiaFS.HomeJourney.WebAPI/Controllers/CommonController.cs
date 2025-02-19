@@ -13,10 +13,10 @@ namespace Laboratorio.Academina.JasonVillanueva.WebAPI.Controllers
             _commonService = commonService;
         }
 
-        [HttpGet("ListadoGerentes")]
+        [HttpGet("ListadoCiudades")]
         public IActionResult GetListadoAgentes()
         {
-            var result = _commonService.ListadoUsuarios();
+            var result = _commonService.ListadoCiudades();
 
             return Ok(result);
         }

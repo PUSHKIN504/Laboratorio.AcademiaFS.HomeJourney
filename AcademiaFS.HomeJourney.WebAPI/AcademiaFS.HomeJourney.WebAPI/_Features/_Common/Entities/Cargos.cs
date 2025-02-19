@@ -9,5 +9,5 @@ public partial class Cargos
 
     public string? Nombre { get; set; }
 
-    public virtual ICollection<Colaboradore> Colaboradores { get; set; } = new List<Colaboradore>();
+    public virtual ICollection<Colaboradorses> Colaboradores { get; set; } = new List<Colaboradorses>();
 }

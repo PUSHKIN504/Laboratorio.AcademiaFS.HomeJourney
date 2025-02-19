@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Sucursale
+public partial class Sucursales
 {
     public int SucursalId { get; set; }
 
@@ -25,11 +25,11 @@ public partial class Sucursale
 
     public decimal Longitud { get; set; }
 
-    public virtual ICollection<Colaboradoressucursale> Colaboradoressucursales { get; set; } = new List<Colaboradoressucursale>();
+    public virtual ICollection<Colaboradoressucursales> Colaboradoressucursales { get; set; } = new List<Colaboradoressucursales>();
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 
-    public virtual ICollection<Viaje> Viajes { get; set; } = new List<Viaje>();
+    public virtual ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
 }

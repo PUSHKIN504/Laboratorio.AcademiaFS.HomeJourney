@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Role
+public partial class Roles
 {
     public int RolId { get; set; }
 
@@ -19,11 +19,11 @@ public partial class Role
 
     public bool Activo { get; set; }
 
-    public virtual ICollection<Colaboradore> Colaboradores { get; set; } = new List<Colaboradore>();
+    public virtual ICollection<Colaboradorses> Colaboradores { get; set; } = new List<Colaboradorses>();
 
-    public virtual ICollection<Pantallasrole> Pantallasroles { get; set; } = new List<Pantallasrole>();
+    public virtual ICollection<Pantallasroles> Pantallasroles { get; set; } = new List<Pantallasroles>();
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 }

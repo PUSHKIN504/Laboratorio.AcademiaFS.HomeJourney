@@ -19,9 +19,9 @@ public partial class Pantalla
 
     public bool Activo { get; set; }
 
-    public virtual ICollection<Pantallasrole> Pantallasroles { get; set; } = new List<Pantallasrole>();
+    public virtual ICollection<Pantallasroles> Pantallasroles { get; set; } = new List<Pantallasroles>();
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Estadoscivile
+public partial class Estadosciviles
 {
     public int EstadocivilId { get; set; }
 
     public string Nombre { get; set; } = null!;
 
-    public virtual ICollection<Persona> Personas { get; set; } = new List<Persona>();
+    public virtual ICollection<Personas> Personas { get; set; } = new List<Personas>();
 }

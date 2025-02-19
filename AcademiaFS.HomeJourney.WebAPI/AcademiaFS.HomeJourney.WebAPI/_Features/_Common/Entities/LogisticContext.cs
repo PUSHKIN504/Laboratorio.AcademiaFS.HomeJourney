@@ -51,7 +51,7 @@ public partial class LogisticContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        modelBuilder.Entity<Colaboradore>(entity =>
+        modelBuilder.Entity<Colaboradorses>(entity =>
         {
             entity.HasKey(e => e.ColaboradorId).HasName("PK_Colaboradores_Colaborador_id");
 
@@ -75,7 +75,7 @@ public partial class LogisticContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.Persona).WithOne(p => p.Colaboradore)
-                .HasForeignKey<Colaboradore>(d => d.PersonaId)
+                .HasForeignKey<Colaboradorses>(d => d.PersonaId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.Rol).WithMany(p => p.Colaboradores)
@@ -89,7 +89,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.ColaboradoreUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Colaboradoressucursale>(entity =>
+        modelBuilder.Entity<Colaboradoressucursales>(entity =>
         {
             entity.HasKey(e => e.ColaboradorsucursalId).HasName("PK_Colaboradoressucursales_Colaboradorsucursal_id");
 
@@ -120,7 +120,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.ColaboradoressucursaleUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Departamento>(entity =>
+        modelBuilder.Entity<Departamentos>(entity =>
         {
             entity.HasKey(e => e.DepartamentoId).HasName("PK_Departamentos_Departamento_id");
 
@@ -136,7 +136,7 @@ public partial class LogisticContext : DbContext
                 .HasConstraintName("FK_Departamento_Paises_Pais_Id");
         });
 
-        modelBuilder.Entity<Estado>(entity =>
+        modelBuilder.Entity<Estados>(entity =>
         {
             entity.HasKey(e => e.EstadoId).HasName("PK_Estados_Estado_id");
 
@@ -149,7 +149,7 @@ public partial class LogisticContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Estadoscivile>(entity =>
+        modelBuilder.Entity<Estadosciviles>(entity =>
         {
             entity.HasKey(e => e.EstadocivilId).HasName("PK_Estadosciviles_Estadocivil_id");
 
@@ -159,7 +159,7 @@ public partial class LogisticContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Moneda>(entity =>
+        modelBuilder.Entity<Monedas>(entity =>
         {
             entity.HasKey(e => e.MonedaId).HasName("PK_Monedas_Moneda_Id");
 
@@ -171,7 +171,7 @@ public partial class LogisticContext : DbContext
             entity.Property(e => e.ValorLempiras).HasColumnType("smallmoney");
         });
 
-        modelBuilder.Entity<Paise>(entity =>
+        modelBuilder.Entity<Paises>(entity =>
         {
             entity.HasKey(e => e.PaisId).HasName("PK_Paises_Pais_id");
 
@@ -200,7 +200,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.PantallaUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Pantallasrole>(entity =>
+        modelBuilder.Entity<Pantallasroles>(entity =>
         {
             entity.HasKey(e => e.PantallarolId).HasName("PK_Pantallasroles_Pantallarol_id");
 
@@ -220,7 +220,7 @@ public partial class LogisticContext : DbContext
                 .HasConstraintName("FK_Pantallas_Roles_Roles_Rol_id");
         });
 
-        modelBuilder.Entity<Persona>(entity =>
+        modelBuilder.Entity<Personas>(entity =>
         {
             entity.HasKey(e => e.PersonaId).HasName("PK_Personas_Persona_id");
 
@@ -263,7 +263,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.PersonaUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<Roles>(entity =>
         {
             entity.HasKey(e => e.RolId).HasName("PK_Roles_Rol_id");
 
@@ -282,7 +282,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.RoleUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Serviciostransporte>(entity =>
+        modelBuilder.Entity<Serviciostransportes>(entity =>
         {
             entity.HasKey(e => e.ServiciotransporteId).HasName("PK_Serviciostrasnporte_Serviciotransporte_id");
 
@@ -311,7 +311,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.ServiciostransporteUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Solicitudesviaje>(entity =>
+        modelBuilder.Entity<Solicitudesviajes>(entity =>
         {
             entity.HasKey(e => e.SolicitudviajeId).HasName("PK_Solicitudesviajes_Solicitudviaje_id");
 
@@ -351,7 +351,7 @@ public partial class LogisticContext : DbContext
                 .HasConstraintName("FK_SolicitudesViaje_Viajes_Viaje_id");
         });
 
-        modelBuilder.Entity<Sucursale>(entity =>
+        modelBuilder.Entity<Sucursales>(entity =>
         {
             entity.HasKey(e => e.SucursalId).HasName("PK_Sucursales_Sucursal_id");
 
@@ -375,7 +375,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.SucursaleUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Transportista>(entity =>
+        modelBuilder.Entity<Transportistas>(entity =>
         {
             entity.HasKey(e => e.TransportistaId).HasName("PK_Transportista_Transportista_id");
 
@@ -391,7 +391,7 @@ public partial class LogisticContext : DbContext
             entity.Property(e => e.Tarifaporkilometro).HasColumnType("decimal(10, 2)");
 
             entity.HasOne(d => d.Persona).WithOne(p => p.Transportista)
-                .HasForeignKey<Transportista>(d => d.PersonaId)
+                .HasForeignKey<Transportistas>(d => d.PersonaId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.Serviciotransporte).WithMany(p => p.Transportista)
@@ -406,7 +406,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.TransportistaUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Usuario>(entity =>
+        modelBuilder.Entity<Usuarios>(entity =>
         {
             entity.HasKey(e => e.UsuarioId).HasName("PK_Usuarios_Usuario_id");
 
@@ -423,11 +423,11 @@ public partial class LogisticContext : DbContext
                 .IsUnicode(false);
 
             entity.HasOne(d => d.Colaborador).WithOne(p => p.Usuario)
-                .HasForeignKey<Usuario>(d => d.ColaboradorId)
+                .HasForeignKey<Usuarios>(d => d.ColaboradorId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
-        modelBuilder.Entity<Valoracionesviaje>(entity =>
+        modelBuilder.Entity<Valoracionesviajes>(entity =>
         {
             entity.HasKey(e => e.ValoracionviajeId).HasName("PK_Valoracionesviajes_Valoracionviaje_id");
 
@@ -446,7 +446,7 @@ public partial class LogisticContext : DbContext
                 .HasConstraintName("FK_Valoracionviaje_Viajes_Viaje_id");
         });
 
-        modelBuilder.Entity<Viaje>(entity =>
+        modelBuilder.Entity<Viajes>(entity =>
         {
             entity.HasKey(e => e.ViajeId).HasName("PK_Viajes_Viajes_id");
 
@@ -486,7 +486,7 @@ public partial class LogisticContext : DbContext
             entity.HasOne(d => d.UsuariomodificaNavigation).WithMany(p => p.ViajeUsuariomodificaNavigations).HasForeignKey(d => d.Usuariomodifica);
         });
 
-        modelBuilder.Entity<Viajesdetalle>(entity =>
+        modelBuilder.Entity<Viajesdetalles>(entity =>
         {
             entity.HasKey(e => e.ViajedetalleId).HasName("PK_Viajesdetalles_Viajedetalle_id");
 

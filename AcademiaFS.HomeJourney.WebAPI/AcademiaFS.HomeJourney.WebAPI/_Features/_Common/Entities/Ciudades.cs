@@ -13,7 +13,7 @@ public partial class Ciudades
 
     public bool Activo { get; set; }
 
-    public virtual Departamento Departamento { get; set; } = null!;
+    public virtual Departamentos Departamento { get; set; } = null!;
 
-    public virtual ICollection<Persona> Personas { get; set; } = new List<Persona>();
+    public virtual ICollection<Personas> Personas { get; set; } = new List<Personas>();
 }

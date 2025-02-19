@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Serviciostransporte
+public partial class Serviciostransportes
 {
     public int ServiciotransporteId { get; set; }
 
@@ -23,9 +23,9 @@ public partial class Serviciostransporte
 
     public bool Activo { get; set; }
 
-    public virtual ICollection<Transportista> Transportista { get; set; } = new List<Transportista>();
+    public virtual ICollection<Transportistas> Transportista { get; set; } = new List<Transportistas>();
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 }

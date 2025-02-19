@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Departamento
+public partial class Departamentos
 {
     public int DepartamentoId { get; set; }
 
@@ -15,5 +15,5 @@ public partial class Departamento
 
     public virtual ICollection<Ciudades> Ciudades { get; set; } = new List<Ciudades>();
 
-    public virtual Paise? Pais { get; set; }
+    public virtual Paises? Pais { get; set; }
 }

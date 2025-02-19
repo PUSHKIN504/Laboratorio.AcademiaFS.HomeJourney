@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Viajesdetalle
+public partial class Viajesdetalles
 {
     public int ViajedetalleId { get; set; }
 
@@ -29,13 +29,13 @@ public partial class Viajesdetalle
 
     public int? MonedaId { get; set; }
 
-    public virtual Colaboradoressucursale Colaboradorsucursal { get; set; } = null!;
+    public virtual Colaboradoressucursales Colaboradorsucursal { get; set; } = null!;
 
-    public virtual Moneda? Moneda { get; set; }
+    public virtual Monedas? Moneda { get; set; }
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 
-    public virtual Viaje Viaje { get; set; } = null!;
+    public virtual Viajes Viaje { get; set; } = null!;
 }

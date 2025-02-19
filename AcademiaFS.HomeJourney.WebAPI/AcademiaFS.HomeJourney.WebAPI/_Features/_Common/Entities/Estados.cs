@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Estado
+public partial class Estados
 {
     public int EstadoId { get; set; }
 
@@ -11,7 +11,7 @@ public partial class Estado
 
     public string Descripcion { get; set; } = null!;
 
-    public virtual ICollection<Solicitudesviaje> Solicitudesviajes { get; set; } = new List<Solicitudesviaje>();
+    public virtual ICollection<Solicitudesviajes> Solicitudesviajes { get; set; } = new List<Solicitudesviajes>();
 
-    public virtual ICollection<Viaje> Viajes { get; set; } = new List<Viaje>();
+    public virtual ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
 }

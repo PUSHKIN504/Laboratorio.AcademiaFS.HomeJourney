@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features._Common.Entities;
 
-public partial class Colaboradoressucursale
+public partial class Colaboradoressucursales
 {
     public int ColaboradorsucursalId { get; set; }
 
@@ -23,13 +23,13 @@ public partial class Colaboradoressucursale
 
     public DateTime? Fechamodifica { get; set; }
 
-    public virtual Colaboradore Colaborador { get; set; } = null!;
+    public virtual Colaboradorses Colaborador { get; set; } = null!;
 
-    public virtual Sucursale Sucursal { get; set; } = null!;
+    public virtual Sucursales Sucursal { get; set; } = null!;
 
-    public virtual Usuario UsuariocreaNavigation { get; set; } = null!;
+    public virtual Usuarios UsuariocreaNavigation { get; set; } = null!;
 
-    public virtual Usuario? UsuariomodificaNavigation { get; set; }
+    public virtual Usuarios? UsuariomodificaNavigation { get; set; }
 
-    public virtual ICollection<Viajesdetalle> Viajesdetalles { get; set; } = new List<Viajesdetalle>();
+    public virtual ICollection<Viajesdetalles> Viajesdetalles { get; set; } = new List<Viajesdetalles>();
 }
