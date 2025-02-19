@@ -1,4 +1,4 @@
-﻿using Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common.Entities;
+﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName.Maps._Common;
 using Microsoft.EntityFrameworkCore;
 

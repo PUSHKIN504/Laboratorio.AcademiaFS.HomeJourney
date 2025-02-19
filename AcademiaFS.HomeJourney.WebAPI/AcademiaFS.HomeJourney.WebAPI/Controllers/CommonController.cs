@@ -16,7 +16,7 @@ namespace Laboratorio.Academina.JasonVillanueva.WebAPI.Controllers
         [HttpGet("ListadoCiudades")]
         public IActionResult GetListadoAgentes()
         {
-            var result = _commonService.ListadoCiudades();
+            var result = _commonService.ListadoPaises();
 
             return Ok(result);
         }

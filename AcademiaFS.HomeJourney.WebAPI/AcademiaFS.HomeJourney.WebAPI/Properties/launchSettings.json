@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "CODIGO_PAIS": "HN",
         "FS_SQL_SUFASA_SERVER": "192.168.1.33\\academiagfs,49194",
-        "FS_SQL_SUFASA_DBNAME": "AcademiaGFSQuerys",
+        "FS_SQL_SUFASA_DBNAME": "HomeJourney",
         "FS_SQL_SUFASA_USER": "AcademiaDEV",
         "FS_SQL_SUFASA_PASSWORD": "Academia.1"
       }

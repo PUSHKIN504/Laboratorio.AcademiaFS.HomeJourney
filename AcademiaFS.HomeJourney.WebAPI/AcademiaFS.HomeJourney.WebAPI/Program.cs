@@ -1,5 +1,6 @@
 //using Farsiman.Extensions.Configuration;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
+using Farsiman.Extensions.Configuration;
 using Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common;
 //using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName;
 using Microsoft.EntityFrameworkCore;
@@ -39,12 +40,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<HomeJourneyContext>(o => o.UseSqlServer(
-                builder.Configuration.GetConnectionString("LOGISTIC_GFS")
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
+          //      builder.Configuration.GetConnectionString("LOGISTIC_GFS")
             ));
 
 
 // Servicios de Aplicación
-builder.Services.AddScoped<CommonService>();
+builder.Services.AddTransient<CommonService>();
 
 var app = builder.Build();
 

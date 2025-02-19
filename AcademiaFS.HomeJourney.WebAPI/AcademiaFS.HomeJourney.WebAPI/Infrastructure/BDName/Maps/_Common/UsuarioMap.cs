@@ -1,4 +1,4 @@
-﻿using Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common.Entities;
+﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -32,6 +32,7 @@ public abstract class BaseEntityMap<T> : IEntityTypeConfiguration<T> where T : c
 
         if (typeof(T).GetProperty("Usuariocrea") != null)
         {
+
             builder.Property("Usuariocrea").IsRequired();
             builder.Property("Fechacrea").HasColumnType("datetime").IsRequired();
         }
