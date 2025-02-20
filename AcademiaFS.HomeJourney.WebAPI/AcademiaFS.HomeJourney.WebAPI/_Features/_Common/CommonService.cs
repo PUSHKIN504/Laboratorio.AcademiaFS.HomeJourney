@@ -1,4 +1,5 @@
-﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
+﻿using AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 
@@ -12,15 +13,15 @@ namespace Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common
     {
         //private readonly LogisticContext _logisticContext;
         private readonly HomeJourneyContext _homeJourneyContext;
-        //private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
         public CommonService(
-            HomeJourneyContext homeJourneyContext
-            //IMapper mapper
+            HomeJourneyContext homeJourneyContext,
+            IMapper mapper
             //LogisticContext logisticContext
             )
         {
             _homeJourneyContext = homeJourneyContext;
-            //_mapper = mapper; 
+            _mapper = mapper;
             //_logisticContext = logisticContext;
         }
 
@@ -31,11 +32,10 @@ namespace Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common
         //    return listado;
         //}
 
-        public List<Paises> ListadoPaises()
+        public List<PaisesDto> ListadoPaises()
             {
             var listado = _homeJourneyContext.Paises.AsNoTracking().ToList();
-
-            return listado;
+            return _mapper.Map<List<PaisesDto>>(listado);
         }
     }
 }

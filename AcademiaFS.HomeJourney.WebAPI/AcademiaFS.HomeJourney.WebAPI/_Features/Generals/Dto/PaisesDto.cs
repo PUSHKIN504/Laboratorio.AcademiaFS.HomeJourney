@@ -6,6 +6,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
             public int PaisId { get; set; }
 
             public string? Nombre { get; set; }
+            public bool? Activo { get; set; }
 
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 
 {
-    public class Ciudades
+    public class Ciudades : IActivableInterface
     {
         public int CiudadId { get; set; }
         public string Nombre { get; set; } = null!;

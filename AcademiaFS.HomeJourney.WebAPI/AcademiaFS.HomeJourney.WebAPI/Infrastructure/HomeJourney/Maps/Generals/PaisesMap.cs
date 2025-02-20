@@ -16,6 +16,9 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Generals
             builder.Property(p => p.Nombre)
                    .HasColumnName("Nombre")
                    .HasMaxLength(50);
+            builder.Property(p => p.Activo)
+                   .HasColumnName("Activo")
+                   .HasDefaultValue(true);
         }
     }
 }

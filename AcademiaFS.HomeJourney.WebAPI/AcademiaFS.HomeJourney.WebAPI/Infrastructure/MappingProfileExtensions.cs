@@ -15,7 +15,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
             CreateMap<Roles, RolesDto>().ReverseMap();
             CreateMap<Usuarios, UsuarioDto>().ReverseMap();
             CreateMap<Cargos, CargoDto>().ReverseMap();
-            CreateMap<Ciudades, CargoDto>().ReverseMap();
+            CreateMap<Ciudades, CiudadesDto>().ReverseMap();
+            CreateMap<Departamentos, DepartamentoDto>().ReverseMap();
         }
     }
 }
