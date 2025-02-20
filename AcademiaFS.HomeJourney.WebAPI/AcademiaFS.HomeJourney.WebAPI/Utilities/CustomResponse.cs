@@ -1,4 +1,4 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI.Controllers
+﻿namespace AcademiaFS.HomeJourney.WebAPI.Utilities
 {
     public class CustomResponse<T>
     {

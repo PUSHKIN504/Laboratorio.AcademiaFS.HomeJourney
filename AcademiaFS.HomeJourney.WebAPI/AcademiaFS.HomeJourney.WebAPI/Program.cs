@@ -1,10 +1,8 @@
-//using Farsiman.Extensions.Configuration;
 using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
-//using Farsiman.Extensions.Configuration;
-using Laboratorio.Academina.JasonVillanueva.WebAPI._Features._Common;
 //using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName;
+using Farsiman.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Scrutor;
 
@@ -44,22 +42,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<HomeJourneyContext>(o => o.UseSqlServer(
-                //builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
-                builder.Configuration.GetConnectionString("LOGISTIC_GFS")
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
+                //builder.Configuration.GetConnectionString("LOGISTIC_GFS")
             ));
 
 
-// Servicios de Aplicación
-builder.Services.AddTransient<CommonService>();
-builder.Services.AddTransient<PaisesService>();
-builder.Services.AddTransient(typeof(IGenericServiceInterface<,>), typeof(GenericService<,>));
+
+DependencyInjection.AppAplication(builder.Services);
 
 
-//builder.Services.Scan(scan => scan
-//    .FromAssemblyOf<CommonService>()
-//    .AddClasses(classes => classes.Where(type => type.Name.EndsWith("Service")))
-//    .AsImplementedInterfaces()
-//    .WithTransientLifetime());
+
+
 
 
 

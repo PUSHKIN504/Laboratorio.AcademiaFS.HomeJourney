@@ -3,6 +3,7 @@ using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using AcademiaFS.HomeJourney.WebAPI.Utilities;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -118,7 +119,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             return Ok(response);
         }
 
-        [HttpPatch("{id}/activo")]
+        [HttpPatch("{id}")]
         public ActionResult<CustomResponse<DepartamentoDto>> SetActive(int id, [FromQuery] bool active)
         {
             var departamento = _departamentosService.GetById(id);

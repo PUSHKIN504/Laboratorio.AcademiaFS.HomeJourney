@@ -3,6 +3,7 @@ using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using AcademiaFS.HomeJourney.WebAPI.Utilities;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -117,7 +118,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             return Ok(response);
         }
 
-        [HttpPatch("{id}/activo")]
+        [HttpPatch("{id}")]
         public IActionResult SetActive(int id, [FromQuery] bool active)
         {
             var pais = _paisesService.GetById(id);
@@ -142,6 +143,30 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             };
 
             return Ok(response);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                _paisesService.Delete(id);
+                var response = new CustomResponse<string>
+                {
+                    Success = true,
+                    Message = "País eliminado correctamente",
+                    Data = $"El país con ID {id} ha sido eliminado"
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new CustomResponse<string>
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
         }
     }
 }

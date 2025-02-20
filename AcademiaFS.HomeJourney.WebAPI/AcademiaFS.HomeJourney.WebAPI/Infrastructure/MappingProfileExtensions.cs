@@ -14,9 +14,18 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
             CreateMap<Pantallasroles, PantallasrolesDto>().ReverseMap();
             CreateMap<Roles, RolesDto>().ReverseMap();
             CreateMap<Usuarios, UsuarioDto>().ReverseMap();
+            CreateMap<Usuarios, UsuarioConDetallesDto>().ReverseMap();
             CreateMap<Cargos, CargoDto>().ReverseMap();
             CreateMap<Ciudades, CiudadesDto>().ReverseMap();
             CreateMap<Departamentos, DepartamentoDto>().ReverseMap();
+
+            CreateMap<Usuarios, UsuarioConDetallesDto>()
+            .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))
+            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+            .ForMember(dest => dest.PersonaNombreCompleto, opt => opt.MapFrom(src => $"{src.Colaborador.Persona.Nombre} {src.Colaborador.Persona.Apelllido}"))
+            .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Colaborador.Cargo != null ? src.Colaborador.Cargo.Nombre : "Sin cargo"))
+            .ForMember(dest => dest.Rol, opt => opt.MapFrom(src => src.Colaborador.Rol != null ? src.Colaborador.Rol.Nombre : "Sin rol"));
+
         }
     }
 }

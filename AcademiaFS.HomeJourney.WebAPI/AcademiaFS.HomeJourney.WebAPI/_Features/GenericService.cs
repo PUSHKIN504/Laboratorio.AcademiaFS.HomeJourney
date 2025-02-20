@@ -36,7 +36,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
                 _context.Entry(entity).State = EntityState.Modified;
                 Save();
                 return entity;
-        }
+            }
 
             public void SetActive(TKey id, bool active)
             {
@@ -46,6 +46,17 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
                     throw new Exception("Entidad no encontrada");
                 }
                 entity.Activo = active;
+                Save();
+            }
+            
+            public void Delete(TKey id)
+            {
+                var entity = GetById(id);
+                if (entity == null)
+                {
+                    throw new Exception("Entidad no encontrada");
+                }
+                _context.Set<TEntity>().Remove(entity);
                 Save();
             }
 
