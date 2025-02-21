@@ -2,7 +2,7 @@ using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
 //using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName;
-//using Farsiman.Extensions.Configuration;
+using Farsiman.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Scrutor;
 
@@ -42,8 +42,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<HomeJourneyContext>(o => o.UseSqlServer(
-                //builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
-                builder.Configuration.GetConnectionString("LOGISTIC_GFS")
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
+                //builder.Configuration.GetConnectionString("LOGISTIC_GFS")
             ));
 
 

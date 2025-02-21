@@ -116,29 +116,5 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             return Ok(response);
         }
-
-        [HttpDelete("{id}")]
-        public ActionResult<CustomResponse<string>> Delete(int id)
-        {
-            var estado = _estadosService.GetById(id);
-            if (estado == null)
-            {
-                return NotFound(new CustomResponse<string>
-                {
-                    Success = false,
-                    Message = $"No se encontró el estado con ID {id}"
-                });
-            }
-
-            _estadosService.Delete(id);
-
-            var response = new CustomResponse<string>
-            {
-                Success = true,
-                Message = "Estado eliminado correctamente"
-            };
-
-            return Ok(response);
-        }
     }
 }

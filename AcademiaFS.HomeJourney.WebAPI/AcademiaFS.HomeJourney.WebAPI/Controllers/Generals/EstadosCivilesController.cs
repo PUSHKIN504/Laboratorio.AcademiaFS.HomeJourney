@@ -116,29 +116,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             return Ok(response);
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<CustomResponse<string>> Delete(int id)
-        {
-            var estadoCivil = _estadosCivilesService.GetById(id);
-            if (estadoCivil == null)
-            {
-                return NotFound(new CustomResponse<string>
-                {
-                    Success = false,
-                    Message = $"No se encontró el estado civil con ID {id}"
-                });
-            }
-
-            _estadosCivilesService.Delete(id);
-
-            var response = new CustomResponse<string>
-            {
-                Success = true,
-                Message = "Estado civil eliminado correctamente"
-            };
-
-            return Ok(response);
-        }
 
         [HttpPatch("{id}")]
         public ActionResult<CustomResponse<string>> SetActive(int id, bool active)

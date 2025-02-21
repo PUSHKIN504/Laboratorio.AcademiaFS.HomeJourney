@@ -9,7 +9,6 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
         TEntity Create(TEntity entity);
         TEntity Update(TEntity entity);
         void SetActive(TKey id, bool active);
-        void Delete(TKey id);
         void Save();
     }
 }

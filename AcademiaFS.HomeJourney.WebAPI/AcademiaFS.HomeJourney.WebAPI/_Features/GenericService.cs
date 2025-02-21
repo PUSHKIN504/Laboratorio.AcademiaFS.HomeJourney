@@ -48,17 +48,6 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
                 entity.Activo = active;
                 Save();
             }
-            
-            public void Delete(TKey id)
-            {
-                var entity = GetById(id);
-                if (entity == null)
-                {
-                    throw new Exception("Entidad no encontrada");
-                }
-                _context.Set<TEntity>().Remove(entity);
-                Save();
-            }
 
             public void Save()
             {
