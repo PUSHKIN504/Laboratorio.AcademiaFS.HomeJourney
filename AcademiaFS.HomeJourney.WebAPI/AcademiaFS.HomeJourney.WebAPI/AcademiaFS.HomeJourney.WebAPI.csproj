@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Viaje\" />
     <Folder Include="Kubernetes\" />
   </ItemGroup>
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
-    public class Serviciostransportes
+    public class Serviciostransportes : IActivableInterface
     {
         public int ServiciotransporteId { get; set; }
         public string Nombre { get; set; } = null!;

@@ -1,5 +1,6 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI._Features.Auth.Dto;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto;
+using AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 
@@ -20,6 +21,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
             CreateMap<Departamentos, DepartamentoDto>().ReverseMap();
             CreateMap<Estados, EstadoDto>().ReverseMap();
             CreateMap<Estadosciviles, EstadoCivilDto>().ReverseMap();
+            CreateMap<Serviciostransportes, ServicioTransporteDto>().ReverseMap()
+                .ForMember(dest => dest.Usuariomodifica, opt => opt.Ignore());
 
             CreateMap<Usuarios, UsuarioConDetallesDto>()
             .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))
