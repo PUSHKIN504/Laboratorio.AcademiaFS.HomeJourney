@@ -71,7 +71,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         {
             var entity = _mapper.Map<Estados>(dto);
             var creado = _estadosService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<EstadoDto>(creado);
             var response = new CustomResponse<EstadoDto>
@@ -109,7 +109,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             _mapper.Map(dto, estado);
 
             var actualizado = _estadosService.Update(estado);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<EstadoDto>(actualizado);
 

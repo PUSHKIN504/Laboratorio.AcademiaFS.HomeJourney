@@ -97,7 +97,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             };
 
             var creado = _solicitudesService.Create(nuevaSolicitud);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             return CreatedAtAction(nameof(GetById), new { id = creado.SolicitudviajeId }, new CustomResponse<Solicitudesviajes>
             {
@@ -164,7 +164,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             solicitud.Fechamodifica = DateTime.Now;
 
             _solicitudesService.Update(solicitud);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             return Ok(new CustomResponse<Solicitudesviajes>
             {

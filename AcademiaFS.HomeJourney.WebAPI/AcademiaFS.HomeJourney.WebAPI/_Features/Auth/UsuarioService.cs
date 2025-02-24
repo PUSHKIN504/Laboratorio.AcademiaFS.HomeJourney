@@ -14,11 +14,12 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
     {
         private readonly IMapper _mapper;
         private readonly HomeJourneyContext _context;
-
-        public UsuarioService(HomeJourneyContext context, IMapper mapper)
+        private readonly DomainServiceAuth _domainService;
+        public UsuarioService(HomeJourneyContext context, IMapper mapper, DomainServiceAuth domainService)
         {
             _mapper = mapper;
             _context = context;
+            _domainService = domainService;
         }
 
         public CustomResponse<UsuarioConDetallesDto> Login(string username, string password)
@@ -36,7 +37,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
             if (usuario == null)
                 throw new Exception("Usuario no encontrado o inactivo.");
 
-            if (!ValidatePassword(password, usuario.Passwordhash))
+            if (!_domainService.ValidatePassword(password, usuario.Passwordhash))
                 throw new Exception("Contraseña incorrecta.");
 
             var dto = _mapper.Map<UsuarioConDetallesDto>(usuario);
@@ -53,14 +54,6 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
 
 
 
-        private bool ValidatePassword(string inputPassword, byte[] storedHash)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var inputBytes = Encoding.UTF8.GetBytes(inputPassword);
-                var inputHash = sha256.ComputeHash(inputBytes);
-                return inputHash.SequenceEqual(storedHash);
-            }
-        }
+
     }
 }

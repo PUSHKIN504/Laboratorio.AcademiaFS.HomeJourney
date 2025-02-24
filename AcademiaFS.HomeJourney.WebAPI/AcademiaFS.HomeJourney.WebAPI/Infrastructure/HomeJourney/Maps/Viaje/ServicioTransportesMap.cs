@@ -10,8 +10,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Viaje
         {
             builder.ToTable("Serviciostransporte");
             builder.HasKey(s => s.ServiciotransporteId);
-            builder.Property(s => s.ServiciotransporteId)
-                   .HasColumnName("Serviciotransporte_id")
+            builder.Property(t => t.ServiciotransporteId)
+                   .HasColumnName("ServiciotransporteId")
                    .IsRequired();
             builder.Property(s => s.Nombre)
                    .HasColumnName("Nombre")

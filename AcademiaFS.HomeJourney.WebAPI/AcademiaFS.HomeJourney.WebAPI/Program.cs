@@ -2,9 +2,10 @@ using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
 //using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName;
-//using Farsiman.Extensions.Configuration;
+using Farsiman.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Scrutor;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,10 +41,15 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
 builder.Services.AddDbContext<HomeJourneyContext>(o => o.UseSqlServer(
-                //builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
-                builder.Configuration.GetConnectionString("LOGISTIC_GFS")
+                builder.Configuration.GetConnectionStringFromENV("LOGISTIC_GFS")
+                //builder.Configuration.GetConnectionString("LOGISTIC_GFS")
             ));
 
 

@@ -71,7 +71,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         {
             var entity = _mapper.Map<Estadosciviles>(dto);
             var creado = _estadosCivilesService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<EstadoCivilDto>(creado);
             var response = new CustomResponse<EstadoCivilDto>

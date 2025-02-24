@@ -71,7 +71,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             entity.Activo = true;
 
             var creado = _paisesService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<PaisesDto>(creado);
 
@@ -109,7 +109,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(paisDto, entity);
             _paisesService.Update(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<PaisesDto>(entity);
 
@@ -137,7 +137,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _paisesService.SetActive(id, active);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var updatedPais = _paisesService.GetById(id);
             var dto = _mapper.Map<PaisesDto>(updatedPais);

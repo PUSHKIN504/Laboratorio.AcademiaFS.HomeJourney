@@ -23,6 +23,20 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
             CreateMap<Estadosciviles, EstadoCivilDto>().ReverseMap();
             CreateMap<Serviciostransportes, ServicioTransporteDto>().ReverseMap()
                 .ForMember(dest => dest.Usuariomodifica, opt => opt.Ignore());
+            CreateMap<CreatePersonaColaboradorDto, Personas>()
+            .ForMember(dest => dest.PersonaId, opt => opt.Ignore());
+            CreateMap<CreatePersonaColaboradorDto, Colaboradores>()
+                .ForMember(dest => dest.ColaboradorId, opt => opt.Ignore()) 
+                .ForMember(dest => dest.PersonaId, opt => opt.Ignore());
+            CreateMap<Personas, PersonaDto>();
+            CreateMap<CreateTransportistaDto, Personas>()
+                .ForMember(dest => dest.PersonaId, opt => opt.Ignore())
+                .ForMember(dest => dest.Fechacrea, opt => opt.Ignore());
+
+            CreateMap<CreateTransportistaDto, Transportistas>()
+                .ForMember(dest => dest.TransportistaId, opt => opt.Ignore())
+                .ForMember(dest => dest.PersonaId, opt => opt.Ignore())
+                .ForMember(dest => dest.Fechacrea, opt => opt.Ignore());
 
             CreateMap<Usuarios, UsuarioConDetallesDto>()
             .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))

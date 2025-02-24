@@ -70,7 +70,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             var entity = _mapper.Map<Cargos>(dto);
 
             var creado = _cargoService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
             var dtoCreado = _mapper.Map<CargoDto>(creado);
 
             var response = new CustomResponse<CargoDto>
@@ -107,7 +107,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(dto, ciudad);
             _cargoService.Update(ciudad);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<CargoDto>(ciudad);
 
@@ -135,7 +135,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _cargoService.SetActive(id, active);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
             var ciudadActualizada = _cargoService.GetById(id);
             var dto = _mapper.Map<CargoDto>(ciudadActualizada);
 

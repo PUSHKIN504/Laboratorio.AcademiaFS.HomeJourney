@@ -73,7 +73,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             entity.Activo = true;
 
             _ciudadesService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<CiudadesDto>(entity);
             var response = new CustomResponse<CiudadesDto>
@@ -110,7 +110,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(dto, ciudad);
             _ciudadesService.Update(ciudad);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<CiudadesDto>(ciudad);
 
@@ -138,7 +138,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _ciudadesService.SetActive(id, active);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var ciudadActualizada = _ciudadesService.GetById(id);
             var dtoActualizado = _mapper.Map<CiudadesDto>(ciudadActualizada);

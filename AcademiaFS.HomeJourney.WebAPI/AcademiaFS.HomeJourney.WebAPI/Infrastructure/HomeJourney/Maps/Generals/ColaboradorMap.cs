@@ -42,11 +42,11 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Generals
                    .IsRequired(false);
             builder.Property(x => x.Latitud)
                    .HasColumnName("Latitud")
-                   .HasColumnType("decimal(9,8)")
+                   .HasPrecision(19, 15)
                    .IsRequired();
             builder.Property(x => x.Longitud)
                    .HasColumnName("Longitud")
-                   .HasColumnType("decimal(9,8)")
+                   .HasPrecision(19, 15)
                    .IsRequired();
 
             builder.HasOne(x => x.Cargo)

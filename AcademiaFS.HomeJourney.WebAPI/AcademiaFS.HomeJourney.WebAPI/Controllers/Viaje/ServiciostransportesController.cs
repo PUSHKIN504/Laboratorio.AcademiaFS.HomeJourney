@@ -74,7 +74,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             entity.Activo = true;
 
             var creado = _servicioService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<ServicioTransporteDto>(creado);
 
@@ -115,7 +115,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             existente.Email = servicio.Email;
 
             var actualizado = _servicioService.Update(existente);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<ServicioTransporteDto>(actualizado);
             var response = new CustomResponse<ServicioTransporteDto>
@@ -142,7 +142,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             }
 
             _servicioService.SetActive(id, active);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var actualizado = _servicioService.GetById(id);
             var dtoActualizado = _mapper.Map<ServicioTransporteDto>(actualizado);

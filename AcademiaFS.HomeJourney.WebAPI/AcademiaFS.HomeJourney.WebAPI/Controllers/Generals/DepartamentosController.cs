@@ -74,7 +74,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             entity.Activo = true;
 
             _departamentosService.Create(entity);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<DepartamentoDto>(entity);
 
@@ -112,7 +112,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(dto, departamento);
             _departamentosService.Update(departamento);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<DepartamentoDto>(departamento);
 
@@ -140,7 +140,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _departamentosService.SetActive(id, active);
-            _unitOfWork.Save();
+            //_unitOfWork.Save();
 
             var departamentoActualizado = _departamentosService.GetById(id);
             var dtoActualizado = _mapper.Map<DepartamentoDto>(departamentoActualizado);

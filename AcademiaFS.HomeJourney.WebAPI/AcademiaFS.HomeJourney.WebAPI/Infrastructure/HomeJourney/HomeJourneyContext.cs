@@ -2,7 +2,6 @@
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Auth;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Generals;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Viaje;
-using Laboratorio.Academina.JasonVillanueva.WebAPI.Infrastructure.BDName.Maps._Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney
