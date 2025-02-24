@@ -9,8 +9,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public int SucursalId { get; set; }
         public int TransportistaId { get; set; }
         public int EstadoId { get; set; }
-        public TimeSpan Viajehora { get; set; }   // Mapeado a time(7)
-        public DateTime Viajefecha { get; set; }   // Mapeado a date
+        public TimeSpan Viajehora { get; set; }  
+        public DateTime Viajefecha { get; set; }  
         public decimal Totalkilometros { get; set; }
         public decimal Totalpagar { get; set; }
         public bool Activo { get; set; }
@@ -28,5 +28,30 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public ICollection<Solicitudesviajes> Solicitudesviajes { get; set; } = new List<Solicitudesviajes>();
         public ICollection<Valoracionesviajes> Valoracionesviajes { get; set; } = new List<Valoracionesviajes>();
         public ICollection<Viajesdetalles> Viajesdetalles { get; set; } = new List<Viajesdetalles>();
+    }
+
+    public class ViajesCreateDto
+    {
+        public int SucursalId { get; set; }
+        public int TransportistaId { get; set; }
+        public int EstadoId { get; set; }
+        public TimeSpan Viajehora { get; set; }
+        public DateTime Viajefecha { get; set; }
+        public decimal Totalkilometros { get; set; }
+        public decimal Totalpagar { get; set; }
+        public int Usuariocrea { get; set; }
+        public int? MonedaId { get; set; }
+
+        public List<ViajesdetallesCreateDto> Detalles { get; set; } = new List<ViajesdetallesCreateDto>();
+    }
+
+    public class ViajesdetallesCreateDto
+    {
+        public int ColaboradorId { get; set; }
+        public decimal Distanciakilometros { get; set; }
+        public decimal Totalpagar { get; set; }
+        public int ColaboradorsucursalId { get; set; }
+        public int Usuariocrea { get; set; }
+        public int? MonedaId { get; set; }
     }
 }

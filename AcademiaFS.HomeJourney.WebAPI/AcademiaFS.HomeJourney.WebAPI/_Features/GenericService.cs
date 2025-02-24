@@ -26,7 +26,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
             public TEntity Create(TEntity entity)
             {
                 _context.Set<TEntity>().Add(entity);
-                Save();
+                //Save();
                 return entity;
             }
 
@@ -34,7 +34,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
             {
                 _context.Attach(entity);
                 _context.Entry(entity).State = EntityState.Modified;
-                Save();
+                //Save();
                 return entity;
             }
 
@@ -46,13 +46,13 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
                     throw new Exception("Entidad no encontrada");
                 }
                 entity.Activo = active;
-                Save();
+                //Save();
             }
 
-            public void Save()
-            {
-                _context.SaveChanges();
-            }
+            //public void Save()
+            //{
+            //    _context.SaveChanges();
+            //}
         }
     
 }

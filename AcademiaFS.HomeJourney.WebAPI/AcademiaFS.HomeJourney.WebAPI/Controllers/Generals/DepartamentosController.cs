@@ -4,6 +4,7 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -12,13 +13,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     public class DepartamentosController : Controller
     {
         private readonly IGenericServiceInterface<Departamentos, int> _departamentosService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public DepartamentosController(
             IGenericServiceInterface<Departamentos, int> departamentosService,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _departamentosService = departamentosService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -69,8 +73,10 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             var entity = _mapper.Map<Departamentos>(dto);
             entity.Activo = true;
 
-            var creado = _departamentosService.Create(entity);
-            var dtoCreado = _mapper.Map<DepartamentoDto>(creado);
+            _departamentosService.Create(entity);
+            _unitOfWork.Save();
+
+            var dtoCreado = _mapper.Map<DepartamentoDto>(entity);
 
             var response = new CustomResponse<DepartamentoDto>
             {
@@ -106,6 +112,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(dto, departamento);
             _departamentosService.Update(departamento);
+            _unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<DepartamentoDto>(departamento);
 
@@ -133,6 +140,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _departamentosService.SetActive(id, active);
+            _unitOfWork.Save();
 
             var departamentoActualizado = _departamentosService.GetById(id);
             var dtoActualizado = _mapper.Map<DepartamentoDto>(departamentoActualizado);

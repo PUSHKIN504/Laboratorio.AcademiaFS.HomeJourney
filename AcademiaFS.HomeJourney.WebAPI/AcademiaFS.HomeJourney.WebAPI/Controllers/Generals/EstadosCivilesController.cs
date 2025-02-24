@@ -4,6 +4,7 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -12,13 +13,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     public class EstadosCivilesController : Controller
     {
         private readonly IGenericServiceInterface<Estadosciviles, int> _estadosCivilesService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EstadosCivilesController(
             IGenericServiceInterface<Estadosciviles, int> estadosCivilesService,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _estadosCivilesService = estadosCivilesService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -67,6 +71,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         {
             var entity = _mapper.Map<Estadosciviles>(dto);
             var creado = _estadosCivilesService.Create(entity);
+            _unitOfWork.Save();
 
             var dtoCreado = _mapper.Map<EstadoCivilDto>(creado);
             var response = new CustomResponse<EstadoCivilDto>
@@ -104,6 +109,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             _mapper.Map(dto, estadoCivil);
 
             var actualizado = _estadosCivilesService.Update(estadoCivil);
+            _unitOfWork.Save();
+
             var dtoActualizado = _mapper.Map<EstadoCivilDto>(actualizado);
 
             var response = new CustomResponse<EstadoCivilDto>
@@ -116,9 +123,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             return Ok(response);
         }
 
-
         [HttpPatch("{id}")]
-        public ActionResult<CustomResponse<string>> SetActive(int id, bool active)
+        public ActionResult<CustomResponse<string>> SetActive(int id, [FromQuery] bool active)
         {
             var estadoCivil = _estadosCivilesService.GetById(id);
             if (estadoCivil == null)
@@ -131,6 +137,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _estadosCivilesService.SetActive(id, active);
+            _unitOfWork.Save();
+
             var estado = active ? "activado" : "desactivado";
 
             return Ok(new CustomResponse<string>

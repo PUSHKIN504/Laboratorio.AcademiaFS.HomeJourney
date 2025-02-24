@@ -25,7 +25,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public Monedas? Moneda { get; set; }
 
 
-        //public ICollection<Colaboradoressucursales> Colaboradoressucursales { get; set; } = new List<Colaboradoressucursales>();
 
     }
 

@@ -4,6 +4,7 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -12,13 +13,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     public class EstadosController : Controller
     {
         private readonly IGenericServiceInterface<Estados, int> _estadosService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public EstadosController(
             IGenericServiceInterface<Estados, int> estadosService,
+            IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _estadosService = estadosService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -66,10 +70,10 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         public ActionResult<CustomResponse<EstadoDto>> Create([FromBody] EstadoDto dto)
         {
             var entity = _mapper.Map<Estados>(dto);
-
             var creado = _estadosService.Create(entity);
-            var dtoCreado = _mapper.Map<EstadoDto>(creado);
+            _unitOfWork.Save();
 
+            var dtoCreado = _mapper.Map<EstadoDto>(creado);
             var response = new CustomResponse<EstadoDto>
             {
                 Success = true,
@@ -105,6 +109,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             _mapper.Map(dto, estado);
 
             var actualizado = _estadosService.Update(estado);
+            _unitOfWork.Save();
+
             var dtoActualizado = _mapper.Map<EstadoDto>(actualizado);
 
             var response = new CustomResponse<EstadoDto>

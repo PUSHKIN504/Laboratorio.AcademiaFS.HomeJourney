@@ -1,6 +1,7 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto;
 using AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
 using AutoMapper;
@@ -13,11 +14,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
     public class ServiciostransportesController : ControllerBase
     {
         private readonly IGenericServiceInterface<Serviciostransportes, int> _servicioService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ServiciostransportesController(IGenericServiceInterface<Serviciostransportes, int> servicioService, IMapper mapper)
+        public ServiciostransportesController(
+            IGenericServiceInterface<Serviciostransportes, int> servicioService,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _servicioService = servicioService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -25,12 +31,15 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
         public ActionResult<CustomResponse<IEnumerable<ServicioTransporteDto>>> GetAll()
         {
             var list = _servicioService.GetAll();
-            var response = new CustomResponse<IEnumerable<Serviciostransportes>>
+            var dtoList = _mapper.Map<List<ServicioTransporteDto>>(list);
+
+            var response = new CustomResponse<IEnumerable<ServicioTransporteDto>>
             {
                 Success = true,
                 Message = "Listado de servicios de transporte obtenido correctamente",
-                Data = list
+                Data = dtoList
             };
+
             return Ok(response);
         }
 
@@ -40,19 +49,21 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             var servicio = _servicioService.GetById(id);
             if (servicio == null)
             {
-                return NotFound(new CustomResponse<Serviciostransportes>
+                return NotFound(new CustomResponse<ServicioTransporteDto>
                 {
                     Success = false,
                     Message = $"No se encontró el servicio con ID {id}"
                 });
             }
 
-            var response = new CustomResponse<Serviciostransportes>
+            var dto = _mapper.Map<ServicioTransporteDto>(servicio);
+            var response = new CustomResponse<ServicioTransporteDto>
             {
                 Success = true,
                 Message = "Servicio encontrado",
-                Data = servicio
+                Data = dto
             };
+
             return Ok(response);
         }
 
@@ -60,9 +71,11 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
         public ActionResult<CustomResponse<ServicioTransporteDto>> Create([FromBody] ServicioTransporteDto dto)
         {
             var entity = _mapper.Map<Serviciostransportes>(dto);
-
             entity.Activo = true;
+
             var creado = _servicioService.Create(entity);
+            _unitOfWork.Save();
+
             var dtoCreado = _mapper.Map<ServicioTransporteDto>(creado);
 
             var response = new CustomResponse<ServicioTransporteDto>
@@ -72,7 +85,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
                 Data = dtoCreado
             };
 
-            return CreatedAtAction(nameof(GetById), new { id = creado.ServiciotransporteId }, response);
+            return CreatedAtAction(nameof(GetById), new { id = dtoCreado.ServiciotransporteId }, response);
         }
 
         [HttpPut("{id}")]
@@ -80,7 +93,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
         {
             if (id != servicio.ServiciotransporteId)
             {
-                return BadRequest(new CustomResponse<Serviciostransportes>
+                return BadRequest(new CustomResponse<ServicioTransporteDto>
                 {
                     Success = false,
                     Message = "El ID de la ruta no coincide con el ID del objeto"
@@ -90,7 +103,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             var existente = _servicioService.GetById(id);
             if (existente == null)
             {
-                return NotFound(new CustomResponse<Serviciostransportes>
+                return NotFound(new CustomResponse<ServicioTransporteDto>
                 {
                     Success = false,
                     Message = $"No se encontró el servicio con ID {id}"
@@ -102,34 +115,42 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             existente.Email = servicio.Email;
 
             var actualizado = _servicioService.Update(existente);
-            var response = new CustomResponse<Serviciostransportes>
+            _unitOfWork.Save();
+
+            var dtoActualizado = _mapper.Map<ServicioTransporteDto>(actualizado);
+            var response = new CustomResponse<ServicioTransporteDto>
             {
                 Success = true,
                 Message = "Servicio actualizado correctamente",
-                Data = actualizado
+                Data = dtoActualizado
             };
 
             return Ok(response);
         }
+
         [HttpPatch("{id}")]
         public ActionResult<CustomResponse<ServicioTransporteDto>> SetActive(int id, [FromQuery] bool active)
         {
             var servicio = _servicioService.GetById(id);
             if (servicio == null)
             {
-                return NotFound(new CustomResponse<Serviciostransportes>
+                return NotFound(new CustomResponse<ServicioTransporteDto>
                 {
                     Success = false,
                     Message = $"No se encontró el servicio con ID {id}"
                 });
             }
+
             _servicioService.SetActive(id, active);
+            _unitOfWork.Save();
+
             var actualizado = _servicioService.GetById(id);
-            var response = new CustomResponse<Serviciostransportes>
+            var dtoActualizado = _mapper.Map<ServicioTransporteDto>(actualizado);
+            var response = new CustomResponse<ServicioTransporteDto>
             {
                 Success = true,
                 Message = active ? "Servicio activado correctamente" : "Servicio desactivado correctamente",
-                Data = actualizado
+                Data = dtoActualizado
             };
 
             return Ok(response);

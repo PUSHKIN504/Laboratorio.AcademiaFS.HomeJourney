@@ -4,25 +4,27 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
     [ApiController]
-    [Route("academiafarsiman/paises")] /**/
+    [Route("academiafarsiman/paises")]
     public class PaisesController : Controller
     {
-
         private readonly IGenericServiceInterface<Paises, int> _paisesService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public PaisesController(IGenericServiceInterface<Paises, int> paisesService, IMapper mapper)
+        public PaisesController(IGenericServiceInterface<Paises, int> paisesService, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _paisesService = paisesService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<PaisesDto>> GetAll()
+        public ActionResult<CustomResponse<IEnumerable<PaisesDto>>> GetAll()
         {
             var paises = _paisesService.GetAll();
             var dto = _mapper.Map<List<PaisesDto>>(paises);
@@ -38,7 +40,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         }
 
         [HttpGet("{id}")]
-        public ActionResult<PaisesDto> GetById(int id)
+        public ActionResult<CustomResponse<PaisesDto>> GetById(int id)
         {
             var pais = _paisesService.GetById(id);
             if (pais == null)
@@ -63,12 +65,14 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         }
 
         [HttpPost]
-        public ActionResult<PaisesDto> Create([FromBody] PaisesDto paisDto)
+        public ActionResult<CustomResponse<PaisesDto>> Create([FromBody] PaisesDto paisDto)
         {
             var entity = _mapper.Map<Paises>(paisDto);
             entity.Activo = true;
 
             var creado = _paisesService.Create(entity);
+            _unitOfWork.Save();
+
             var dtoCreado = _mapper.Map<PaisesDto>(creado);
 
             var response = new CustomResponse<PaisesDto>
@@ -105,6 +109,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(paisDto, entity);
             _paisesService.Update(entity);
+            _unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<PaisesDto>(entity);
 
@@ -132,6 +137,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _paisesService.SetActive(id, active);
+            _unitOfWork.Save();
+
             var updatedPais = _paisesService.GetById(id);
             var dto = _mapper.Map<PaisesDto>(updatedPais);
 

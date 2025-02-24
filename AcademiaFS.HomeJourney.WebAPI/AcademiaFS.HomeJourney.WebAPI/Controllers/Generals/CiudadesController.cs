@@ -4,6 +4,7 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
@@ -12,11 +13,15 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     public class CiudadesController : Controller
     {
         private readonly IGenericServiceInterface<Ciudades, int> _ciudadesService;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CiudadesController(IGenericServiceInterface<Ciudades, int> ciudadesService, IMapper mapper)
+        public CiudadesController(IGenericServiceInterface<Ciudades, int> ciudadesService,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
             _ciudadesService = ciudadesService;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -67,9 +72,10 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             var entity = _mapper.Map<Ciudades>(dto);
             entity.Activo = true;
 
-            var creado = _ciudadesService.Create(entity);
-            var dtoCreado = _mapper.Map<CiudadesDto>(creado);
+            _ciudadesService.Create(entity);
+            _unitOfWork.Save();
 
+            var dtoCreado = _mapper.Map<CiudadesDto>(entity);
             var response = new CustomResponse<CiudadesDto>
             {
                 Success = true,
@@ -104,6 +110,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
             _mapper.Map(dto, ciudad);
             _ciudadesService.Update(ciudad);
+            _unitOfWork.Save();
 
             var dtoActualizado = _mapper.Map<CiudadesDto>(ciudad);
 
@@ -131,15 +138,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
 
             _ciudadesService.SetActive(id, active);
+            _unitOfWork.Save();
 
             var ciudadActualizada = _ciudadesService.GetById(id);
-            var dto = _mapper.Map<CiudadesDto>(ciudadActualizada);
+            var dtoActualizado = _mapper.Map<CiudadesDto>(ciudadActualizada);
 
             var response = new CustomResponse<CiudadesDto>
             {
                 Success = true,
                 Message = active ? "La ciudad ha sido activada" : "La ciudad ha sido desactivada",
-                Data = dto
+                Data = dtoActualizado
             };
 
             return Ok(response);
