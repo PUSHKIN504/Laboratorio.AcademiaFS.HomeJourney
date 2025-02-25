@@ -54,4 +54,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public int Usuariocrea { get; set; }
         public int? MonedaId { get; set; }
     }
+
+
+
 }

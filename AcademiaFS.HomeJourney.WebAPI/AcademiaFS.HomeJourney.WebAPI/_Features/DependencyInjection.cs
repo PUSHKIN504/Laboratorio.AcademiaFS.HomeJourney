@@ -16,6 +16,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
             service.AddTransient<TransportistaService>();
             service.AddTransient< PersonasColaboradoresService>();
             service.AddTransient(typeof(IGenericServiceInterface<,>), typeof(GenericService<,>));
+            service.AddHttpClient<DomainServiceClustering>();
             service.AddScoped<IUnitOfWork, UnitOfWork>();
             return service;
         }

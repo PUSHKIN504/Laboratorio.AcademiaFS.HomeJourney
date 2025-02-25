@@ -1,4 +1,6 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
+﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
+
+namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
 {
     public interface IUnitOfWork
     {
@@ -10,5 +12,6 @@
         Task CommitTransactionAsync();
         void RollbackTransaction();
         Task RollbackTransactionAsync();
+        Task AddRangeAsync(List<Viajes> trips);
     }
 }

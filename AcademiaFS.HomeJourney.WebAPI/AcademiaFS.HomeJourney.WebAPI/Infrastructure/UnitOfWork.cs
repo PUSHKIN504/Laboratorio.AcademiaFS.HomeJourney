@@ -1,4 +1,5 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
@@ -74,7 +75,12 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
                 DisposeTransaction();
             }
         }
-        
+
+        public Task AddRangeAsync(List<Viajes> trips)
+        {
+            return Task.CompletedTask;
+        }
+
         public void RollbackTransaction()
         {
             _transaction?.Rollback();
