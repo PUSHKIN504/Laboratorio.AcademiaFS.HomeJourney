@@ -34,10 +34,11 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
                 .ForMember(dest => dest.Fechacrea, opt => opt.Ignore());
 
             CreateMap<CreateTransportistaDto, Transportistas>()
-                .ForMember(dest => dest.TransportistaId, opt => opt.Ignore())
                 .ForMember(dest => dest.PersonaId, opt => opt.Ignore())
                 .ForMember(dest => dest.Fechacrea, opt => opt.Ignore());
-
+            CreateMap<ViajesCreateDto, Viajes>().ReverseMap();
+            CreateMap<ViajesCreateDto, Viajesdetalles>().ReverseMap();
+            CreateMap<ViajesdetallesCreateDto, Viajesdetalles>().ReverseMap();
             CreateMap<Usuarios, UsuarioConDetallesDto>()
             .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))
             .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))

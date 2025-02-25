@@ -19,7 +19,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         // Relaciones
         public Serviciostransportes Serviciotransporte { get; set; } = null!;
         public Personas Persona { get; set; } = null!;
-        public Monedas? Moneda { get; set; }
+        public Monedas Moneda { get; set; }
         public ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
     }
 }

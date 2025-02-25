@@ -11,6 +11,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
         public static IServiceCollection AppAplication (IServiceCollection service)
         {
             service.AddTransient<UsuarioService>();
+            service.AddTransient<ViajesService>();
             service.AddTransient<DomainServiceAuth>();
             service.AddTransient<TransportistaService>();
             service.AddTransient< PersonasColaboradoresService>();

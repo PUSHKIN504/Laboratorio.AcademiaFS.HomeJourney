@@ -13,5 +13,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         // Relaciones
         public ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
         public ICollection<Viajesdetalles> Viajesdetalles { get; set; } = new List<Viajesdetalles>();
+        public ICollection<Transportistas> Transportistas { get; set; } = new List<Transportistas>();
     }
 }

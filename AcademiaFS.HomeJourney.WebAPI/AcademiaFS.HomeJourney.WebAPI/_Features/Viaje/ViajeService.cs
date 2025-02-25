@@ -34,7 +34,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                     await transaction.CommitAsync();
                     return viaje;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     await transaction.RollbackAsync();
                     throw;

@@ -11,7 +11,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Viaje
             builder.ToTable("Serviciostransporte");
             builder.HasKey(s => s.ServiciotransporteId);
             builder.Property(t => t.ServiciotransporteId)
-                   .HasColumnName("ServiciotransporteId")
+                   .HasColumnName("Serviciotransporte_id")
                    .IsRequired();
             builder.Property(s => s.Nombre)
                    .HasColumnName("Nombre")

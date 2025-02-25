@@ -5,6 +5,7 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
 {
@@ -52,7 +53,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             solicitud.FechaAprobacion = DateTime.Now;
             solicitud.Comentarios = dto.Comentarios; 
 
-            solicitud.EstadoId = dto.Aprobar ? 2 : 3;
+            solicitud.EstadoId = dto.Aprobar ? 1 : 2;
 
             _solicitudesService.Update(solicitud);
             _unitOfWork.Save();
@@ -84,17 +85,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
                 });
             }
 
-            var nuevaSolicitud = new Solicitudesviajes
-            {
-                ColaboradorId = dto.ColaboradorId,
-                ViajeId = dto.ViajeId,
-                Comentarios = dto.Comentarios,
-                EstadoId = 1, 
-                Activo = true,
-                Usuariocrea = dto.ColaboradorId, 
-                Fechacrea = DateTime.Now,
-                Fechasolicitud = DateTime.Now
-            };
+            var nuevaSolicitud = _mapper.Map<Solicitudesviajes>(dto);
+
 
             var creado = _solicitudesService.Create(nuevaSolicitud);
             //_unitOfWork.Save();
@@ -159,7 +151,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
                 });
             }
 
-            solicitud.EstadoId = 4;
+            solicitud.EstadoId = 3;
             solicitud.Usuariomodifica = colaboradorId;
             solicitud.Fechamodifica = DateTime.Now;
 
