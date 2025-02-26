@@ -12,7 +12,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Viaje
             builder.HasKey(v => v.ViajeId);
             builder.Property(v => v.ViajeId)
                    .HasColumnName("Viaje_id")
-                   .IsRequired();
+                   .IsRequired()
+                   .ValueGeneratedOnAdd();
             builder.Property(v => v.SucursalId)
                    .HasColumnName("Sucursal_id")
                    .IsRequired();

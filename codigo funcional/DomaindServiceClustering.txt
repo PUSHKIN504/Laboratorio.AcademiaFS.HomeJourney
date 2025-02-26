@@ -1,11 +1,14 @@
-﻿using AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto;
+using AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto;
+using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
 {
     public class DomainServiceClustering
     {
+
         private readonly HttpClient _httpClient;
         private readonly string _googleApiKey;
         private readonly Random _random = new Random();
@@ -25,6 +28,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                 throw new ArgumentException("Distance threshold must be positive.");
 
             var distanceMatrix = await GetDistanceMatrixAsync(employees);
+
             var clusters = HierarchicalClustering(distanceMatrix, (double)distanceThreshold);
 
             var clusteredEmployees = new List<List<ViajesdetallesCreateClusteredDto>>();
@@ -38,8 +42,9 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
             return clusteredEmployees;
         }
 
-        public List<Viajes> CreateTripsFromClusters(
-            ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees)
+        public async Task<List<Viajes>> CreateTripsFromClusters(
+    ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees,
+    HomeJourneyContext context) 
         {
             if (tripDto == null) throw new ArgumentNullException(nameof(tripDto));
             if (tripDto.SucursalId <= 0 || tripDto.EstadoId <= 0) throw new ArgumentException("Invalid trip data.");
@@ -47,26 +52,52 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
             if (tripDto.TransportistaIds == null || tripDto.TransportistaIds.Count < clusteredEmployees.Count)
                 throw new ArgumentException("Not enough transportistas for the clusters.");
 
+            var existingTrips = await context.Viajes
+                .Where(v => v.SucursalId == tripDto.SucursalId
+                         && v.Viajefecha.Date == tripDto.Viajefecha.Date
+                         && v.EstadoId == 5) // 5 = Abierto
+                .AnyAsync();
+            //if (existingTrips)
+            //    throw new InvalidOperationException($"Ya existe un viaje abierto para la sucursal {tripDto.SucursalId} en la fecha {tripDto.Viajefecha.Date}");
+
+            var sucursal = await context.Sucursales
+                .FirstOrDefaultAsync(s => s.SucursalId == tripDto.SucursalId);
+            if (sucursal == null)
+                throw new ArgumentException($"Sucursal con ID {tripDto.SucursalId} no encontrada.");
+
             var trips = new List<Viajes>();
             var availableTransportistas = new List<int>(tripDto.TransportistaIds);
 
             foreach (var cluster in clusteredEmployees)
             {
-                var tripDetails = cluster.Select(d => new Viajesdetalles
-                {
-                    ColaboradorId = d.ColaboradorId,
-                    Distanciakilometros = d.Distanciakilometros,
-                    Totalpagar = d.Totalpagar,
-                    ColaboradorsucursalId = d.ColaboradorsucursalId,
-                    Activo = true,
-                    Usuariocrea = tripDto.Usuariocrea,
-                    Fechacrea = DateTime.Now,
-                    MonedaId = d.MonedaId
-                }).ToList();
-
                 int randomIndex = _random.Next(0, availableTransportistas.Count);
                 int transportistaId = availableTransportistas[randomIndex];
                 availableTransportistas.RemoveAt(randomIndex);
+
+                var transportista = await context.Transportistas
+                    .FirstOrDefaultAsync(t => t.TransportistaId == transportistaId);
+                if (transportista == null)
+                    throw new ArgumentException($"Transportista con ID {transportistaId} no encontrado.");
+                decimal tarifaPorKilometro = transportista.Tarifaporkilometro;
+
+                var tripDetails = new List<Viajesdetalles>();
+                foreach (var employee in cluster)
+                {
+                    var distance = await GetDistanceToSucursalAsync(employee, sucursal);
+                    var totalPagar = distance * tarifaPorKilometro;
+
+                    tripDetails.Add(new Viajesdetalles
+                    {
+                        ColaboradorId = employee.ColaboradorId,
+                        Distanciakilometros = distance,
+                        Totalpagar = totalPagar, 
+                        ColaboradorsucursalId = employee.ColaboradorsucursalId,
+                        Activo = true,
+                        Usuariocrea = tripDto.Usuariocrea,
+                        Fechacrea = DateTime.Now,
+                        MonedaId = employee.MonedaId
+                    });
+                }
 
                 trips.Add(new Viajes
                 {
@@ -75,8 +106,8 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                     EstadoId = tripDto.EstadoId,
                     Viajehora = tripDto.Viajehora,
                     Viajefecha = tripDto.Viajefecha,
-                    Totalkilometros = tripDetails.Sum(d => d.Distanciakilometros),
-                    Totalpagar = tripDetails.Sum(d => d.Totalpagar),
+                    Totalkilometros = tripDetails.Max(d => d.Distanciakilometros), 
+                    Totalpagar = tripDetails.Sum(d => d.Totalpagar), 
                     Activo = true,
                     Usuariocrea = tripDto.Usuariocrea,
                     Fechacrea = DateTime.Now,
@@ -84,6 +115,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                     Viajesdetalles = tripDetails
                 });
             }
+
             return trips;
         }
 
@@ -128,7 +160,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                     {
                         if (elements[j].Status != "OK")
                             throw new Exception($"Distance calculation failed between employees {employees[i].ColaboradorId} and {employees[j].ColaboradorId}.");
-                        matrix[i, j] = elements[j].Distance.Value / 1000.0;
+                        matrix[i, j] = elements[j].Distance.Value / 1000.0; 
                     }
                 }
                 return matrix;
@@ -143,6 +175,23 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
             }
         }
 
+        private async Task<decimal> GetDistanceToSucursalAsync(ViajesdetallesCreateClusteredDto employee, Sucursales sucursal)
+        {
+            var origin = $"{employee.Latitud},{employee.Longitud}";
+            var destination = $"{sucursal.Latitud},{sucursal.Longitud}";
+            var url = $"https://maps.googleapis.com/maps/api/distancematrix/json?origins={Uri.EscapeDataString(origin)}&destinations={Uri.EscapeDataString(destination)}&units=metric&key={_googleApiKey}";
+
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonSerializer.Deserialize<DistanceMatrixResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (result.Status != "OK" || result.Rows[0].Elements[0].Status != "OK")
+                throw new Exception($"Error al calcular distancia para empleado {employee.ColaboradorId}");
+
+            return (decimal)(result.Rows[0].Elements[0].Distance.Value / 1000.0); 
+        }
         private List<List<int>> HierarchicalClustering(double[,] distances, double maxDistance)
         {
             int n = distances.GetLength(0);
@@ -165,41 +214,40 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
 
                 if (closest.cluster1 >= clusters.Count || closest.cluster2 >= clusters.Count)
                 {
-                    Console.WriteLine($"Índice fuera de rango: cluster1={closest.cluster1}, cluster2={closest.cluster2}, clusters.Count={clusters.Count}");
-                    break;
+                    Console.WriteLine($"Índice fuera de rango detectado: cluster1={closest.cluster1}, cluster2={closest.cluster2}, clusters.Count={clusters.Count}");
+                    break; 
                 }
 
                 var cluster1 = clusters[closest.cluster1];
                 var cluster2 = clusters[closest.cluster2];
 
                 cluster1.AddRange(cluster2);
-                clusters.RemoveAt(closest.cluster2);
+                clusters.RemoveAt(closest.cluster2); 
 
+                minDistances.RemoveAll(d => d.cluster1 == closest.cluster1 || d.cluster2 == closest.cluster1 ||
+                                           d.cluster1 == closest.cluster2 || d.cluster2 == closest.cluster2);
 
-                var newMinDistances = new List<(int cluster1, int cluster2, double distance)>();
                 for (int i = 0; i < clusters.Count; i++)
                 {
-                    for (int j = i + 1; j < clusters.Count; j++)
+                    if (i != closest.cluster1)
                     {
                         double minDist = double.MaxValue;
-                        foreach (var idx1 in clusters[i])
+                        foreach (var idx1 in clusters[closest.cluster1])
                         {
-                            foreach (var idx2 in clusters[j])
+                            foreach (var idx2 in clusters[i])
                             {
                                 if (idx1 >= distances.GetLength(0) || idx2 >= distances.GetLength(0))
                                     throw new IndexOutOfRangeException($"Índice inválido en distances: idx1={idx1}, idx2={idx2}, tamaño={distances.GetLength(0)}");
                                 minDist = Math.Min(minDist, distances[idx1, idx2]);
                             }
                         }
-                        newMinDistances.Add((i, j, minDist));
+                        minDistances.Add((closest.cluster1, i, minDist));
                     }
                 }
-                minDistances = newMinDistances; 
             }
 
             return clusters;
         }
-    }
 
-    
+    }
 }
