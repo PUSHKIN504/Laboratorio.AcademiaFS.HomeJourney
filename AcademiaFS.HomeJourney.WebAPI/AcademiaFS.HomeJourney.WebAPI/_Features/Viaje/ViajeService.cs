@@ -73,12 +73,42 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
             return await _clusteringService.ClusterEmployeesAsync(employees, distanceThreshold);
         }
 
+        //public async Task<List<Viajes>> CreateTripsFromClustersAsync(
+        //    ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees)
+        //{
+        //    var trips = _clusteringService.CreateTripsFromClusters(tripDto, clusteredEmployees);
+        //     _unitOfWork.Save();
+        //    return trips;
+        //}
         public async Task<List<Viajes>> CreateTripsFromClustersAsync(
             ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees)
         {
             var trips = _clusteringService.CreateTripsFromClusters(tripDto, clusteredEmployees);
-             _unitOfWork.Save();
-            return trips;
+
+            // Iniciar una transacción
+            await _unitOfWork.BeginTransactionAsync();
+
+            try
+            {
+                // Añadir las entidades al contexto
+                _unitOfWork.Context.Viajes.AddRange(trips);
+
+                // Guardar los cambios
+                var affectedRows = await _unitOfWork.SaveAsync();
+                if (affectedRows == 0)
+                    throw new Exception("No se guardaron cambios en la base de datos.");
+
+                // Confirmar la transacción
+                await _unitOfWork.CommitTransactionAsync();
+
+                return trips;
+            }
+            catch (Exception ex)
+            {
+                // Revertir la transacción en caso de error
+                await _unitOfWork.RollbackTransactionAsync();
+                throw new Exception($"Error al guardar los viajes en una transacción: {ex.Message}", ex);
+            }
         }
     }
 }

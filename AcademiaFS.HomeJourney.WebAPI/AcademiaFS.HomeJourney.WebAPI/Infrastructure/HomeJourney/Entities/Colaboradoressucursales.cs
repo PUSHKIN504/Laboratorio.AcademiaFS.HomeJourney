@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
-    public class Colaboradoressucursales
+    public class Colaboradoressucursales : IActivableInterface
     {
         public int ColaboradorsucursalId { get; set; }
         public int ColaboradorId { get; set; }
@@ -14,6 +14,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public DateTime Fechacrea { get; set; }
         public int? Usuariomodifica { get; set; }
         public DateTime? Fechamodifica { get; set; }
+
 
         // Relaciones
         public Colaboradores Colaborador { get; set; } = null!;

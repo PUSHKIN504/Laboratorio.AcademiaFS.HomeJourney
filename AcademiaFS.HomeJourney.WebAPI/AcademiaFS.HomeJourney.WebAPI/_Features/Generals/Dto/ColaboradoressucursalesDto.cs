@@ -1,6 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
+﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
-    public class ColaboradorSucursalDto
+    public class ColaboradorSucursalDto : IActivableInterface
     {
         public int ColaboradorsucursalId { get; set; }
         public int ColaboradorId { get; set; }
