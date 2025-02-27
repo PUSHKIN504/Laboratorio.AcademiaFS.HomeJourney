@@ -67,5 +67,29 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 Data = dto
             });
         }
+        [HttpGet]
+        public async Task<ActionResult<CustomResponse<List<ColaboradorGetAllDto>>>> GetAllColaboradores()
+        {
+            try
+            {
+                var colaboradores = await _service.GetAllColaboradoresAsync();
+                var colaboradoresDto = _mapper.Map<List<ColaboradorGetAllDto>>(colaboradores);
+
+                return Ok(new CustomResponse<List<ColaboradorGetAllDto>>
+                {
+                    Success = true,
+                    Message = "Colaboradores obtenidos correctamente. Excluye los que están en viajes hoy.",
+                    Data = colaboradoresDto
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomResponse<List<ColaboradorGetAllDto>>
+                {
+                    Success = false,
+                    Message = $"Error al obtener los colaboradores: {ex.Message}"
+                });
+            }
+        }
     }
 }

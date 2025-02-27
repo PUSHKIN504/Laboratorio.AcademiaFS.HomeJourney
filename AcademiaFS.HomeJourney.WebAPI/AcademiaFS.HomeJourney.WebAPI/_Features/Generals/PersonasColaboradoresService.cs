@@ -53,5 +53,22 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals
             var persona = await _context.Personas.FirstOrDefaultAsync(p => p.PersonaId == id);
             return persona;
         }
+        public async Task<List<Colaboradores>> GetAllColaboradoresAsync()
+        {
+            var today = DateTime.Today; // Fecha actual: 2025-02-27
+
+            // Obtener IDs de colaboradores en viajes hoy
+            var colaboradoresEnViajesHoy = await _context.Viajesdetalles
+                .Where(vd => vd.Viaje.Viajefecha == today && vd.Activo)
+                .Select(vd => vd.ColaboradorId)
+                .Distinct()
+                .ToListAsync();
+
+            // Devolver colaboradores activos que no estén en la lista de viajes hoy
+            return await _context.Colaboradores
+                .Include(c => c.Persona) // Para Nombre y Apellido
+                .Where(c => c.Activo && !colaboradoresEnViajesHoy.Contains(c.ColaboradorId))
+                .ToListAsync();
+        }
     }
 }

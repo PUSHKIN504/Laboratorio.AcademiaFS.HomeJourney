@@ -22,6 +22,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
             _domainService = domainService;
         }
 
+   
         public CustomResponse<UsuarioConDetallesDto> Login(string username, string password)
         {
             var usuario = _context.Usuarios
@@ -32,6 +33,8 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
                     .ThenInclude(c => c.Cargo)
                 .Include(u => u.Colaborador)
                     .ThenInclude(c => c.Rol)
+                .Include(u => u.Colaborador)
+                    .ThenInclude(c => c.Sucursales)
                 .FirstOrDefault(u => u.Username == username && u.Activo);
 
             if (usuario == null)
@@ -51,9 +54,6 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
 
             return response;
         }
-
-
-
 
     }
 }

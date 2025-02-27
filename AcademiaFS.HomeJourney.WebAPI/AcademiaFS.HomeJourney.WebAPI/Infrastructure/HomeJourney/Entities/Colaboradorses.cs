@@ -25,7 +25,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public ICollection<Colaboradoressucursales> Colaboradoressucursales { get; set; } = new List<Colaboradoressucursales>();
         public ICollection<Solicitudesviajes> Solicitudesviajes { get; set; } = new List<Solicitudesviajes>();
         public ICollection<Valoracionesviajes> Valoracionesviajes { get; set; } = new List<Valoracionesviajes>();
-
+        public virtual ICollection<Sucursales> Sucursales { get; set; } = new List<Sucursales>();
         public ICollection<Usuarios> Usuarios { get; set; } = new List<Usuarios>();
     }
 }

@@ -63,5 +63,29 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 Data = transportista
             });
         }
+        [HttpGet]
+        public async Task<ActionResult<CustomResponse<List<TransportistaGetAllDto>>>> GetAllTransportistas()
+        {
+            try
+            {
+                var transportistas = await _service.GetAllTransportistasAsync();
+                var transportistasDto = _mapper.Map<List<TransportistaGetAllDto>>(transportistas);
+
+                return Ok(new CustomResponse<List<TransportistaGetAllDto>>
+                {
+                    Success = true,
+                    Message = "Transportistas obtenidos correctamente. Excluye los que están en viajes hoy.",
+                    Data = transportistasDto
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomResponse<List<TransportistaGetAllDto>>
+                {
+                    Success = false,
+                    Message = $"Error al obtener los transportistas: {ex.Message}"
+                });
+            }
+        }
     }
 }

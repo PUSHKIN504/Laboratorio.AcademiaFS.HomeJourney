@@ -40,12 +40,43 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
             CreateMap<ViajesCreateDto, Viajesdetalles>().ReverseMap();
             CreateMap<ViajesdetallesCreateDto, Viajesdetalles>().ReverseMap();
             CreateMap<ColaboradorSucursalDto, Colaboradoressucursales>().ReverseMap();
+
             CreateMap<Usuarios, UsuarioConDetallesDto>()
-            .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))
-            .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
-            .ForMember(dest => dest.PersonaNombreCompleto, opt => opt.MapFrom(src => $"{src.Colaborador.Persona.Nombre} {src.Colaborador.Persona.Apelllido}"))
-            .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Colaborador.Cargo != null ? src.Colaborador.Cargo.Nombre : "Sin cargo"))
-            .ForMember(dest => dest.Rol, opt => opt.MapFrom(src => src.Colaborador.Rol != null ? src.Colaborador.Rol.Nombre : "Sin rol"));
+                        .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))
+                        .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.Username))
+                        .ForMember(dest => dest.PersonaNombreCompleto, opt => opt.MapFrom(src =>
+                            src.Colaborador != null && src.Colaborador.Persona != null
+                            ? $"{src.Colaborador.Persona.Nombre} {src.Colaborador.Persona.Apelllido}"
+                            : "Sin nombre"))
+                        .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src =>
+                            src.Colaborador != null && src.Colaborador.Cargo != null
+                            ? src.Colaborador.Cargo.Nombre
+                            : "Sin cargo"))
+                        .ForMember(dest => dest.Rol, opt => opt.MapFrom(src =>
+                            src.Colaborador != null && src.Colaborador.Rol != null
+                            ? src.Colaborador.Rol.Nombre
+                            : "Sin rol"))
+                        .AfterMap((src, dest) =>
+                        {
+                            if (src.Colaborador != null && src.Colaborador.CargoId == 3 && src.Colaborador.Sucursales.Any(s => s.Activo))
+                            {
+                                var sucursal = src.Colaborador.Sucursales.First(s => s.Activo);
+                                dest.SucursalId = sucursal.SucursalId;
+                                dest.SucursalNombre = sucursal.Nombre;
+                            }
+                            else
+                            {
+                                dest.SucursalId = null;
+                                dest.SucursalNombre = null;
+                            }
+                        });
+            CreateMap<Colaboradores, ColaboradorGetAllDto>()
+                        .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Persona.Nombre))
+                        .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Persona.Apelllido));
+
+            CreateMap<Transportistas, TransportistaGetAllDto>()
+                        .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Persona.Nombre))
+                        .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Persona.Apelllido));
 
         }
     }

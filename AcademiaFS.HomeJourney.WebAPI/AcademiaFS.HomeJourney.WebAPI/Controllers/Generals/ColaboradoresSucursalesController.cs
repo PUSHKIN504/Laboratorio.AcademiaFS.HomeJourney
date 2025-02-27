@@ -1,5 +1,6 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI._Features;
 using AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto;
+using AcademiaFS.HomeJourney.WebAPI._Features.Viaje;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AcademiaFS.HomeJourney.WebAPI.Utilities;
 using AutoMapper;
@@ -13,11 +14,12 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     {
         private readonly IGenericServiceInterface<Colaboradoressucursales, int> _service;
         private readonly IMapper _mapper;
-
-        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper)
+        private readonly DomainServiceViaje _domainService;
+        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper, DomainServiceViaje domainServiceViaje)
         {
             _service = service;
             _mapper = mapper;
+            _domainService = domainServiceViaje;
         }
 
         [HttpGet]
@@ -54,22 +56,63 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             });
         }
 
-        [HttpPost]
-        public ActionResult<CustomResponse<ColaboradorSucursalDto>> Create([FromBody] ColaboradorSucursalDto dto)
-        {
-            var entity = _mapper.Map<Colaboradoressucursales>(dto);
-            entity.Usuariomodifica = null;
-            entity.Fechamodifica = null;
-            var created = _service.Create(entity);
-            var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
-            return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalDto>
-            {
-                Success = true,
-                Message = "Registro creado correctamente.",
-                Data = createdDto
-            });
-        }
+        //[HttpPost]
+        //public ActionResult<CustomResponse<ColaboradorSucursalDto>> Create([FromBody] ColaboradorSucursalDto dto)
+        //{
+        //    var entity = _mapper.Map<Colaboradoressucursales>(dto);
+        //    entity.Usuariomodifica = null;
+        //    entity.Fechamodifica = null;
+        //    var created = _service.Create(entity);
+        //    var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
+        //    return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalDto>
+        //    {
+        //        Success = true,
+        //        Message = "Registro creado correctamente.",
+        //        Data = createdDto
+        //    });
+        //}
 
+        [HttpPost]
+        public async Task<ActionResult<CustomResponse<ColaboradorSucursalDto>>> Create([FromBody] ColaboradorSucursalDto dto)
+        {
+            try
+            {
+                // Mapear DTO a entidad
+                var entity = _mapper.Map<Colaboradoressucursales>(dto);
+                entity.Usuariomodifica = null;
+                entity.Fechamodifica = null;
+
+                // Validar y establecer la distancia real con Google Maps
+                await _domainService.ValidateAndSetDistanceAsync(entity);
+
+                // Guardar usando el servicio genérico
+                var created = _service.Create(entity);
+                var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
+
+                return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalDto>
+                {
+                    Success = true,
+                    Message = "Registro creado correctamente.",
+                    Data = createdDto
+                });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new CustomResponse<ColaboradorSucursalDto>
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new CustomResponse<ColaboradorSucursalDto>
+                {
+                    Success = false,
+                    Message = $"Error al crear el registro: {ex.Message}"
+                });
+            }
+        }
         [HttpPut("{id}")]
         public ActionResult<CustomResponse<ColaboradorSucursalDto>> Update(int id, [FromBody] ColaboradorSucursalDto dto)
         {

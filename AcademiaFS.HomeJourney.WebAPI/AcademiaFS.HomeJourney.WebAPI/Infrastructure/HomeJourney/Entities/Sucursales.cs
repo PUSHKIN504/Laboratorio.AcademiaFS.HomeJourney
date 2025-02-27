@@ -15,8 +15,10 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public DateTime? Fechamodifica { get; set; }
         public decimal Latitud { get; set; }
         public decimal Longitud { get; set; }
+        public int? JefeId { get; set; }
 
         // Relaciones
+        public virtual Colaboradores Jefe { get; set; }
         public ICollection<Colaboradoressucursales> Colaboradoressucursales { get; set; } = new List<Colaboradoressucursales>();
         public ICollection<Viajes> Viajes { get; set; } = new List<Viajes>();
     }

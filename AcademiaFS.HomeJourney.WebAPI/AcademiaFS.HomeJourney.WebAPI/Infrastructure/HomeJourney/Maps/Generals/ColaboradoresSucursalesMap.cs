@@ -60,10 +60,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Generals
                    .HasForeignKey(x => x.Usuariomodifica)
                    .OnDelete(DeleteBehavior.ClientSetNull);
 
-            //builder.hasone(vd => vd.colaboradorsucursal)
-            //       .withmany(c => c.viajesdetalles)
-            //       .hasforeignkey(vd => vd.colaboradorsucursalId)
-            //       .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

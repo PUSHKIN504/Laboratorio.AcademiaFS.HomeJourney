@@ -35,6 +35,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
                 var transportista = _mapper.Map<Transportistas>(dto);
                 transportista.PersonaId = persona.PersonaId;
                 transportista.Fechacrea = DateTime.Now;
+                transportista.Activo = true;
                 _context.Transportistas.Add(transportista);
                 await _unitOfWork.SaveAsync();
 
@@ -54,6 +55,21 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje
             return await _context.Transportistas
                 .Include(t => t.Persona)
                 .FirstOrDefaultAsync(t => t.TransportistaId == id);
+        }
+        public async Task<List<Transportistas>> GetAllTransportistasAsync()
+        {
+            var today = DateTime.Today; 
+
+            var transportistasEnViajesHoy = await _context.Viajes
+                .Where(v => v.Viajefecha == today && v.Activo)
+                .Select(v => v.TransportistaId)
+                .Distinct()
+                .ToListAsync();
+
+            return await _context.Transportistas
+                .Include(t => t.Persona) 
+                .Where(t => t.Activo && !transportistasEnViajesHoy.Contains(t.TransportistaId))
+                .ToListAsync();
         }
     }
 }

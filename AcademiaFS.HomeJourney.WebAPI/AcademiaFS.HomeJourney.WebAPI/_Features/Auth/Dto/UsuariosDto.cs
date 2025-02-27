@@ -21,6 +21,8 @@
         public string PersonaNombreCompleto { get; set; } = null!;
         public string Cargo { get; set; } = null!;
         public string Rol { get; set; } = null!;
+        public int? SucursalId { get; set; }
+        public string? SucursalNombre { get; set; }
     }
 
 }

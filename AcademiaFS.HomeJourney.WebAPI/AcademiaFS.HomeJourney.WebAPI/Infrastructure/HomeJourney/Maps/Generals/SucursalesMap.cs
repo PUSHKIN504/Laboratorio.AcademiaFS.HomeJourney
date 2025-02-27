@@ -46,6 +46,9 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Maps.Generals
                    .HasColumnName("Longitud")
                    .HasColumnType("decimal(9,8)")
                    .IsRequired();
+            builder.Property(s => s.JefeId) 
+                   .HasColumnName("Jefe_id")
+                   .IsRequired(false);
 
             // Relaciones de auditoría
             builder.HasOne<Usuarios>()
