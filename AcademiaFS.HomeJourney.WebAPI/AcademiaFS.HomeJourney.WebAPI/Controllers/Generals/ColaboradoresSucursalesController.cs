@@ -56,36 +56,18 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             });
         }
 
-        //[HttpPost]
-        //public ActionResult<CustomResponse<ColaboradorSucursalDto>> Create([FromBody] ColaboradorSucursalDto dto)
-        //{
-        //    var entity = _mapper.Map<Colaboradoressucursales>(dto);
-        //    entity.Usuariomodifica = null;
-        //    entity.Fechamodifica = null;
-        //    var created = _service.Create(entity);
-        //    var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
-        //    return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalDto>
-        //    {
-        //        Success = true,
-        //        Message = "Registro creado correctamente.",
-        //        Data = createdDto
-        //    });
-        //}
 
         [HttpPost]
         public async Task<ActionResult<CustomResponse<ColaboradorSucursalDto>>> Create([FromBody] ColaboradorSucursalDto dto)
         {
             try
             {
-                // Mapear DTO a entidad
                 var entity = _mapper.Map<Colaboradoressucursales>(dto);
                 entity.Usuariomodifica = null;
                 entity.Fechamodifica = null;
 
-                // Validar y establecer la distancia real con Google Maps
                 await _domainService.ValidateAndSetDistanceAsync(entity);
 
-                // Guardar usando el servicio genérico
                 var created = _service.Create(entity);
                 var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
 

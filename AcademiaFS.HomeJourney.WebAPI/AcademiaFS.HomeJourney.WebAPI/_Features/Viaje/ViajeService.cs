@@ -33,8 +33,8 @@ public class ViajesService
 
         var viajes = await query
             .Include(v => v.Viajesdetalles)
-            .Include(v => v.Transportista) // Incluye Transportista
-            .ThenInclude(t => t.Persona) // Incluye Persona relacionada con Transportista
+            .Include(v => v.Transportista) 
+            .ThenInclude(t => t.Persona) 
             .ToListAsync();
 
         var reportes = viajes

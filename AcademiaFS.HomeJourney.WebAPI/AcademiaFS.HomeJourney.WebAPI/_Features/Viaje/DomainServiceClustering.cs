@@ -30,7 +30,6 @@ public class DomainServiceClustering
         var distanceMatrix = await _googleMapsService.GetDistanceMatrixAsync(employees);
         var clusters = PerformHierarchicalClustering(distanceMatrix, (double)distanceThreshold);
 
-        // Redistribuir clústeres para respetar el límite de 100 km
         var adjustedClusters = AdjustClustersForDistanceLimit(clusters, employees, 100m);
 
         return MapClustersToEmployees(employees, adjustedClusters);
@@ -45,7 +44,7 @@ public class DomainServiceClustering
             var currentCluster = new List<int>();
             decimal totalDistance = 0m;
 
-            foreach (var employeeIndex in cluster.OrderBy(i => employees[i].Distanciakilometros)) // Ordenar para optimizar
+            foreach (var employeeIndex in cluster.OrderBy(i => employees[i].Distanciakilometros)) 
             {
                 decimal employeeDistance = employees[employeeIndex].Distanciakilometros;
 
@@ -56,19 +55,16 @@ public class DomainServiceClustering
                 }
                 else
                 {
-                    // Si el clúster actual no está vacío, lo agregamos
                     if (currentCluster.Any())
                     {
                         adjustedClusters.Add(new List<int>(currentCluster));
                     }
 
-                    // Iniciar un nuevo clúster con este empleado
                     currentCluster = new List<int> { employeeIndex };
                     totalDistance = employeeDistance;
                 }
             }
 
-            // Agregar el último clúster si tiene elementos
             if (currentCluster.Any())
             {
                 adjustedClusters.Add(currentCluster);

@@ -72,14 +72,14 @@
                 {
                     if (elements[j].Status != "OK")
                         throw new Exception($"Fallo al calcular la distancia entre empleados en posición {i} y {j}.");
-                    matrix[i, j] = elements[j].Distance.Value / 1000.0; // Convertir a kilómetros
+                    matrix[i, j] = elements[j].Distance.Value / 1000.0;
                 }
             }
             return matrix;
         }
     }
 
-    // Clase para deserializar la respuesta de Google Maps
+
     public class DistanceMatrixResponse
     {
         public string Status { get; set; }
