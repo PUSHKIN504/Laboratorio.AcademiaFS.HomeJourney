@@ -28,10 +28,8 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features
             service.AddTransient(typeof(IGenericServiceInterface<,>), typeof(GenericService<,>));
             service.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // Registrar GoogleMapsService con HttpClient
             service.AddHttpClient<IGoogleMapsService, GoogleMapsService>();
 
-            // Registrar DomainServiceClustering como transient (no necesita HttpClient directamente)
             service.AddTransient<DomainServiceClustering>();
             service.AddTransient<DomainServiceViaje>();
 

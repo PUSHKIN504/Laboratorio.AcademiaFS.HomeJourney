@@ -35,7 +35,7 @@ public class DomainServiceClustering
         return MapClustersToEmployees(employees, adjustedClusters);
     }
 
-    private List<List<int>> AdjustClustersForDistanceLimit(List<List<int>> clusters, List<ViajesdetallesCreateClusteredDto> employees, decimal maxDistance)
+    public List<List<int>> AdjustClustersForDistanceLimit(List<List<int>> clusters, List<ViajesdetallesCreateClusteredDto> employees, decimal maxDistance)
     {
         var adjustedClusters = new List<List<int>>();
 
@@ -96,7 +96,7 @@ public class DomainServiceClustering
         return trips;
     }
 
-    private Transportistas GetTransportista(int transportistaId)
+    public Transportistas GetTransportista(int transportistaId)
     {
         var transportista = _context.Transportistas
             .FirstOrDefault(t => t.TransportistaId == transportistaId && t.Activo);
@@ -107,7 +107,7 @@ public class DomainServiceClustering
         return transportista;
     }
 
-    private List<Viajesdetalles> BuildTripDetails(List<ViajesdetallesCreateClusteredDto> cluster, ViajesCreateClusteredDto tripDto, decimal tarifaPorKilometro)
+    public List<Viajesdetalles> BuildTripDetails(List<ViajesdetallesCreateClusteredDto> cluster, ViajesCreateClusteredDto tripDto, decimal tarifaPorKilometro)
     {
         return cluster.Select(d => new Viajesdetalles
         {
@@ -122,7 +122,7 @@ public class DomainServiceClustering
         }).ToList();
     }
 
-    private int AssignTransportista(List<int> availableTransportistas)
+    public int AssignTransportista(List<int> availableTransportistas)
     {
         int randomIndex = _random.Next(0, availableTransportistas.Count);
         int transportistaId = availableTransportistas[randomIndex];
@@ -130,7 +130,7 @@ public class DomainServiceClustering
         return transportistaId;
     }
 
-    private Viajes BuildTrip(ViajesCreateClusteredDto tripDto, List<Viajesdetalles> tripDetails, int transportistaId)
+    public Viajes BuildTrip(ViajesCreateClusteredDto tripDto, List<Viajesdetalles> tripDetails, int transportistaId)
     {
         return new Viajes
         {
@@ -149,7 +149,7 @@ public class DomainServiceClustering
         };
     }
 
-    private List<List<int>> PerformHierarchicalClustering(double[,] distances, double maxDistance)
+    public List<List<int>> PerformHierarchicalClustering(double[,] distances, double maxDistance)
     {
         int n = distances.GetLength(0);
         var clusters = Enumerable.Range(0, n).Select(i => new List<int> { i }).ToList();
@@ -166,7 +166,7 @@ public class DomainServiceClustering
         return clusters;
     }
 
-    private List<(int cluster1, int cluster2, double distance)> CalculateInitialDistances(double[,] distances, int n)
+    public List<(int cluster1, int cluster2, double distance)> CalculateInitialDistances(double[,] distances, int n)
     {
         var minDistances = new List<(int, int, double)>();
         for (int i = 0; i < n; i++)
@@ -175,7 +175,7 @@ public class DomainServiceClustering
         return minDistances;
     }
 
-    private void MergeClusters(List<List<int>> clusters, int cluster1Idx, int cluster2Idx)
+    public void MergeClusters(List<List<int>> clusters, int cluster1Idx, int cluster2Idx)
     {
         var cluster1 = clusters[cluster1Idx];
         var cluster2 = clusters[cluster2Idx];
@@ -183,7 +183,7 @@ public class DomainServiceClustering
         clusters.RemoveAt(cluster2Idx);
     }
 
-    private List<(int cluster1, int cluster2, double distance)> RecalculateDistances(double[,] distances, List<List<int>> clusters)
+    public List<(int cluster1, int cluster2, double distance)> RecalculateDistances(double[,] distances, List<List<int>> clusters)
     {
         var newMinDistances = new List<(int, int, double)>();
         for (int i = 0; i < clusters.Count; i++)
@@ -197,7 +197,7 @@ public class DomainServiceClustering
         return newMinDistances;
     }
 
-    private List<List<ViajesdetallesCreateClusteredDto>> MapClustersToEmployees(
+    public List<List<ViajesdetallesCreateClusteredDto>> MapClustersToEmployees(
         List<ViajesdetallesCreateClusteredDto> employees, List<List<int>> clusters)
     {
         var clusteredEmployees = new List<List<ViajesdetallesCreateClusteredDto>>();
