@@ -10,7 +10,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
     [ApiController]
     [Route("academiafarsiman/personascolaboradores")]
-    public class PersonasColaboradoresController : Controller
+    public class PersonasColaboradoresController : ControllerBase
     {
         private readonly PersonasColaboradoresService _service;
         private readonly IMapper _mapper;

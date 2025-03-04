@@ -53,6 +53,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals
             var persona = await _context.Personas.FirstOrDefaultAsync(p => p.PersonaId == id);
             return persona;
         }
+
         public async Task<List<Colaboradores>> GetAllColaboradoresAsync()
         {
             var today = DateTime.Today; 

@@ -1,4 +1,5 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI._Features.Auth;
+using FluentAssertions;
 using HomeJourne.UnitTest.DomainServiceAuthTest.DataTest;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace HomeJourne.UnitTest.DomainServiceAuthTest
             bool result = _service.ValidatePassword(inputPassword, storedHash);
 
             // Assert
-            Assert.Equal(expectedResult, result);
+            result.Should().Be(expectedResult);
         }
 
     }

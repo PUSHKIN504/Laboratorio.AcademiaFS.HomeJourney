@@ -10,12 +10,12 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 {
     [ApiController]
     [Route("academiafarsiman/colaboradoressucursales")]
-    public class ColaboradoresSucursalesController : Controller
+    public class ColaboradoresSucursalesController : ControllerBase
     {
         private readonly IGenericServiceInterface<Colaboradoressucursales, int> _service;
         private readonly IMapper _mapper;
-        private readonly DomainServiceViaje _domainService;
-        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper, DomainServiceViaje domainServiceViaje)
+        private readonly ViajesService _domainService;
+        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper, ViajesService domainServiceViaje)
         {
             _service = service;
             _mapper = mapper;
@@ -66,7 +66,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 entity.Usuariomodifica = null;
                 entity.Fechamodifica = null;
 
-                await _domainService.ValidateAndSetDistanceAsync(entity);
+                await _domainService.AsignarColaboradorASucursalAsync(entity);
 
                 var created = _service.Create(entity);
                 var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
@@ -95,6 +95,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 });
             }
         }
+
         [HttpPut("{id}")]
         public ActionResult<CustomResponse<ColaboradorSucursalDto>> Update(int id, [FromBody] ColaboradorSucursalDto dto)
         {

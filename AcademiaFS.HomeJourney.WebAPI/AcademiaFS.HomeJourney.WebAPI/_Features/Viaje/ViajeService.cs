@@ -4,27 +4,40 @@ using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
 using AcademiaFS.HomeJourney.WebAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using AcademiaFS.HomeJourney.WebAPI._Common;
 
 public class ViajesService
 {
     private readonly HomeJourneyContext _context;
     private readonly IUnitOfWork _unitOfWork;
     private readonly DomainServiceClustering _clusteringService;
+    private readonly IGoogleMapsService _googleMapsService;
+    private readonly DomainServiceViaje _domainServiceViaje;
     private const int GERENTE_TIENDA_CARGO_ID = 3;
-    public ViajesService(HomeJourneyContext context, IUnitOfWork unitOfWork, DomainServiceClustering clusteringService)
+    private readonly ClusteringApplicationService _clusteringApplicationService;
+    public ViajesService(HomeJourneyContext context, IUnitOfWork unitOfWork,
+        DomainServiceClustering clusteringService,
+        IGoogleMapsService googleMapsService,
+        DomainServiceViaje domainServiceViaje, ClusteringApplicationService clusteringApplicationService)
     {
         _context = context;
         _unitOfWork = unitOfWork;
         _clusteringService = clusteringService;
+        _googleMapsService = googleMapsService;
+        _domainServiceViaje = domainServiceViaje;
+        _clusteringApplicationService = clusteringApplicationService;
     }
 
     public async Task<List<ViajesTransportistaReporteDto>> GetViajesPorTransportistaReporteAsync(
-                DateTime fechaInicio,
-                DateTime fechaFin,
-                int? transportistaId = null)
+            DateTime fechaInicio,
+            DateTime fechaFin,
+            int? transportistaId = null)
     {
+        if (fechaInicio > fechaFin)
+            throw new ArgumentException("La fecha de inicio no puede ser mayor que la fecha de fin.");
+
         var query = _context.Viajes
-            .Where(v => v.Viajefecha >= fechaInicio && v.Viajefecha <= fechaFin && v.Activo && v.EstadoId==4);
+            .Where(v => v.Viajefecha >= fechaInicio && v.Viajefecha <= fechaFin && v.Activo && v.EstadoId == 4);
 
         if (transportistaId.HasValue)
         {
@@ -33,8 +46,8 @@ public class ViajesService
 
         var viajes = await query
             .Include(v => v.Viajesdetalles)
-            .Include(v => v.Transportista) 
-            .ThenInclude(t => t.Persona) 
+            .Include(v => v.Transportista)
+                .ThenInclude(t => t.Persona)
             .ToListAsync();
 
         var reportes = viajes
@@ -65,6 +78,124 @@ public class ViajesService
 
         return reportes;
     }
+    public void ValidateEmployeeInputs(List<ViajesdetallesCreateClusteredDto> employees)
+    {
+        if (employees == null || !employees.Any())
+            throw new ArgumentException("La lista de empleados no puede ser nula o vacía.");
+
+        foreach (var emp in employees)
+        {
+            var colaboradorSucursal = _context.Colaboradoressucursales
+                .FirstOrDefault(cs => cs.ColaboradorsucursalId == emp.ColaboradorsucursalId);
+            if (colaboradorSucursal == null)
+                throw new ArgumentException($"ColaboradorSucursalId {emp.ColaboradorsucursalId} no existe.");
+
+            if (emp.Distanciakilometros < 0)
+                throw new ArgumentException("La distancia debe ser un valor positivo.");
+
+            if (emp.Distanciakilometros != colaboradorSucursal.Distanciakilometro)
+                throw new ArgumentException("La distancia no puede ser modificada.");
+
+            _domainServiceViaje.ValidateCoordenadas((decimal)emp.Latitud, (decimal)emp.Longitud, $"empleado {emp.ColaboradorId}");
+        }
+    }
+    public async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
+        List<ViajesdetallesCreateClusteredDto> employees, decimal distanceThreshold)
+    {
+        _domainServiceViaje.ValidateDistanceThreshold(distanceThreshold);
+        ValidateEmployeeInputs(employees);
+        return await _clusteringApplicationService.ClusterEmployeesAsync(employees, distanceThreshold);
+    }
+
+    public async Task AsignarColaboradorASucursalAsync(Colaboradoressucursales entity)
+    {
+        var colaborador = _context.Colaboradores
+            .FirstOrDefault(c => c.ColaboradorId == entity.ColaboradorId)
+            ?? throw new ArgumentException($"El colaborador con ID {entity.ColaboradorId} no existe.");
+
+        var sucursal = _context.Sucursales
+            .FirstOrDefault(s => s.SucursalId == entity.SucursalId)
+            ?? throw new ArgumentException($"La sucursal con ID {entity.SucursalId} no existe.");
+
+        var existingAssignment = _context.Colaboradoressucursales
+            .FirstOrDefault(cs => cs.ColaboradorId == entity.ColaboradorId &&
+                                    cs.SucursalId == entity.SucursalId &&
+                                    cs.Activo);
+        if (existingAssignment != null)
+            throw new ArgumentException($"El colaborador {entity.ColaboradorId} ya está asignado a la sucursal {entity.SucursalId}.");
+
+        _domainServiceViaje.ValidateCoordenadas(sucursal.Latitud, sucursal.Longitud, "sucursal");
+        _domainServiceViaje.ValidateCoordenadas(colaborador.Latitud, colaborador.Longitud, "colaborador");
+
+        var locations = new List<ViajesdetallesCreateClusteredDto>
+        {
+            new ViajesdetallesCreateClusteredDto
+            {
+                Latitud = (double)sucursal.Latitud,
+                Longitud = (double)sucursal.Longitud
+            },
+            new ViajesdetallesCreateClusteredDto
+            {
+                Latitud = (double)colaborador.Latitud,
+                Longitud = (double)colaborador.Longitud
+            }
+        };
+
+        var distanceMatrix = await _googleMapsService.GetDistanceMatrixAsync(locations);
+        var distanceKm = (decimal)distanceMatrix[0, 1];
+
+        _domainServiceViaje.ValidateAndSetDistance(entity, colaborador, sucursal, distanceKm);
+
+    }
+
+
+    //public async Task<List<ViajesTransportistaReporteDto>> GetViajesPorTransportistaReporteAsync(
+    //            DateTime fechaInicio,
+    //            DateTime fechaFin,
+    //            int? transportistaId = null)
+    //{
+    //    var query = _context.Viajes
+    //        .Where(v => v.Viajefecha >= fechaInicio && v.Viajefecha <= fechaFin && v.Activo && v.EstadoId==4);
+
+    //    if (transportistaId.HasValue)
+    //    {
+    //        query = query.Where(v => v.TransportistaId == transportistaId.Value);
+    //    }
+
+    //    var viajes = await query
+    //        .Include(v => v.Viajesdetalles)
+    //        .Include(v => v.Transportista) 
+    //        .ThenInclude(t => t.Persona) 
+    //        .ToListAsync();
+
+    //    var reportes = viajes
+    //        .GroupBy(v => v.TransportistaId)
+    //        .Select(g => new ViajesTransportistaReporteDto
+    //        {
+    //            TransportistaId = g.Key,
+    //            TransportistaNombre = g.First().Transportista?.Persona?.Nombre ?? "Sin nombre",
+    //            DNI = g.First().Transportista?.Persona?.Documentonacionalidentificacion ?? "Sin DNI",
+    //            Correo = g.First().Transportista?.Persona?.Email ?? "Sin correo",
+    //            Viajes = g.Select(v => new ViajeDetalleReporteDto
+    //            {
+    //                ViajeId = v.ViajeId,
+    //                Viajefecha = v.Viajefecha,
+    //                Viajehora = v.Viajehora,
+    //                Totalkilometros = v.Totalkilometros,
+    //                Totalpagar = v.Totalpagar,
+    //                Detalles = v.Viajesdetalles.Select(d => new ViajesdetallesReporteDto
+    //                {
+    //                    ColaboradorId = d.ColaboradorId,
+    //                    Distanciakilometros = d.Distanciakilometros,
+    //                    Totalpagar = d.Totalpagar,
+    //                    ColaboradorsucursalId = d.ColaboradorsucursalId
+    //                }).ToList()
+    //            }).ToList(),
+    //            TotalPagar = g.Sum(v => v.Totalpagar)
+    //        }).ToList();
+
+    //    return reportes;
+    //}
     public Colaboradores GetColaboradorById(int id) => _context.Colaboradores.Find(id);
     public async Task<bool> IsUserGerenteTienda(int usuarioId)
     {
@@ -75,12 +206,12 @@ public class ViajesService
         return usuario != null && usuario.Colaborador != null && usuario.Colaborador.CargoId == GERENTE_TIENDA_CARGO_ID;
     }
 
-    public async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
-        List<ViajesdetallesCreateClusteredDto> employees, decimal distanceThreshold)
-    {
-        ValidateEmployeeInputs(employees);
-        return await _clusteringService.ClusterEmployeesAsync(employees, distanceThreshold);
-    }
+    //public async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
+    //    List<ViajesdetallesCreateClusteredDto> employees, decimal distanceThreshold)
+    //{
+    //    ValidateEmployeeInputs(employees);
+    //    return await _clusteringApplicationService.ClusterEmployeesAsync(employees, distanceThreshold);
+    //}
 
     public async Task<List<Viajes>> CreateTripsFromClustersAsync(
         ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees)
@@ -88,7 +219,7 @@ public class ViajesService
         ValidateTripInputs(tripDto, clusteredEmployees);
         await ValidateEmployeeTripConstraints(clusteredEmployees, tripDto.Viajefecha);
 
-        var trips = _clusteringService.CreateTripsFromClusters(tripDto, clusteredEmployees);
+        var trips = _clusteringApplicationService.CreateTripsFromClusters(tripDto, clusteredEmployees);
         ValidateTotalDistance(trips);
 
         await SaveTripsAsync(trips);
@@ -102,22 +233,22 @@ public class ViajesService
             .ToListAsync();
     }
 
-    private void ValidateEmployeeInputs(List<ViajesdetallesCreateClusteredDto> employees)
-    {
-        if (employees == null || !employees.Any())
-            throw new ArgumentException("La lista de empleados no puede ser nula o vacía.");
+    //private void ValidateEmployeeInputs(List<ViajesdetallesCreateClusteredDto> employees)
+    //{
+    //    if (employees == null || !employees.Any())
+    //        throw new ArgumentException("La lista de empleados no puede ser nula o vacía.");
 
-        foreach (var emp in employees)
-        {
-            var colaboradorSucursal = _context.Colaboradoressucursales
-                .FirstOrDefault(cs => cs.ColaboradorsucursalId == emp.ColaboradorsucursalId);
-            if (colaboradorSucursal == null)
-                throw new ArgumentException($"ColaboradorSucursalId {emp.ColaboradorsucursalId} no existe.");
+    //    foreach (var emp in employees)
+    //    {
+    //        var colaboradorSucursal = _context.Colaboradoressucursales
+    //            .FirstOrDefault(cs => cs.ColaboradorsucursalId == emp.ColaboradorsucursalId);
+    //        if (colaboradorSucursal == null)
+    //            throw new ArgumentException($"ColaboradorSucursalId {emp.ColaboradorsucursalId} no existe.");
 
-            if (emp.Distanciakilometros != colaboradorSucursal.Distanciakilometro)
-                throw new ArgumentException("La distancia no puede ser modificada.");
-        }
-    }
+    //        if (emp.Distanciakilometros != colaboradorSucursal.Distanciakilometro)
+    //            throw new ArgumentException("La distancia no puede ser modificada.");
+    //    }
+    //}
 
     private void ValidateTripInputs(ViajesCreateClusteredDto tripDto, List<List<ViajesdetallesCreateClusteredDto>> clusteredEmployees)
     {
@@ -190,4 +321,44 @@ public class ViajesService
             throw new Exception($"Error al guardar los viajes: {ex.Message}", ex);
         }
     }
+
+    //public async Task AsignarColaboradorASucursalAsync(Colaboradoressucursales entity)
+    //{
+    //    var colaborador = _context.Colaboradores
+    //        .FirstOrDefault(c => c.ColaboradorId == entity.ColaboradorId)
+    //        ?? throw new ArgumentException($"El colaborador con ID {entity.ColaboradorId} no existe.");
+
+    //    var sucursal = _context.Sucursales
+    //        .FirstOrDefault(s => s.SucursalId == entity.SucursalId)
+    //        ?? throw new ArgumentException($"La sucursal con ID {entity.SucursalId} no existe.");
+
+    //    var existingAssignment = _context.Colaboradoressucursales
+    //        .FirstOrDefault(cs => cs.ColaboradorId == entity.ColaboradorId &&
+    //                                cs.SucursalId == entity.SucursalId &&
+    //                                cs.Activo);
+    //    if (existingAssignment != null)
+    //        throw new ArgumentException($"El colaborador {entity.ColaboradorId} ya está asignado a la sucursal {entity.SucursalId}.");
+
+    //    var locations = new List<ViajesdetallesCreateClusteredDto>
+    //        {
+    //            new ViajesdetallesCreateClusteredDto
+    //            {
+    //                Latitud = (double)sucursal.Latitud,
+    //                Longitud = (double)sucursal.Longitud
+    //            },
+    //            new ViajesdetallesCreateClusteredDto
+    //            {
+    //                Latitud = (double)colaborador.Latitud,
+    //                Longitud = (double)colaborador.Longitud
+    //            }
+    //        };
+
+    //    var distanceMatrix = await _googleMapsService.GetDistanceMatrixAsync(locations);
+    //    var distanceKm = (decimal)distanceMatrix[0, 1];
+
+    //    _domainServiceViaje.ValidateAndSetDistance(entity, colaborador, sucursal, distanceKm);
+
+    //    _context.Colaboradoressucursales.Add(entity);
+    //    await _context.SaveChangesAsync();
+    //}
 }
