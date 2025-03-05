@@ -44,7 +44,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
                 throw new Exception("Contraseña incorrecta.");
 
             var dto = _mapper.Map<UsuarioConDetallesDto>(usuario);
-
+                
             var response = new CustomResponse<UsuarioConDetallesDto>
             {
                 Success = true,
