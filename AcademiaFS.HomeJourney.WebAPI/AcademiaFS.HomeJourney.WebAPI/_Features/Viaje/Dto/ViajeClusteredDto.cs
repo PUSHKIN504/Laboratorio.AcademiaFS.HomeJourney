@@ -13,7 +13,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
         public double Latitud { get; set; }
         public double Longitud { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class ViajesCreateClusteredDto
     {
         public int SucursalId { get; set; }
