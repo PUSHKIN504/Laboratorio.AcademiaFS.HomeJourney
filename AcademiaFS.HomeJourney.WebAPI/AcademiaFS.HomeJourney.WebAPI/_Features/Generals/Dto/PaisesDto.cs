@@ -1,8 +1,10 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class PaisesDto
     {
             public int PaisId { get; set; }

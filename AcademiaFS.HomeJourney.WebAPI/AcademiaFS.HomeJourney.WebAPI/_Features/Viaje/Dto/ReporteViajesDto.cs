@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class ViajesTransportistaReporteDto
     {
         public int TransportistaId { get; set; }
@@ -9,7 +12,7 @@
         public List<ViajeDetalleReporteDto> Viajes { get; set; } = new List<ViajeDetalleReporteDto>();
         public decimal TotalPagar { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class ViajeDetalleReporteDto
     {
         public int ViajeId { get; set; }
@@ -19,7 +22,7 @@
         public decimal Totalpagar { get; set; }
         public List<ViajesdetallesReporteDto> Detalles { get; set; } = new List<ViajesdetallesReporteDto>();
     }
-
+    [ExcludeFromCodeCoverage]
     public class ViajesdetallesReporteDto
     {
         public int ColaboradorId { get; set; }

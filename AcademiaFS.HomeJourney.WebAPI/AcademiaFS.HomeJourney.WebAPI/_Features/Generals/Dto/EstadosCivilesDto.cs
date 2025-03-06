@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class EstadoCivilDto
     {
         public int EstadocivilId { get; set; }

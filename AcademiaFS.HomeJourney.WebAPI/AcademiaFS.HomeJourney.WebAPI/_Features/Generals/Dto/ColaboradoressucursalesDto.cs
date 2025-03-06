@@ -1,7 +1,9 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class ColaboradorSucursalDto : IActivableInterface
     {
         public int ColaboradorsucursalId { get; set; }

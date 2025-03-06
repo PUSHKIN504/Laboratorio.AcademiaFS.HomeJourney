@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class Monedas
     {
         public int MonedaId { get; set; }

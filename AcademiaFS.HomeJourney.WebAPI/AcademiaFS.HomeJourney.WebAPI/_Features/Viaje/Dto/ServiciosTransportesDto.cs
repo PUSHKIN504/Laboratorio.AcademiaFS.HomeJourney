@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class ServicioTransporteDto
     {
         public int ServiciotransporteId { get; set; }

@@ -101,7 +101,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 return NotFound(new CustomResponse<CargoDto>
                 {
                     Success = false,
-                    Message = $"No se encontró la ciudad con ID {id}"
+                    Message = $"No se encontró el Cargo con ID {id}"
                 });
             }
 
@@ -114,7 +114,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             var response = new CustomResponse<CargoDto>
             {
                 Success = true,
-                Message = "Ciudad actualizada correctamente",
+                Message = "Cargo actualizado correctamente",
                 Data = dtoActualizado
             };
 

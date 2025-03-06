@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class Estados : IActivableInterface
     {
         public int EstadoId { get; set; }

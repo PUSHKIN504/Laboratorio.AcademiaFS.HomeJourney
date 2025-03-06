@@ -10,7 +10,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public string Descripcion { get; set; } = null!;
         public string Email { get; set; } = null!;
         public int Usuariocrea { get; set; }
-        public DateTime Fechacrea { get; set; }
+        public DateTime Fechacrea { get; set; } = DateTime.Now;
         public int? Usuariomodifica { get; set; }
         public DateTime? Fechamodifica { get; set; }
         public bool Activo { get; set; }

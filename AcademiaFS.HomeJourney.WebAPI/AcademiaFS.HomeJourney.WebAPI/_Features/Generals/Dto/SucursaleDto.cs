@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class SucursalesDto
     {
         public int SucursalId { get; set; }

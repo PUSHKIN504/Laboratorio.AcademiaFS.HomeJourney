@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class ColaboradorDto
     {
         public int ColaboradorId { get; set; }
@@ -15,7 +18,7 @@
         public decimal Latitud { get; set; }
         public decimal Longitud { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class ColaboradorGetAllDto
     {
         public int ColaboradorId { get; set; }

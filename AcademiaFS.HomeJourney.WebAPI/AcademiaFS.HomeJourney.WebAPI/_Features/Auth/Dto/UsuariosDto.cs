@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class UsuarioDto
     {
         public int UsuarioId { get; set; }
@@ -8,12 +11,13 @@
         public bool Esadmin { get; set; }
         public bool Activo { get; set; }
     }
+    [ExcludeFromCodeCoverage]
     public class UsuarioLoginRequest
     {
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
     }
-
+    [ExcludeFromCodeCoverage]
     public class UsuarioConDetallesDto
     {
         public int UsuarioId { get; set; }

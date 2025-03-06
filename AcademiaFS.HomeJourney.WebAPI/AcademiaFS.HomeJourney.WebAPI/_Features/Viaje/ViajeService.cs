@@ -93,8 +93,8 @@ public class ViajesService
             if (emp.Distanciakilometros < 0)
                 throw new ArgumentException("La distancia debe ser un valor positivo.");
 
-            if (emp.Distanciakilometros != colaboradorSucursal.Distanciakilometro)
-                throw new ArgumentException("La distancia no puede ser modificada.");
+            //if (emp.Distanciakilometros != colaboradorSucursal.Distanciakilometro)
+            //    throw new ArgumentException("La distancia no puede ser modificada.");
 
             _domainServiceViaje.ValidateCoordenadas((decimal)emp.Latitud, (decimal)emp.Longitud, $"empleado {emp.ColaboradorId}");
         }
@@ -322,43 +322,4 @@ public class ViajesService
         }
     }
 
-    //public async Task AsignarColaboradorASucursalAsync(Colaboradoressucursales entity)
-    //{
-    //    var colaborador = _context.Colaboradores
-    //        .FirstOrDefault(c => c.ColaboradorId == entity.ColaboradorId)
-    //        ?? throw new ArgumentException($"El colaborador con ID {entity.ColaboradorId} no existe.");
-
-    //    var sucursal = _context.Sucursales
-    //        .FirstOrDefault(s => s.SucursalId == entity.SucursalId)
-    //        ?? throw new ArgumentException($"La sucursal con ID {entity.SucursalId} no existe.");
-
-    //    var existingAssignment = _context.Colaboradoressucursales
-    //        .FirstOrDefault(cs => cs.ColaboradorId == entity.ColaboradorId &&
-    //                                cs.SucursalId == entity.SucursalId &&
-    //                                cs.Activo);
-    //    if (existingAssignment != null)
-    //        throw new ArgumentException($"El colaborador {entity.ColaboradorId} ya está asignado a la sucursal {entity.SucursalId}.");
-
-    //    var locations = new List<ViajesdetallesCreateClusteredDto>
-    //        {
-    //            new ViajesdetallesCreateClusteredDto
-    //            {
-    //                Latitud = (double)sucursal.Latitud,
-    //                Longitud = (double)sucursal.Longitud
-    //            },
-    //            new ViajesdetallesCreateClusteredDto
-    //            {
-    //                Latitud = (double)colaborador.Latitud,
-    //                Longitud = (double)colaborador.Longitud
-    //            }
-    //        };
-
-    //    var distanceMatrix = await _googleMapsService.GetDistanceMatrixAsync(locations);
-    //    var distanceKm = (decimal)distanceMatrix[0, 1];
-
-    //    _domainServiceViaje.ValidateAndSetDistance(entity, colaborador, sucursal, distanceKm);
-
-    //    _context.Colaboradoressucursales.Add(entity);
-    //    await _context.SaveChangesAsync();
-    //}
 }

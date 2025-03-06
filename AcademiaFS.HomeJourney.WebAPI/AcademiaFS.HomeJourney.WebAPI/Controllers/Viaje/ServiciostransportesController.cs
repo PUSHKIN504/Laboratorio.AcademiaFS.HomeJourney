@@ -142,7 +142,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Viaje
             }
 
             _servicioService.SetActive(id, active);
-            //_unitOfWork.Save();
 
             var actualizado = _servicioService.GetById(id);
             var dtoActualizado = _mapper.Map<ServicioTransporteDto>(actualizado);

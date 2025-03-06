@@ -1,5 +1,8 @@
-﻿namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class PersonaDto
     {
         public int PersonaId { get; set; }
@@ -16,7 +19,7 @@
         public int? Usuariomodifica { get; set; }
         public DateTime? Fechamodifica { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class CreatePersonaColaboradorDto
     {
         public string Nombre { get; set; } = null!;

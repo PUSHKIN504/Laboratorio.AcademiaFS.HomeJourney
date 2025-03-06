@@ -1,7 +1,9 @@
 ﻿using AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
 {
+    [ExcludeFromCodeCoverage]
     public class SolicitudViajeDto
     {
         public int SolicitudviajeId { get; set; }
@@ -20,7 +22,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
 
         public Colaboradores? Supervisor { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class SolicitudViajeAprobacionDto
     {
         public int SolicitudviajeId { get; set; }
@@ -28,6 +30,7 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Viaje.Dto
         public bool Aprobar { get; set; } 
         public string? Comentarios { get; set; }
     }
+    [ExcludeFromCodeCoverage]
     public class SolicitudViajeCreateDto
     {
         public int ColaboradorId { get; set; }

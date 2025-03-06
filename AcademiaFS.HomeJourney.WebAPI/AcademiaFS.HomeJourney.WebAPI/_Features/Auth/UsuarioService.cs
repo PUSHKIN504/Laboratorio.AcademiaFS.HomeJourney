@@ -27,15 +27,15 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Auth
         {
             var usuario = _context.Usuarios
                 .AsNoTracking()
-                .Include(u => u.Colaborador)
-                    .ThenInclude(c => c.Persona)
-                .Include(u => u.Colaborador)
-                    .ThenInclude(c => c.Cargo)
-                .Include(u => u.Colaborador)
-                    .ThenInclude(c => c.Rol)
-                .Include(u => u.Colaborador)
-                    .ThenInclude(c => c.Sucursales)
-                .FirstOrDefault(u => u.Username == username && u.Activo);
+            .Include(u => u.Colaborador)
+                .ThenInclude(c => c.Persona)
+            .Include(u => u.Colaborador)
+                .ThenInclude(c => c.Cargo)
+            .Include(u => u.Colaborador)
+                .ThenInclude(c => c.Rol)
+            .Include(u => u.Colaborador)
+                .ThenInclude(c => c.Sucursales)
+            .FirstOrDefault(u => u.Username == username && u.Activo);
 
             if (usuario == null)
                 throw new Exception("Usuario no encontrado o inactivo.");
