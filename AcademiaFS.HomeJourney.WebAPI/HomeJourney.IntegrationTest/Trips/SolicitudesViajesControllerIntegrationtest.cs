@@ -25,15 +25,14 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
         [Fact]
         public async Task CrearSolicitudColaborador_ValidDto_ReturnsCreatedSolicitud()
         {
-            // Arrange: crear un DTO válido para solicitud de viaje.
+            // Arrange
             var solicitudCreateDto = new SolicitudViajeCreateDto
             {
-                // Asegúrate de incluir los campos obligatorios. En este ejemplo se requiere al menos:
+
                 ColaboradorId = 1,
-                // Agrega otros campos si es necesario, por ejemplo: Origen, Destino, FechaProgramada, etc.
             };
 
-            // Act: llamar al endpoint POST para crear la solicitud.
+            // Act
             var response = await _client.PostAsJsonAsync("/academiafarsiman/solicitudesviajes/colaborador", solicitudCreateDto);
 
             // Assert
@@ -49,11 +48,11 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
         [Fact]
         public async Task AprobarSolicitud_ValidRequest_ReturnsOk()
         {
-            // Arrange: Crear una solicitud primero.
+            // Arrange
             var solicitudCreateDto = new SolicitudViajeCreateDto
             {
                 ColaboradorId = 1
-                // Otros campos mínimos si son requeridos.
+
             };
 
             var createResponse = await _client.PostAsJsonAsync("/academiafarsiman/solicitudesviajes/colaborador", solicitudCreateDto);
@@ -61,16 +60,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             var createCustomResponse = await createResponse.Content.ReadFromJsonAsync<CustomResponse<Solicitudesviajes>>();
             int solicitudId = createCustomResponse.Data.SolicitudviajeId;
 
-            // Preparar DTO para aprobar la solicitud.
+
             var aprobacionDto = new SolicitudViajeAprobacionDto
             {
                 SolicitudviajeId = solicitudId,
-                SupervisorId = 100,         // Valor de ejemplo
+                SupervisorId = 100,     
                 Comentarios = "Aprobado",
-                Aprobar = true             // Indica aprobación
+                Aprobar = true           
             };
 
-            // Act: Llamar al endpoint PATCH para aprobar.
+            // Act
             var response = await _client.PatchAsJsonAsync($"/academiafarsiman/solicitudesviajes/{solicitudId}/aprobar", aprobacionDto);
 
             // Assert
@@ -81,17 +80,17 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             customResponseAprobacion.Message.Should().Contain("aprobada correctamente");
             customResponseAprobacion.Data.Should().NotBeNull();
             customResponseAprobacion.Data.SolicitudviajeId.Should().Be(solicitudId);
-            // Opcional: verificar que SupervisorId y EstadoId se hayan actualizado (p.ej., EstadoId == 1 para aprobado)
+
         }
 
         [Fact]
         public async Task CancelarSolicitud_ValidRequest_ReturnsOk()
         {
-            // Arrange: Crear una solicitud para el colaborador.
+            // Arrange
             var solicitudCreateDto = new SolicitudViajeCreateDto
             {
                 ColaboradorId = 1
-                // Otros campos mínimos si fueran necesarios.
+ 
             };
 
             var createResponse = await _client.PostAsJsonAsync("/academiafarsiman/solicitudesviajes/colaborador", solicitudCreateDto);
@@ -99,8 +98,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             var createCustomResponse = await createResponse.Content.ReadFromJsonAsync<CustomResponse<Solicitudesviajes>>();
             int solicitudId = createCustomResponse.Data.SolicitudviajeId;
 
-            // Para cancelar, el código requiere que la solicitud tenga EstadoId == 1.
-            // Aprobamos primero la solicitud.
             var aprobacionDto = new SolicitudViajeAprobacionDto
             {
                 SolicitudviajeId = solicitudId,
@@ -111,7 +108,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             var aprobacionResponse = await _client.PatchAsJsonAsync($"/academiafarsiman/solicitudesviajes/{solicitudId}/aprobar", aprobacionDto);
             aprobacionResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            // Act: Cancelar la solicitud llamando al endpoint PATCH "colaborador/{id}/cancelar" y pasando el colaboradorId.
+            // Act
             var cancelResponse = await _client.PatchAsync($"/academiafarsiman/solicitudesviajes/colaborador/{solicitudId}/cancelar?colaboradorId=1", null);
 
             // Assert
@@ -122,17 +119,16 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             cancelCustomResponse.Message.Should().Contain("cancelada correctamente");
             cancelCustomResponse.Data.Should().NotBeNull();
             cancelCustomResponse.Data.SolicitudviajeId.Should().Be(solicitudId);
-            // Opcional: verificar que EstadoId se haya actualizado a 3 (cancelado)
+
         }
 
         [Fact]
         public async Task GetById_ExistingSolicitud_ReturnsSolicitud()
         {
-            // Arrange: Crear una solicitud primero.
+            // Arrange
             var solicitudCreateDto = new SolicitudViajeCreateDto
             {
                 ColaboradorId = 1
-                // Otros campos mínimos si son requeridos.
             };
 
             var createResponse = await _client.PostAsJsonAsync("/academiafarsiman/solicitudesviajes/colaborador", solicitudCreateDto);
@@ -140,7 +136,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             var createCustomResponse = await createResponse.Content.ReadFromJsonAsync<CustomResponse<Solicitudesviajes>>();
             int solicitudId = createCustomResponse.Data.SolicitudviajeId;
 
-            // Act: Consultar la solicitud por ID.
+            // Act
             var getResponse = await _client.GetAsync($"/academiafarsiman/solicitudesviajes/{solicitudId}");
 
             // Assert

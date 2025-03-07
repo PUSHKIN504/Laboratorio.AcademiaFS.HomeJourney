@@ -39,8 +39,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
 
-                if (!db.Personas.Any() && !db.Colaboradores.Any() && !db.Sucursales.Any() && !db.Colaboradoressucursales.Any() && !db.Usuarios.Any() && !db.Transportistas.Any())
-                    SeedTestData(db);
+                SeedTestData(db);
             }
         });
     }
