@@ -26,18 +26,12 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
         public async Task CreateViaje_ValidDto_ReturnsCreatedResponse()
         {
             // Arrange
-            // Se asume que ViajesCreateDto tiene una propiedad 'Detalles' que es una lista de un DTO (ej. ViajesdetallesCreateDto)
             var dto = new ViajesCreateDto
             {
-                // Otras propiedades que sean requeridas para crear un viaje.
-                // Por ejemplo, podrías tener propiedades como: Fecha, Origen, Destino, etc.
-                // Aquí solo se muestra la propiedad 'Detalles'
                 Detalles = new List<ViajesdetallesCreateDto>
                 {
                     new ViajesdetallesCreateDto
                     {
-                        // Rellena las propiedades requeridas en el detalle del viaje
-                        // Por ejemplo:
                         ColaboradorId = 1,
                         Distanciakilometros = 10.0m,
                         Totalpagar = 200.0m
@@ -51,7 +45,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created, "porque se creó correctamente el viaje y sus detalles");
 
-            // Se deserializa la respuesta a CustomResponse<Viajes>
             var customResponse = await response.Content.ReadFromJsonAsync<CustomResponse<Viajes>>();
             customResponse.Should().NotBeNull();
             customResponse.Success.Should().BeTrue();
@@ -63,7 +56,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
         [Fact]
         public async Task GetById_ExistingViaje_ReturnsOkResponse()
         {
-            // Arrange: Crear un viaje primero
+            // Arrange
             var createDto = new ViajesCreateDto
             {
                 Detalles = new List<ViajesdetallesCreateDto>
@@ -87,7 +80,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Tests.Integration.Controllers
 
             // Assert
             getResponse.StatusCode.Should().Be(HttpStatusCode.OK, "porque el viaje existe");
-            // Si el endpoint GET no retorna contenido, no intentes deserializar
             var content = await getResponse.Content.ReadAsStringAsync();
             content.Should().BeEmpty("porque el endpoint GET no retorna ningún contenido");
         }

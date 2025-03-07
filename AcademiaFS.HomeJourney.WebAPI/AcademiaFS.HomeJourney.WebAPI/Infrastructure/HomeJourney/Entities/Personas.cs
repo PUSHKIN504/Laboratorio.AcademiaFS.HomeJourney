@@ -20,7 +20,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public DateTime? Fechamodifica { get; set; }
 
         // Relaciones existentes
-        public Ciudades Ciudad { get; set; } = null!;
+        public Ciudades Ciudad { get; set; } 
         public Estadosciviles? Estadocivil { get; set; }
         //public Transportistas? Transportista { get; set; }
 

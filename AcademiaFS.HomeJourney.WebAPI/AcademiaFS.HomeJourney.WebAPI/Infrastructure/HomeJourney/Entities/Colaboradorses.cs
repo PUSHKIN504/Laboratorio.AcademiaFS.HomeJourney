@@ -10,7 +10,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public int RolId { get; set; }
         public int CargoId { get; set; }
         public bool Activo { get; set; }
-        public string Direccion { get; set; } = null!;
+        public string Direccion { get; set; }
         public int Usuariocrea { get; set; }
         public DateTime Fechacrea { get; set; }
         public int? Usuariomodifica { get; set; }
