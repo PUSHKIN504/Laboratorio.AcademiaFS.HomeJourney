@@ -15,7 +15,7 @@ public class ViajesClusteredController : ControllerBase
     }
 
     [HttpPost("cluster-employees")]
-    public async Task<IActionResult> ClusterEmployees(
+    public virtual async Task<IActionResult> ClusterEmployees(
         [FromQuery] int usuarioCrea,
         [FromBody] List<ViajesdetallesCreateClusteredDto> employees,
         [FromQuery] decimal distanceThreshold)

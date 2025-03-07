@@ -99,7 +99,7 @@ public class ViajesService
             _domainServiceViaje.ValidateCoordenadas((decimal)emp.Latitud, (decimal)emp.Longitud, $"empleado {emp.ColaboradorId}");
         }
     }
-    public async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
+    public virtual async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
         List<ViajesdetallesCreateClusteredDto> employees, decimal distanceThreshold)
     {
         _domainServiceViaje.ValidateDistanceThreshold(distanceThreshold);

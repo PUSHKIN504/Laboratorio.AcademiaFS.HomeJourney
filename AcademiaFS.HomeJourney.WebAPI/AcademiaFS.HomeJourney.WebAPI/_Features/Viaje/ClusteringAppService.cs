@@ -24,7 +24,7 @@ public class ClusteringApplicationService
         _domainServiceClustering = domainServiceClustering;
     }
 
-    public async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
+    public virtual async Task<List<List<ViajesdetallesCreateClusteredDto>>> ClusterEmployeesAsync(
         List<ViajesdetallesCreateClusteredDto> employees,
         decimal distanceThreshold)
     {

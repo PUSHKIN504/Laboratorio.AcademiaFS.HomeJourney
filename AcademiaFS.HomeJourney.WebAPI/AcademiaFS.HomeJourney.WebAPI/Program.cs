@@ -140,16 +140,19 @@ public class Program
 
         var isTesting = builder.Environment.IsEnvironment("Test");
 
-        if (!isTesting)
+        builder.Services.AddDbContext<HomeJourneyContext>(options =>
         {
-            //builder.Services.AddDbContext<HomeJourneyContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration.GetConnectionString("LOGISTIC_GFS"));
+            if (isTesting)
+            {
+                options.UseInMemoryDatabase("TestDatabase");
+            }
+            else
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LOGISTIC_GFS"));
+            }
+        });
 
-            //});
-        }
 
-        
         DependencyInjection.AppAplication(builder.Services);
 
         var app = builder.Build();
