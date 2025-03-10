@@ -1,15 +1,11 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { TestPageComponent } from './test-page/test-page.component';
+// app.routes.ts
+import { Routes } from '@angular/router';
+import { PaisComponent } from './views/components/pais/pais.component';
+import { DirectivasComponent } from './views/directives/directivas.component';
 
-const routes: Routes = [
-  { path: 'testpage', component: TestPageComponent },
+export const routes: Routes = [
+  { path: 'Paises', component: PaisComponent },
+  { path: 'Directivas', component: DirectivasComponent },
   { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   { path: '**', redirectTo: 'inicio' }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}

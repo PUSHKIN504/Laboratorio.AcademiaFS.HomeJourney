@@ -1,17 +1,15 @@
+// app.component.ts
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { DirectivasComponent } from './views/directives/directivas.component'; // Ajusta la ruta según corresponda
 
 @Component({
   selector: 'app-root',
+  standalone: true,
+  imports: [RouterModule, SidebarComponent, DirectivasComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  // Arreglo con tus rutas
-  routes = [
-    { path: 'testpage', label: 'Test Page' },
-    { path: 'anotherpage', label: 'Another Page' },
-    { path: 'yetanotherpage', label: 'Yet Another Page' }
-  ];
 
-  constructor(public router: Router) {}
 }

@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-header">
+      <h2>Formulario con Directivas</h2>
+    </div>
+    <div class="card-body">
+      <button (click)="toggleForm()">
+        {{ showForm ? 'Ocultar Formulario' : 'Mostrar Formulario' }}
+      </button>
+      <button (click)="toggleHighlight()">Cambiar Color</button>
+  
+      <div *ngIf="showForm" [ngClass]="{'highlight': highlight}">
+        <form>
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input id="nombre" type="text" class="form-control" placeholder="Ingresa tu nombre">
+          </div>
+        </form>
+      </div>
+      
+    </div>
+    <div class="card-footer">
+      <h3>Sucursales</h3>
+      <ul>
+        <li *ngFor="let sucursal of sucursales">{{ sucursal }}</li>
+      </ul>
+    </div>
+  </div>
+  

@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+    <span>Gestión de Países</span>
+  </mat-toolbar>
+  
+  <div class="container" style="padding: 16px;">
+    <mat-card>
+      <mat-card-title>Formulario de País</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="paisForm" (ngSubmit)="onSubmit()">
+          <dx-form [formData]="paisForm.value" (onFieldDataChanged)="onFieldDataChanged($event)">
+            <dxi-item dataField="paisId" editorType="dxNumberBox" [isRequired]="true"></dxi-item>
+            <dxi-item dataField="nombre" editorType="dxTextBox" [isRequired]="true"></dxi-item>
+            <dxi-item dataField="activo" editorType="dxCheckBox" [isRequired]="true"></dxi-item>
+            <dxi-item>
+              <dx-button text="Guardar" type="success" [useSubmitBehavior]="true"></dx-button>
+            </dxi-item>
+          </dx-form>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  
+
+  </div>
+  
