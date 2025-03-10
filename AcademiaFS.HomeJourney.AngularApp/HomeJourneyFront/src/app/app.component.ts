@@ -1,13 +1,17 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
-  title = 'HomeJourneyFront';
+  // Arreglo con tus rutas
+  routes = [
+    { path: 'testpage', label: 'Test Page' },
+    { path: 'anotherpage', label: 'Another Page' },
+    { path: 'yetanotherpage', label: 'Yet Another Page' }
+  ];
+
+  constructor(public router: Router) {}
 }
