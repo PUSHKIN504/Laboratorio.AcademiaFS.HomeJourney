@@ -38,6 +38,7 @@ export class SidebarComponent {
       children: [
         { label: 'Paises', route: '/Paises' },
         { label: 'Test Directivas', route: '/Directivas' },
+        { label: 'Colaboradores', route: '/Colaboradores' },
         { label: 'Otra Página', route: '/otra' },
         
       ]

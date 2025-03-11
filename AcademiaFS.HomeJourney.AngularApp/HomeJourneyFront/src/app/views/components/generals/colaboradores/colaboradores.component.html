@@ -1,0 +1,50 @@
+<mat-toolbar color="primary">
+  <span>Gestión de Colaboradores</span>
+</mat-toolbar>
+
+<div class="container" style="padding: 16px;">
+
+  <app-custom-form [title]="popupOptions.title" [isVisible]="popupOptions.visible">
+    <div  [formGroup]="_form">
+      <dx-form [formData]="_form.value" >
+        <dxi-item dataField="personaId" editorType="dxSelectBox" [isRequired]="true"
+          [editorOptions]="{ items: personas, displayExpr: 'nombre', valueExpr: 'id' }">
+        </dxi-item>
+        <dxi-item dataField="rolId" editorType="dxSelectBox" [isRequired]="true"
+          [editorOptions]="{ items: roles, displayExpr: 'nombre', valueExpr: 'id' }">
+        </dxi-item>
+        <dxi-item dataField="cargoId" editorType="dxSelectBox" [isRequired]="true"
+          [editorOptions]="{ items: cargos, displayExpr: 'nombre', valueExpr: 'id' }">
+        </dxi-item>
+        <dxi-item dataField="direccion" editorType="dxTextBox" [isRequired]="true"></dxi-item>
+        <dxi-item dataField="activo" editorType="dxCheckBox" [isRequired]="true"></dxi-item>
+        <dxi-item>
+          <dx-button text="Guardar" type="success" (onClick)="onSave()" [useSubmitBehavior]="true"></dx-button>
+        </dxi-item>
+      </dx-form>
+    </div>
+  </app-custom-form>
+
+  <div *ngIf="!popupOptions.visible" style="margin-bottom: 16px;">
+    <button mat-raised-button color="accent" (click)="popupOptions.visible = true">
+      Crear Colaborador
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-title>Listado de Colaboradores</mat-card-title>
+    <mat-card-content>
+      <dx-data-grid [dataSource]="listEntities" [showBorders]="true" [columnAutoWidth]="true">
+        <dxi-column dataField="colaboradorId" caption="ID" width="50"></dxi-column>
+        <dxi-column caption="Persona" [calculateCellValue]="calculateFullName"></dxi-column>
+        <dxi-column dataField="rolId" caption="Rol"></dxi-column>
+        <dxi-column dataField="cargoId" caption="Cargo"></dxi-column>
+        <dxi-column dataField="direccion" caption="Dirección"></dxi-column>
+        <dxi-column dataField="activo" caption="Activo" dataType="boolean"></dxi-column>
+        <dxi-column type="buttons" caption="Acciones">
+          <dxi-button icon="edit" hint="Editar" [onClick]="onEditShow"></dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+    </mat-card-content>
+  </mat-card>
+</div>

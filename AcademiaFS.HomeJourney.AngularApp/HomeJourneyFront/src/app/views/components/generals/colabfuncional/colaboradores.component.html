@@ -1,0 +1,65 @@
+<mat-toolbar color="primary">
+  <span>Gestión de Colaboradores</span>
+</mat-toolbar>
+
+<div class="container" style="padding: 16px;">
+
+  <div *ngIf="isCreating">
+    <mat-card>
+      <mat-card-title>
+        {{ colaboradorForm.value.colaboradorId === 0 ? 'Agregar Colaborador' : 'Editar Colaborador' }}
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="colaboradorForm" (ngSubmit)="onSubmit()">
+          <dx-form [formData]="formData" (onFieldDataChanged)="onFieldDataChanged($event)">
+            <dxi-item dataField="personaId" editorType="dxSelectBox" [isRequired]="true"
+              [editorOptions]="{ items: personas, displayExpr: 'name', valueExpr: 'id' }">
+            </dxi-item>
+            <dxi-item dataField="rolId" editorType="dxSelectBox" [isRequired]="true"
+              [editorOptions]="{ items: roles, displayExpr: 'name', valueExpr: 'id' }">
+            </dxi-item>
+            <dxi-item dataField="cargoId" editorType="dxSelectBox" [isRequired]="true"
+              [editorOptions]="{ items: cargos, displayExpr: 'name', valueExpr: 'id' }">
+            </dxi-item>
+            <dxi-item dataField="direccion" editorType="dxTextBox" [isRequired]="true"></dxi-item>
+            <dxi-item dataField="activo" editorType="dxCheckBox" [isRequired]="true"></dxi-item>
+            <dxi-item dataField="latitud" editorType="dxNumberBox" [isRequired]="true"></dxi-item>
+            <dxi-item dataField="longitud" editorType="dxNumberBox" [isRequired]="true"></dxi-item>
+            <dxi-item>
+              <dx-button text="Guardar" type="success" [useSubmitBehavior]="true"></dx-button>
+            </dxi-item>
+          </dx-form>
+        </form>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="cancelCreate()">Cancelar</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div *ngIf="!isCreating" style="margin-bottom: 16px;">
+    <button mat-raised-button color="accent" (click)="openCreateForm()">Crear Colaborador</button>
+  </div>
+
+   <div *ngIf="!isCreating">
+  <mat-card>
+    <mat-card-title>Listado de Colaboradores</mat-card-title>
+    <mat-card-content>
+      <dx-data-grid [dataSource]="colaboradores" [showBorders]="true" [columnAutoWidth]="true">
+        <dxi-column dataField="colaboradorId" caption="ID" width="50"></dxi-column>
+        <dxi-column dataField="personaId" caption="Persona"></dxi-column>
+        <dxi-column dataField="rolId" caption="Rol"></dxi-column>
+        <dxi-column dataField="cargoId" caption="Cargo"></dxi-column>
+        <dxi-column dataField="direccion" caption="Dirección"></dxi-column>
+        <dxi-column dataField="activo" caption="Activo" dataType="boolean"></dxi-column>
+        <dxi-column dataField="latitud" caption="Latitud"></dxi-column>
+        <dxi-column dataField="longitud" caption="Longitud"></dxi-column>
+        <dxi-column dataField="fechaCrea" caption="Fecha Creación" dataType="date"></dxi-column>
+        <dxi-column type="buttons" caption="Acciones">
+          <dxi-button icon="edit" hint="Editar" [onClick]="onEditShow"></dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+    </mat-card-content>
+  </mat-card>
+   </div>
+</div>

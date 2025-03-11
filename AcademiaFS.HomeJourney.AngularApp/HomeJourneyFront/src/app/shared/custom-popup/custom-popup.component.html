@@ -1,0 +1,8 @@
+<dx-popup [title]="title()" [visible]="isVisible()"  (onHidden)="onHidden.emit()" [width]="580" height="auto"
+    >
+    <div *dxTemplate="let data of 'content'">
+        <dx-scroll-view width="100%" height="100%">
+           <ng-content></ng-content>
+        </dx-scroll-view>
+    </div>
+</dx-popup>
