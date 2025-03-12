@@ -21,7 +21,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             _mapper = mapper;
         }
 
-        [HttpPost("crear")]
+        [HttpPost]
         public async Task<ActionResult<CustomResponse<Personas>>> Create([FromBody] CreatePersonaColaboradorDto dto)
         {
             try

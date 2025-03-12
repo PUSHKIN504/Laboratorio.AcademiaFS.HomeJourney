@@ -4,7 +4,7 @@ import { ConfigurationComponent } from '../../../components/configuration.compon
 import { Colaborador, CreatePersonaColaboradorDto } from '../../../models/colaborador.model';
 import { ConfigurationBaseService } from '../../../services/configuration-base.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { LeafletMouseEvent } from 'leaflet';
 import {
   DxDataGridModule,
   DxFormModule,
@@ -22,7 +22,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-
+import { CustomForm} from "../../../../shared/custom-popup/custom-popup.component"
 @Component({
   templateUrl: './colaboradores.component.html',
   styleUrls: ['./colaboradores.component.scss'],
@@ -31,6 +31,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     DxDataGridModule,
     DxFormModule,
+    CustomForm,
     ReactiveFormsModule,
     DxPopupModule,
     DxScrollViewModule,
@@ -52,17 +53,19 @@ export class ColaboradoresComponent extends ConfigurationComponent<CreatePersona
     { id: 1, nombre: 'Juan Pérez' },
     { id: 2, nombre: 'María Gómez' }
   ];
-  roles: Array<{ id: number; nombre: string }> = [
-    { id: 1, nombre: 'Administrador' },
-    { id: 2, nombre: 'Colaborador' }
+  roles: Array<{ rolId: number; nombre: string }> = [
+    { rolId: 1, nombre: 'Administrador' },
+    { rolId: 2, nombre: 'Colaborador' }
   ];
-  cargos: Array<{ id: number; nombre: string }> = [
-    { id: 1, nombre: 'Gerente' },
-    { id: 2, nombre: 'Asistente' }
+  ciudades: Array<{ ciudadId: number; nombre: string }> = [
+    { ciudadId: 1, nombre: 'San Pedro Sula' },
+    { ciudadId: 2, nombre: 'La Lima' }
+  ];
+  cargos: Array<{ cargoId: number; nombre: string }> = [
+    { cargoId: 1, nombre: 'Gerente' },
+    { cargoId: 2, nombre: 'Asistente' }
   ];
   calculateFullName(data: any): string {
-    console.log(data);
-
     return `${data.nombre} ${data.apellido}`;
   }
   constructor(snackBar: MatSnackBar) {
@@ -71,6 +74,7 @@ export class ColaboradoresComponent extends ConfigurationComponent<CreatePersona
 
   override onInitForm(): void {
     this._form = new FormGroup({
+      usuariocrea: new FormControl<number | null>(1, [Validators.required]),
       colaboradorId: new FormControl<number | null>(0),
       personaId: new FormControl<number | null>(null, [Validators.required]),
       rolId: new FormControl<number | null>(null, [Validators.required]),
@@ -79,7 +83,12 @@ export class ColaboradoresComponent extends ConfigurationComponent<CreatePersona
       direccion: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(500)])
     });
   }
-
+  onLocationSelected(event: LeafletMouseEvent): void {
+    this._form.patchValue({
+      latitud: event.latlng.lat,
+      longitud: event.latlng.lng
+    });
+  }
   ngOnInit(): void {
     super.get(true);
   }

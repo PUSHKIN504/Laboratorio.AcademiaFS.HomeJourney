@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { DxButtonModule, DxCheckBoxModule, DxPopupModule, DxScrollViewModule, DxSelectBoxModule } from 'devextreme-angular';
-import { InputType } from 'zlib';
 @Component({
   selector: 'app-custom-form',
   imports: [ReactiveFormsModule, CommonModule,  DxButtonModule,DxCheckBoxModule, DxSelectBoxModule, DxPopupModule,DxScrollViewModule],

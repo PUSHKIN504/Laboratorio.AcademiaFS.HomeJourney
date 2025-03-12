@@ -25,7 +25,7 @@ export class ConfigurationComponent<TEntity> {
 
     onInitForm(): void {
         this._form = new FormGroup({
-            id: new FormControl<number | null>(0),
+            usuariocrea: new FormControl<number | null>(0),
             descripcion: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(50)]),
             estaActivo: new FormControl<boolean | null>(true, [Validators.required])
         });
@@ -45,14 +45,32 @@ export class ConfigurationComponent<TEntity> {
             });
     }
 
+    // onSave(): void {
+    //     this.popupOptions.loading = true;
+    //     const { usuariocrea } = this._form.value;
+
+    //     const promise = usuariocrea == 0
+    //         ? this._baseService.add(<TEntity>this._form.value)
+    //         : this._baseService.update(<TEntity>this._form.value);
+
+    //     promise.then(data => {
+    //         this.get();
+    //         this.onClosePopup();
+    //         this.snackBar.open(String(Object.values(data)[0]), 'Cerrar', { duration: 3000 });
+    //         this.onClosePopup();
+    //     }).catch(error => {
+    //         this.snackBar.open(String(error), 'Cerrar', { duration: 3000 });
+    //         this.popupOptions.loading = false;
+    //     });
+    // }
     onSave(): void {
         this.popupOptions.loading = true;
-        const { id } = this._form.value;
-
-        const promise = id == 0
+        const { colaboradorId } = this._form.value;  // Usamos colaboradorId en lugar de usuariocrea
+    
+        const promise = colaboradorId == 0
             ? this._baseService.add(<TEntity>this._form.value)
             : this._baseService.update(<TEntity>this._form.value);
-
+    
         promise.then(data => {
             this.get();
             this.onClosePopup();
@@ -63,14 +81,15 @@ export class ConfigurationComponent<TEntity> {
             this.popupOptions.loading = false;
         });
     }
+    
 
     onChangeStatus(event: any): void {
         const { data } = event;
         if (!data) return;
 
-        const { id, descripcion, estaActivo } = data;
+        const { usuariocrea, descripcion, estaActivo } = data;
 
-        this._baseService.updateState(id, estaActivo)
+        this._baseService.updateState(usuariocrea, estaActivo)
             .then(() => {
                 this.get();
                 this.snackBar.open(`Cambio de estado realizado a ${descripcion}`, 'Cerrar', { duration: 3000 });
@@ -87,18 +106,22 @@ export class ConfigurationComponent<TEntity> {
         }
         const { data } = event.row;
         this.popupOptions.title = "Editar " + this.text.toLocaleLowerCase();
-
+        console.log(data);
         this._form.patchValue(data);
 
         this.popupOptions.visible = true;
     }
 
     onClosePopup(): void {
+        console.log(this.popupOptions.title);
         this.popupOptions = {
             title: '', visible: false, loading: false
         };
-
         this.onInitForm();
+
+        this._form.markAsPristine();
+        this._form.markAsUntouched();
+
     }
 
     calculateFilterExpression(filterValue: any, selectedFilterOperation: any, target: any) {
@@ -115,9 +138,9 @@ export class ConfigurationComponent<TEntity> {
         const { newData, oldData } = event;
 
         const propertyNames = Object.getOwnPropertyNames(newData);
-        const { descripcion, id } = oldData;
+        const { descripcion, usuariocrea } = oldData;
 
-       this._baseService.updateEstado(oldData.id, propertyNames[0], newData[propertyNames[0]])
+       this._baseService.updateEstado(oldData.usuariocrea, propertyNames[0], newData[propertyNames[0]])
        .then(() => {
            this.get();
            this.snackBar.open(`Cambio de estado realizado a ${descripcion}`, 'Cerrar', { duration: 3000 });

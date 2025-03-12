@@ -1,0 +1,60 @@
+<mat-toolbar color="primary">
+  <span>Gestión de Colaboradores</span>
+</mat-toolbar>
+
+<div class="container" style="padding: 16px;">
+  <app-custom-form [title]="popupOptions.title" [isVisible]="popupOptions.visible" height="auto">
+    <form [formGroup]="_form" class="row">
+      <dx-form [formData]="_form.value">
+        <dxi-item dataField="nombre" editorType="dxTextBox" ></dxi-item>
+        <dxi-item dataField="apelllido" editorType="dxTextBox" ></dxi-item>
+        <dxi-item dataField="sexo" editorType="dxSelectBox" 
+          [editorOptions]="{ items: ['M', 'F'], searchEnabled: false }">
+        </dxi-item>
+        <dxi-item dataField="email" editorType="dxTextBox" ></dxi-item>
+        <dxi-item dataField="documentonacionalidentificacion" editorType="dxTextBox" ></dxi-item>
+        <dxi-item dataField="ciudadId" editorType="dxSelectBox" 
+          [editorOptions]="{ items: ciudades, displayExpr: 'nombre', valueExpr: 'ciudadId', searchEnabled: true }">
+        </dxi-item>
+        <dxi-item dataField="rolId" editorType="dxSelectBox" 
+          [editorOptions]="{ items: roles, displayExpr: 'nombre', valueExpr: 'rolId' }">
+        </dxi-item>
+        <dxi-item dataField="cargoId" editorType="dxSelectBox" 
+          [editorOptions]="{ items: cargos, displayExpr: 'nombre', valueExpr: 'cargoId' }">
+        </dxi-item>
+        <dxi-item dataField="direccion" editorType="dxTextBox" ></dxi-item>
+        <dxi-item dataField="activo" editorType="dxCheckBox" ></dxi-item>
+        <dxi-item dataField="latitud" editorType="dxNumberBox" ></dxi-item>
+        <dxi-item dataField="longitud" editorType="dxNumberBox" ></dxi-item>
+        
+        <dxi-item>
+          <div style="display: flex; justify-content: flex-end; gap: 8px;">
+            <dx-button text="Guardar" type="success" (onClick)="onSave()" [useSubmitBehavior]="true"></dx-button>
+            <dx-button text="Cerrar" type="danger" (onClick)="onClosePopup()" [useSubmitBehavior]="true"></dx-button>
+          </div>
+        </dxi-item>
+      </dx-form>
+    </form>
+  </app-custom-form>
+  
+  <div  style="margin-bottom: 16px;">
+    <dx-button text="Nuevo producto" hint="Nuevo producto" icon="add" type="success" (onClick)="this.onEditShow(null)"></dx-button>
+  </div>
+
+  <mat-card>
+    <mat-card-title>Listado de Colaboradores</mat-card-title>
+    <mat-card-content>
+      <dx-data-grid [dataSource]="listEntities" [showBorders]="true" [columnAutoWidth]="true">
+        <dxi-column dataField="colaboradorId" caption="ID" width="50"></dxi-column>
+        <dxi-column caption="Persona" [calculateCellValue]="calculateFullName"></dxi-column>
+        <dxi-column dataField="rolId" caption="Rol"></dxi-column>
+        <dxi-column dataField="cargoId" caption="Cargo"></dxi-column>
+        <dxi-column dataField="direccion" caption="Dirección"></dxi-column>
+        <dxi-column dataField="activo" caption="Activo" dataType="boolean"></dxi-column>
+        <dxi-column type="buttons" caption="Acciones">
+          <dxi-button icon="edit" hint="Editar" [onClick]="onEditShow"></dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+    </mat-card-content>
+  </mat-card>
+</div>
