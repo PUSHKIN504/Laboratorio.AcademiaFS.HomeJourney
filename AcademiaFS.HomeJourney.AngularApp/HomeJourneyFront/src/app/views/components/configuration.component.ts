@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FormControl, FormGroup, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfigurationBaseService } from "../services/configuration-base.service";
-
+import Swal from 'sweetalert2';
 export class ConfigurationComponent<TEntity> {
     maxHeight: number = window.screen.height * 0.69;
     text: string = "Configuracion";
@@ -45,43 +45,61 @@ export class ConfigurationComponent<TEntity> {
             });
     }
 
-    // onSave(): void {
-    //     this.popupOptions.loading = true;
-    //     const { usuariocrea } = this._form.value;
-
-    //     const promise = usuariocrea == 0
-    //         ? this._baseService.add(<TEntity>this._form.value)
-    //         : this._baseService.update(<TEntity>this._form.value);
-
-    //     promise.then(data => {
-    //         this.get();
-    //         this.onClosePopup();
-    //         this.snackBar.open(String(Object.values(data)[0]), 'Cerrar', { duration: 3000 });
-    //         this.onClosePopup();
-    //     }).catch(error => {
-    //         this.snackBar.open(String(error), 'Cerrar', { duration: 3000 });
-    //         this.popupOptions.loading = false;
-    //     });
-    // }
+   
     onSave(): void {
         this.popupOptions.loading = true;
-        const { colaboradorId } = this._form.value;  // Usamos colaboradorId en lugar de usuariocrea
-    
-        const promise = colaboradorId == 0
-            ? this._baseService.add(<TEntity>this._form.value)
-            : this._baseService.update(<TEntity>this._form.value);
-    
-        promise.then(data => {
-            this.get();
-            this.onClosePopup();
-            this.snackBar.open(String(Object.values(data)[0]), 'Cerrar', { duration: 3000 });
-            this.onClosePopup();
-        }).catch(error => {
-            this.snackBar.open(String(error), 'Cerrar', { duration: 3000 });
+        this.popupOptions.visible = false;
+        console.log(this._form);
+        // Si el formulario es inválido, marca todos los controles como tocados
+        if (this._form.invalid) {
+          Object.keys(this._form.controls).forEach(controlName => {
+            this._form.get(controlName)?.markAsTouched();
+          });
+          Swal.fire({
+            title: 'Error',
+            text: 'Por favor, complete los campos requeridos',
+            icon: 'warning',
+            confirmButtonText: 'Cerrar'
+          }).then(() => {
+            this.popupOptions.visible = true;
             this.popupOptions.loading = false;
+          });
+          return;
+        }
+      
+        const { colaboradorId } = this._form.value;
+        const promise = colaboradorId == 0
+          ? this._baseService.add(<TEntity>this._form.value)
+          : this._baseService.update(<TEntity>this._form.value);
+      
+        promise.then(data => {
+          this.get();
+          this.onClosePopup();
+      
+          Swal.fire({
+            title: '¡Éxito!',
+            text: String(Object.values(data)[0]),
+            icon: 'success',
+            confirmButtonText: 'Cerrar',
+            customClass: {
+              popup: 'swal2-popup-custom'
+            }
+          }).then(() => {
+            this.popupOptions.loading = false;
+          });
+        }).catch(error => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al guardar, comunicarse con soporte técnico',
+            icon: 'error',
+            confirmButtonText: 'Cerrar'
+          }).then(() => {
+            this.popupOptions.visible = true;
+            this.popupOptions.loading = false;
+          });
         });
-    }
-    
+      }
+      
 
     onChangeStatus(event: any): void {
         const { data } = event;

@@ -11,12 +11,7 @@ export class ConfigurationBaseService<TEntity> {
         this.prefix = url;
     }
 
-    get(withActive: boolean = false, active: boolean = false): Promise<ApiResponseData<TEntity[]>> {
-        const params: Array<IParam> = new Array<IParam>();
-
-        params.push({ type: 'params', name: 'withActive', value: withActive });
-        params.push({ type: 'params', name: 'active', value: active });
-
+    get(): Promise<ApiResponseData<TEntity[]>> {
         return this._appService.get(`${this.prefix}`);
     }
 

@@ -13,7 +13,6 @@ import { DxButtonModule, DxCheckBoxModule, DxPopupModule, DxScrollViewModule, Dx
 })
 export class CustomForm  {
 
-
 title= input<string>('title'); 
 isVisible= input<boolean>(false);
 

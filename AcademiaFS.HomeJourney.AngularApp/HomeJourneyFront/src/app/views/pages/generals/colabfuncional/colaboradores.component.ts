@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfigurationComponent } from '../../../components/configuration.component';
-import { Colaborador } from '../../../models/colaborador.model';
+import { Colaborador, CreatePersonaColaboradorDto } from '../../../models/colaborador.model';
 import { ConfigurationBaseService } from '../../../services/configuration-base.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { LeafletMouseEvent } from 'leaflet';
 import {
   DxDataGridModule,
   DxFormModule,
@@ -12,22 +12,31 @@ import {
   DxSelectBoxModule,
   DxNumberBoxModule,
   DxCheckBoxModule,
-  DxTextBoxModule
+  DxTextBoxModule,
+  DxPopupModule,
+  DxScrollViewModule
 } from 'devextreme-angular';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
+import { CommonModule } from '@angular/common';
+import { CustomForm} from "../../../../shared/custom-popup/custom-popup.component"
+import { ValidationPatterns } from '../../../../shared/validators/ValidationPatterns';
 @Component({
   templateUrl: './colaboradores.component.html',
   styleUrls: ['./colaboradores.component.scss'],
   standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
-    ReactiveFormsModule,
     DxDataGridModule,
     DxFormModule,
+    CustomForm,
+    ReactiveFormsModule,
+    DxPopupModule,
+    DxScrollViewModule,
     DxButtonModule,
     DxSelectBoxModule,
     DxNumberBoxModule,
@@ -36,44 +45,70 @@ import { MatButtonModule } from '@angular/material/button';
     MatToolbarModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule
   ]
 })
-export class ColaboradoresComponent extends ConfigurationComponent<Colaborador> implements OnInit {
-  // Opciones para los dropdowns
+export class ColaboradoresComponent extends ConfigurationComponent<CreatePersonaColaboradorDto> implements OnInit {
+
   personas: Array<{ id: number; nombre: string }> = [
     { id: 1, nombre: 'Juan Pérez' },
     { id: 2, nombre: 'María Gómez' }
   ];
-  roles: Array<{ id: number; nombre: string }> = [
-    { id: 1, nombre: 'Administrador' },
-    { id: 2, nombre: 'Colaborador' }
+  roles: Array<{ rolId: number; nombre: string }> = [
+    { rolId: 1, nombre: 'Administrador' },
+    { rolId: 2, nombre: 'Colaborador' }
   ];
-  cargos: Array<{ id: number; nombre: string }> = [
-    { id: 1, nombre: 'Gerente' },
-    { id: 2, nombre: 'Asistente' }
+  ciudades: Array<{ ciudadId: number; nombre: string }> = [
+    { ciudadId: 1, nombre: 'San Pedro Sula' },
+    { ciudadId: 2, nombre: 'La Lima' }
   ];
-
+  cargos: Array<{ cargoId: number; nombre: string }> = [
+    { cargoId: 1, nombre: 'Gerente' },
+    { cargoId: 2, nombre: 'Asistente' }
+  ];
+  estadociviles = [
+    { estadocivilId: 1, nombre: 'Soltero' },
+    { estadocivilId: 2, nombre: 'Casado' },
+    // ... otros estados
+  ];
+  calculateFullName(data: any): string {
+    return `${data.nombre} ${data.apellido}`;
+  }
   constructor(snackBar: MatSnackBar) {
-    // Pasa la URL, el texto y el snackBar al componente base
-    super("configurations/colaboradores", "Colaborador", snackBar);
+    super("academiafarsiman/personascolaboradores", "Colaborador", snackBar);
   }
 
   override onInitForm(): void {
-    // Definimos los controles del formulario para Colaborador
     this._form = new FormGroup({
-      colaboradorId: new FormControl<number | null>(0),
-      personaId: new FormControl<number | null>(null, [Validators.required]),
-      rolId: new FormControl<number | null>(null, [Validators.required]),
-      cargoId: new FormControl<number | null>(null, [Validators.required]),
-      activo: new FormControl<boolean | null>(true, [Validators.required]),
-      direccion: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(500)])
-      // Agrega otros campos (como latitud, longitud) si es necesario
+      colaboradorId: new FormControl(0),
+      nombre: new FormControl(null, [Validators.required]),
+      apelllido: new FormControl(null, [Validators.required]),
+      sexo: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      documentonacionalidentificacion: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(/^[0-9]+$/)
+      ]),
+      ciudadId: new FormControl(null, [Validators.required]),
+      estadocivilId: new FormControl(null, [Validators.required]),
+      usuariocrea: new FormControl(1, [Validators.required]),
+      rolId: new FormControl(null, [Validators.required]),
+      cargoId: new FormControl(null, [Validators.required]),
+      direccion: new FormControl(null, [Validators.required, Validators.maxLength(500)]),
+      activo: new FormControl(true, [Validators.required]),
+      latitud: new FormControl(null, [Validators.required]),
+      longitud: new FormControl(null, [Validators.required])
     });
   }
-
+  
+  onLocationSelected(event: LeafletMouseEvent): void {
+    this._form.patchValue({
+      latitud: event.latlng.lat,
+      longitud: event.latlng.lng
+    });
+  }
   ngOnInit(): void {
-    // Carga los colaboradores usando el método del componente base
     super.get(true);
   }
 }
