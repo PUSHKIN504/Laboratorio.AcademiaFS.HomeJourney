@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
-    public class Sucursales
+    public class Sucursales : IActivableInterface
     {
         public int SucursalId { get; set; }
         public string Nombre { get; set; } = null!;

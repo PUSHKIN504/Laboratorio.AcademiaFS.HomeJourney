@@ -3,9 +3,14 @@
 </mat-toolbar>
 
 <div class="container" style="padding: 16px;">
-  <app-custom-form [title]="popupOptions.title" [isVisible]="popupOptions.visible" height="auto">
+  <app-custom-form 
+    [title]="popupOptions.title" 
+    [isVisible]="popupOptions.visible" 
+    height="auto"
+    style="max-width: 1000px; margin: auto;">
     <form [formGroup]="_form" class="form-container">
       <div class="form-grid">
+        <!-- Columna 1 -->
         <div class="form-field">
           <label>Nombre</label>
           <dx-text-box formControlName="nombre" placeholder="Ingrese su nombre" [isRequired]="true"></dx-text-box>
@@ -27,22 +32,8 @@
             <span *ngIf="_form.get('sexo')?.errors?.['required']">El sexo es requerido.</span>
           </div>
         </div>
-        <div class="form-field">
-          <label>Estado Civil</label>
-          <dx-select-box 
-            formControlName="estadocivilId"
-            [dataSource]="estadociviles" 
-            displayExpr="nombre" 
-            valueExpr="estadocivilId" 
-            placeholder="Seleccione su estado civil" 
-            [isRequired]="true">
-          </dx-select-box>
-          <div class="error-message" *ngIf="_form.get('estadocivilId')?.invalid && (_form.get('estadocivilesId')?.dirty || _form.get('estadocivilId')?.touched)">
-            <span *ngIf="_form.get('estadocivilId')?.errors?.['required']">
-              El estado civil es requerido.
-            </span>
-          </div>
-        </div>
+
+        <!-- Columna 2 -->
         <div class="form-field">
           <label>Email</label>
           <dx-text-box formControlName="email" placeholder="Ingrese su email" [isRequired]="true"></dx-text-box>
@@ -60,22 +51,55 @@
           </div>
         </div>
         <div class="form-field">
+          <label>Estado Civil</label>
+          <dx-select-box formControlName="estadocivilId" 
+                         [dataSource]="estadociviles" 
+                         displayExpr="nombre" 
+                         valueExpr="estadocivilId" 
+                         placeholder="Seleccione su estado civil" 
+                         [isRequired]="true">
+          </dx-select-box>
+          <div class="error-message" *ngIf="_form.get('estadocivilId')?.invalid && (_form.get('estadocivilId')?.dirty || _form.get('estadocivilId')?.touched)">
+            <span *ngIf="_form.get('estadocivilId')?.errors?.['required']">El estado civil es requerido.</span>
+          </div>
+        </div>
+
+        <!-- Columna 3 -->
+        <div class="form-field">
           <label>Ciudad</label>
-          <dx-select-box formControlName="ciudadId" [dataSource]="ciudades" displayExpr="nombre" valueExpr="ciudadId" placeholder="Seleccione ciudad" [isRequired]="true"></dx-select-box>
+          <dx-select-box formControlName="ciudadId" 
+                         [dataSource]="ciudades" 
+                         displayExpr="nombre" 
+                         valueExpr="ciudadId" 
+                         placeholder="Seleccione ciudad" 
+                         [isRequired]="true">
+          </dx-select-box>
           <div class="error-message" *ngIf="_form.get('ciudadId')?.invalid && (_form.get('ciudadId')?.dirty || _form.get('ciudadId')?.touched)">
             <span *ngIf="_form.get('ciudadId')?.errors?.['required']">La ciudad es requerida.</span>
           </div>
         </div>
         <div class="form-field">
           <label>Rol</label>
-          <dx-select-box formControlName="rolId" [dataSource]="roles" displayExpr="nombre" valueExpr="rolId" placeholder="Seleccione rol" [isRequired]="true"></dx-select-box>
+          <dx-select-box formControlName="rolId" 
+                         [dataSource]="roles" 
+                         displayExpr="nombre" 
+                         valueExpr="rolId" 
+                         placeholder="Seleccione rol" 
+                         [isRequired]="true">
+          </dx-select-box>
           <div class="error-message" *ngIf="_form.get('rolId')?.invalid && (_form.get('rolId')?.dirty || _form.get('rolId')?.touched)">
             <span *ngIf="_form.get('rolId')?.errors?.['required']">El rol es requerido.</span>
           </div>
         </div>
         <div class="form-field">
           <label>Cargo</label>
-          <dx-select-box formControlName="cargoId" [dataSource]="cargos" displayExpr="nombre" valueExpr="cargoId" placeholder="Seleccione cargo" [isRequired]="true"></dx-select-box>
+          <dx-select-box formControlName="cargoId" 
+                         [dataSource]="cargos" 
+                         displayExpr="nombre" 
+                         valueExpr="cargoId" 
+                         placeholder="Seleccione cargo" 
+                         [isRequired]="true">
+          </dx-select-box>
           <div class="error-message" *ngIf="_form.get('cargoId')?.invalid && (_form.get('cargoId')?.dirty || _form.get('cargoId')?.touched)">
             <span *ngIf="_form.get('cargoId')?.errors?.['required']">El cargo es requerido.</span>
           </div>
@@ -106,7 +130,8 @@
             <span *ngIf="_form.get('longitud')?.errors?.['required']">La longitud es requerida.</span>
           </div>
         </div>
-        <div class="form-field" style="grid-column: span 2;">
+        <!-- Mapa de Google en fila completa (3 columnas) -->
+        <div class="form-field" style="grid-column: span 3;">
           <label>Seleccione Ubicación en el Mapa</label>
           <google-map 
             height="300px" 
@@ -126,6 +151,7 @@
           </google-map>
         </div>
       </div>
+      <!-- Botones de acción -->
       <div class="form-buttons">
         <dx-button text="Guardar" type="success" (click)="onSave()" [useSubmitBehavior]="true"></dx-button>
         <dx-button text="Cerrar" type="danger" (click)="onClosePopup()" [useSubmitBehavior]="true"></dx-button>
@@ -133,118 +159,6 @@
     </form>
   </app-custom-form>
   
-  
-  
-  
-  <div  style="margin-bottom: 16px;">
-    <dx-button text="Nuevo Colaborador" hint="Nuevo Colaborador" icon="add" type="success" (onClick)="this.onEditShow(null)"></dx-button>
-  </div>
-
-  <mat-card>
-    <mat-card-title>Listado de Colaboradores</mat-card-title>
-    <mat-card-content>
-      <dx-data-grid [dataSource]="listEntities" [showBorders]="true" [columnAutoWidth]="true">
-        <dxi-column dataField="colaboradorId" caption="ID" width="50"></dxi-column>
-        <dxi-column caption="Persona" [calculateCellValue]="calculateFullName"></dxi-column>
-        <dxi-column dataField="rolId" caption="Rol"></dxi-column>
-        <dxi-column dataField="cargoId" caption="Cargo"></dxi-column>
-        <dxi-column dataField="direccion" caption="Dirección"></dxi-column>
-        <dxi-column dataField="activo" caption="Activo" dataType="boolean"></dxi-column>
-        <dxi-column type="buttons" caption="Acciones">
-          <dxi-button icon="edit" hint="Editar" [onClick]="onEditShow"></dxi-button>
-        </dxi-column>
-      </dx-data-grid>
-    </mat-card-content>
-  </mat-card>
-</div>
-
-<!-- <mat-toolbar color="primary">
-  <span>Gestión de Colaboradores</span>
-</mat-toolbar>
-
-<div class="container" style="padding: 16px;">
-  <app-custom-form [title]="popupOptions.title" [isVisible]="popupOptions.visible" height="auto">
-    <form [formGroup]="_form" class="form-container">
-      <div class="form-grid">
-        <div class="form-field">
-          <label>Nombre</label>
-          <dx-text-box formControlName="nombre" placeholder="Ingrese su nombre" [isRequired]="true"></dx-text-box>
-        </div>
-        <div class="form-field">
-          <label>Apellido</label>
-          <dx-text-box formControlName="apelllido" placeholder="Ingrese su apellido" [isRequired]="true"></dx-text-box>
-        </div>
-        <div class="form-field">
-          <label>Sexo</label>
-          <dx-select-box formControlName="sexo" [dataSource]="['M', 'F']" placeholder="Seleccione su sexo" [isRequired]="true"></dx-select-box>
-        </div>
-        <div class="form-field">
-          <label>Email</label>
-          <dx-text-box formControlName="email" placeholder="Ingrese su email" [isRequired]="true"></dx-text-box>
-        </div>
-        <div class="form-field">
-          <label>Documento Nacional</label>
-          <dx-text-box formControlName="documentonacionalidentificacion" placeholder="Ingrese su DNI" [isRequired]="true"></dx-text-box>
-        </div>
-        <div class="form-field">
-          <label>Estado Civil</label>
-          <dx-select-box formControlName="estadocivilId" [dataSource]="estadociviles" displayExpr="nombre" valueExpr="estadocivilId" placeholder="Seleccione su estado civil" [isRequired]="true"></dx-select-box>
-        </div>
-        <div class="form-field">
-          <label>Ciudad</label>
-          <dx-select-box formControlName="ciudadId" [dataSource]="ciudades" displayExpr="nombre" valueExpr="ciudadId" placeholder="Seleccione ciudad" [isRequired]="true"></dx-select-box>
-        </div>
-        <div class="form-field">
-          <label>Rol</label>
-          <dx-select-box formControlName="rolId" [dataSource]="roles" displayExpr="nombre" valueExpr="rolId" placeholder="Seleccione rol" [isRequired]="true"></dx-select-box>
-        </div>
-        <div class="form-field">
-          <label>Cargo</label>
-          <dx-select-box formControlName="cargoId" [dataSource]="cargos" displayExpr="nombre" valueExpr="cargoId" placeholder="Seleccione cargo" [isRequired]="true"></dx-select-box>
-        </div>
-        <div class="form-field">
-          <label>Dirección</label>
-          <dx-text-box formControlName="direccion" placeholder="Ingrese dirección" [isRequired]="true"></dx-text-box>
-        </div>
-        <div class="form-field">
-          <label>Activo</label>
-          <dx-check-box formControlName="activo" text="Activo" [isRequired]="true"></dx-check-box>
-        </div>
-        <div class="form-field">
-          <label>Latitud</label>
-          <dx-number-box formControlName="latitud" placeholder="Latitud" [isRequired]="true"></dx-number-box>
-        </div>
-        <div class="form-field">
-          <label>Longitud</label>
-          <dx-number-box formControlName="longitud" placeholder="Longitud" [isRequired]="true"></dx-number-box>
-        </div>
-        <div class="form-field" style="grid-column: span 2;">
-          <label>Seleccione Ubicación en el Mapa</label>
-          <google-map 
-            height="300px" 
-            width="100%" 
-            [center]="mapCenter" 
-            [zoom]="mapZoom" 
-            (mapClick)="onMapClick($event)">
-            <map-marker 
-              *ngIf="markerPosition" 
-              [position]="markerPosition"
-              [options]="{
-                icon: {
-                  url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                }
-              }">
-            </map-marker>
-          </google-map>
-        </div>
-      </div>
-      <div class="form-buttons">
-        <dx-button text="Guardar" type="success" (click)="onSave()" [useSubmitBehavior]="true"></dx-button>
-        <dx-button text="Cerrar" type="danger" (click)="onClosePopup()" [useSubmitBehavior]="true"></dx-button>
-      </div>
-    </form>
-  </app-custom-form>
-
   <div style="margin-bottom: 16px;">
     <dx-button text="Nuevo Colaborador" hint="Nuevo Colaborador" icon="add" type="success" (click)="onEditShow(null)"></dx-button>
   </div>
@@ -265,4 +179,4 @@
       </dx-data-grid>
     </mat-card-content>
   </mat-card>
-</div> -->
+</div>

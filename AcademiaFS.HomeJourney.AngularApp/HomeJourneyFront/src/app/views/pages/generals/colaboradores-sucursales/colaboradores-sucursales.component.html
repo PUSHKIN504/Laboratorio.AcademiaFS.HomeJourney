@@ -1,0 +1,66 @@
+<mat-toolbar color="primary">
+    <span>Asignación de Sucursales a Colaboradores</span>
+  </mat-toolbar>
+  
+  <div class="container" style="padding: 16px;">
+    <!-- Popup utilizando el componente custom-form -->
+    <app-custom-form 
+      [title]="popupOptions.title" 
+      [isVisible]="popupOptions.visible" 
+      height="auto"
+      style="max-width: 500px; margin: auto;">
+      <form [formGroup]="_form" class="form-container">
+        <div class="form-grid">
+          <!-- Campo para seleccionar Colaborador -->
+          <div class="form-field">
+            <label>Colaborador</label>
+            <dx-select-box formControlName="colaboradorId"
+                           [editorOptions]="collaboratorSelectOptions">
+            </dx-select-box>
+          </div>
+          <!-- Campo para seleccionar Sucursal -->
+          <div class="form-field">
+            <label>Sucursal</label>
+            <dx-select-box formControlName="sucursalId"
+                           [editorOptions]="sucursalSelectOptions">
+            </dx-select-box>
+          </div>
+          <!-- Campo para ingresar Distancia -->
+          <div class="form-field">
+            <label>Distancia (km)</label>
+            <dx-number-box formControlName="distanciaKilometro"
+                           [editorOptions]="{ placeholder: 'Ingrese distancia en km', min: 0.01, max: 50, step: 0.1 }">
+            </dx-number-box>
+          </div>
+        </div>
+        <!-- Botones de acción -->
+        <div class="form-buttons">
+          <dx-button text="Guardar" type="success" (click)="onSave()" [useSubmitBehavior]="true"></dx-button>
+          <dx-button text="Cerrar" type="danger" (click)="onClosePopup()" [useSubmitBehavior]="true"></dx-button>
+        </div>
+      </form>
+    </app-custom-form>
+    
+    <!-- Botón para mostrar el popup (o abrir el formulario) -->
+    <div style="margin-bottom: 16px;">
+      <dx-button text="Nueva Asignación" hint="Nueva Asignación" icon="add" type="success" (click)="openPopup()"></dx-button>
+    </div>
+  
+    <!-- Grid para listar las asignaciones existentes -->
+    <mat-card>
+      <mat-card-title>Listado de Asignaciones</mat-card-title>
+      <mat-card-content>
+        <dx-data-grid [dataSource]="assignedList" [showBorders]="true" [columnAutoWidth]="true">
+          <dxi-column caption="Colaborador" [calculateCellValue]="calculateFullName.bind(this)">
+          </dxi-column>
+          <dxi-column caption="Sucursal" [calculateCellValue]="getSucursalName.bind(this)">
+          </dxi-column>
+          <dxi-column dataField="distanciaKilometro" caption="Distancia (km)">
+          </dxi-column>
+          <dxi-column dataField="activo" caption="Activo" dataType="boolean">
+          </dxi-column>
+        </dx-data-grid>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
