@@ -19,3 +19,12 @@ export class ColaboradorService extends ConfigurationBaseService<ColaboradorGetA
     super("academiafarsiman/personascolaboradores");
   }
 }
+
+@Injectable({
+  providedIn: 'root'
+})
+export class colaboradoressucursales extends ConfigurationBaseService<ColaboradorSucursalDto> {
+  constructor() {
+    super("academiafarsiman/colaboradoressucursales");
+  }
+}

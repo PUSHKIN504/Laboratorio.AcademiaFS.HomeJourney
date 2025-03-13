@@ -1,0 +1,69 @@
+<mat-toolbar color="primary">
+    <span>Gestión de Colaboradores</span>
+  </mat-toolbar>
+  <div class="container" style="padding: 16px;">
+    <mat-tab-group [(selectedIndex)]="currentTab">
+      <mat-tab label="Seleccionar Colaboradores">
+        <div style="margin: 16px 0;">
+          <dx-data-grid
+            [dataSource]="collaborators"
+            [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
+            (onSelectionChanged)="selectedCollaborators = $event.selectedRowsData">
+            <dxi-column dataField="colaboradorsucursalId" caption="ID" width="50"></dxi-column>
+            <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+          </dx-data-grid>
+        </div>
+        <div class="form-buttons" style="text-align: right; margin-top: 16px;">
+          <dx-button text="Siguiente" type="success" (click)="onNextFromCollaborators()"></dx-button>
+        </div>
+      </mat-tab>
+    
+      <mat-tab label="Transportistas y Viaje">
+        <div style="margin: 16px 0;">
+          <dx-data-grid
+            [dataSource]="transportistas"
+            [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
+            (onSelectionChanged)="selectedTransportistas = $event.selectedRowsData">
+            <dxi-column dataField="transportistaId" caption="ID" width="50"></dxi-column>
+            <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+          </dx-data-grid>
+        </div>
+        <div style="margin: 16px 0;">
+          <form [formGroup]="viajeForm" class="form-container">
+            <div class="form-field">
+              <label>Sucursal</label>
+              <dx-select-box
+                formControlName="sucursalId"
+                [dataSource]="sucursales"
+                displayExpr="nombre"
+                valueExpr="sucursalId"
+                placeholder="Seleccione sucursal"
+                [isRequired]="true">
+              </dx-select-box>
+            </div>
+            <div class="form-field">
+              <label>Hora de Viaje</label>
+              <dx-text-box
+                formControlName="viajehora"
+                placeholder="Ingrese hora (HH:mm)"
+                [isRequired]="true">
+              </dx-text-box>
+            </div>
+            <div class="form-field">
+              <label>Fecha de Viaje</label>
+              <dx-date-box
+                formControlName="viajefecha"
+                placeholder="Seleccione fecha"
+                [isRequired]="true">
+              </dx-date-box>
+            </div>
+          </form>
+        </div>
+        <div class="form-buttons" style="text-align: right; margin-top: 16px;">
+          <dx-button text="Atrás" type="default" (click)="onBack()"></dx-button>
+          <dx-button text="Crear Viaje" type="success" (click)="onNextFromTransportistas()"></dx-button>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  

@@ -40,6 +40,7 @@ export class SidebarComponent {
         { label: 'Test Directivas', route: '/Directivas' },
         { label: 'Colaboradores', route: '/Colaboradores' },
         { label: 'Asignación Colaboradores', route: '/ColaboradoresSucursales' },
+        { label: 'Generar Viajes', route: '/Generarviaje' },
         { label: 'Otra Página', route: '/otra' },
         
       ]

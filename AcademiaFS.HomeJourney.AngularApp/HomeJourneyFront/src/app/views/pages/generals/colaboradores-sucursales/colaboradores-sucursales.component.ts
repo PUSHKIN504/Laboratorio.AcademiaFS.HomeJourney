@@ -104,24 +104,6 @@ export class ColaboradoresSucursalesComponent extends ConfigurationComponent<Col
       });
   }
 
-  // getColaboradorName(data: any): string {
-  //   console.log('colaboradoreslist', this.collaborators);
-  //   if (!this.collaborators || this.collaborators.length === 0) {
-  //     return 'Cargando...'; // Temporary placeholder while data loads
-  //   }
-
-  //   const collab = this.collaborators.find(c => c.colaboradorId === data.colaboradorId);
-  //   return collab ? (collab.nombreCompleto ?? collab.nombre ?? '') : 'No encontrado';
-  // }
-
-  // getSucursalName(data: any): string {
-  //   if (!this.sucursales || this.sucursales.length === 0) {
-  //     return 'Cargando...';
-  //   }
-  //   const suc = this.sucursales.find(s => s.sucursalId === data.sucursalId);
-  //   return suc ? (suc.nombre ?? '') : 'No encontrada';
-  // }
-
   override onInitForm(): void {
     this._form = new FormGroup({
       colaboradorSucursalId: new FormControl(0),

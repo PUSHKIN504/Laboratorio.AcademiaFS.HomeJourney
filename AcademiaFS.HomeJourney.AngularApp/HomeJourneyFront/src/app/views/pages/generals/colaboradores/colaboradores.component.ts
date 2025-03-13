@@ -20,7 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { CustomForm } from "../../../../shared/custom-popup/custom-popup.component";
 import { ValidationPatterns } from '../../../../shared/validators/ValidationPatterns';
 
@@ -76,10 +76,15 @@ export class ColaboradoresComponent extends ConfigurationComponent<CreatePersona
   mapZoom: number = 12;
   markerPosition?: google.maps.LatLngLiteral;
 
+  // calculateFullName(data: any): string {
+  //   console.log(JSON.stringify(data));
+  //   return `${data.nombre} ${data.apelllido}`;
+  // }
   calculateFullName(data: any): string {
-    return `${data.nombre} ${data.apelllido}`;
+    const nombre = JSON.stringify(data.nombre);
+    const apellido = JSON.stringify(data.apellido);
+    return `${nombre.slice(1, -1)} ${apellido.slice(1, -1)}`;
   }
-
   constructor(snackBar: MatSnackBar) {
     super("academiafarsiman/personascolaboradores", "Colaborador", snackBar);
   }

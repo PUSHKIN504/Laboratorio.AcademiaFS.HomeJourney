@@ -23,7 +23,6 @@ export abstract class BaseService {
     private callback: Function,
     private snackBar: MatSnackBar
   ) {
-    // Se crea la instancia de HttpErrorResponseExtends con MatSnackBar y el callback
     this.httpErrorResponseExtends = new HttpErrorResponseExtends(this.snackBar, this.callback);
   }
 
@@ -85,7 +84,7 @@ export abstract class BaseService {
     return new Promise<T>((resolve, reject) => {
       lastValueFrom($observer)
         .then(response => resolve(response))
-        .catch(error => reject(this.httpErrorResponseExtends.customError(error)))
+        .catch(error => reject(error))
         .finally(() => this.params.params = new HttpParams());
     });
   }
