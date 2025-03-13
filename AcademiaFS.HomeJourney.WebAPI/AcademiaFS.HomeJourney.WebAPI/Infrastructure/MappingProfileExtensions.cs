@@ -38,8 +38,17 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure
                 .ForMember(dest => dest.Fechacrea, opt => opt.Ignore());
             CreateMap<ViajesCreateDto, Viajes>().ReverseMap();
             CreateMap<ViajesCreateDto, Viajesdetalles>().ReverseMap();
-            CreateMap<ViajesdetallesCreateDto, Viajesdetalles>().ReverseMap();
-            CreateMap<ColaboradorSucursalDto, Colaboradoressucursales>().ReverseMap();
+            CreateMap<ViajesCreateDto, Viajesdetalles>().ReverseMap();
+            CreateMap<ColaboradorSucursalRequestDto, Colaboradoressucursales>().ReverseMap();
+            //CreateMap<ColaboradorSucursalDto, Colaboradoressucursales>().ReverseMap();
+            CreateMap<Colaboradoressucursales, ColaboradorSucursalDto>()
+            .ForMember(dest => dest.NombreColaborador, opt => opt.MapFrom(src =>
+                 src.Colaborador != null && src.Colaborador.Persona != null
+                    ? src.Colaborador.Persona.Nombre + " " + src.Colaborador.Persona.Apelllido
+                    : "Nombre no disponible"))
+            .ForMember(dest => dest.NombreSucursal, opt => opt.MapFrom(src =>
+                 src.Sucursal != null ? src.Sucursal.Nombre : "Sucursal no disponible"));
+
             CreateMap<SolicitudViajeCreateDto, Solicitudesviajes>().ReverseMap();
             CreateMap<Usuarios, UsuarioConDetallesDto>()
                         .ForMember(dest => dest.UsuarioId, opt => opt.MapFrom(src => src.UsuarioId))

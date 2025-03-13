@@ -15,18 +15,69 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
         private readonly IGenericServiceInterface<Colaboradoressucursales, int> _service;
         private readonly IMapper _mapper;
         private readonly ViajesService _domainService;
-        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper, ViajesService domainServiceViaje)
+        private readonly IGenericServiceInterface<Colaboradores, int> _colaboradorService;
+        private readonly IGenericServiceInterface<Personas, int> _personaService;
+        private readonly IGenericServiceInterface<Sucursales, int> _sucursalService;
+        public ColaboradoresSucursalesController(IGenericServiceInterface<Colaboradoressucursales, int> service, IMapper mapper, ViajesService domainServiceViaje, IGenericServiceInterface<Colaboradores, int> colaboradorService, IGenericServiceInterface<Personas, int> personaService,
+            IGenericServiceInterface<Sucursales, int> sucursalService)
         {
             _service = service;
             _mapper = mapper;
             _domainService = domainServiceViaje;
+            _personaService = personaService;
+            _colaboradorService = colaboradorService;
+            _sucursalService = sucursalService;
         }
 
+        //[HttpGet]
+        //public ActionResult<CustomResponse<IEnumerable<ColaboradorSucursalDto>>> GetAll()
+        //{
+        //    var list = _service.GetAll();
+        //    var dtoList = _mapper.Map<IEnumerable<ColaboradorSucursalDto>>(list);
+        //    return Ok(new CustomResponse<IEnumerable<ColaboradorSucursalDto>>
+        //    {
+        //        Success = true,
+        //        Message = "Listado de colaboradores por sucursal obtenido correctamente.",
+        //        Data = dtoList
+        //    });
+        //}
         [HttpGet]
         public ActionResult<CustomResponse<IEnumerable<ColaboradorSucursalDto>>> GetAll()
         {
             var list = _service.GetAll();
-            var dtoList = _mapper.Map<IEnumerable<ColaboradorSucursalDto>>(list);
+
+            var colaboradores = _colaboradorService.GetAll();
+            var sucursales = _sucursalService.GetAll();
+            var personas = _personaService.GetAll();
+
+            var dtoList = list.Select(entity =>
+            {
+                var dto = _mapper.Map<ColaboradorSucursalDto>(entity);
+
+                var collab = colaboradores.FirstOrDefault(c => c.ColaboradorId == entity.ColaboradorId);
+                if (collab != null)
+                {
+                    var persona = personas.FirstOrDefault(p => p.PersonaId == collab.PersonaId);
+                    if (persona != null)
+                    {
+                        dto.NombreColaborador = $"{persona.Nombre} {persona.Apelllido}";
+                    }
+                    else
+                    {
+                        dto.NombreColaborador = "Nombre no disponible";
+                    }
+                }
+                else
+                {
+                    dto.NombreColaborador = "Nombre no disponible";
+                }
+
+                var sucursal = sucursales.FirstOrDefault(s => s.SucursalId == entity.SucursalId);
+                dto.NombreSucursal = sucursal?.Nombre ?? "Sucursal no disponible";
+
+                return dto;
+            });
+
             return Ok(new CustomResponse<IEnumerable<ColaboradorSucursalDto>>
             {
                 Success = true,
@@ -58,7 +109,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
 
         [HttpPost]
-        public async Task<ActionResult<CustomResponse<ColaboradorSucursalDto>>> Create([FromBody] ColaboradorSucursalDto dto)
+        public async Task<ActionResult<CustomResponse<ColaboradorSucursalRequestDto>>> Create([FromBody] ColaboradorSucursalRequestDto dto)
         {
             try
             {
@@ -69,9 +120,9 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                 await _domainService.AsignarColaboradorASucursalAsync(entity);
 
                 var created = _service.Create(entity);
-                var createdDto = _mapper.Map<ColaboradorSucursalDto>(created);
+                var createdDto = _mapper.Map<ColaboradorSucursalRequestDto>(created);
 
-                return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalDto>
+                return CreatedAtAction(nameof(GetById), new { id = created.ColaboradorsucursalId }, new CustomResponse<ColaboradorSucursalRequestDto>
                 {
                     Success = true,
                     Message = "Registro creado correctamente.",
@@ -80,7 +131,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(new CustomResponse<ColaboradorSucursalDto>
+                return BadRequest(new CustomResponse<ColaboradorSucursalRequestDto>
                 {
                     Success = false,
                     Message = ex.Message
@@ -88,7 +139,7 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new CustomResponse<ColaboradorSucursalDto>
+                return StatusCode(500, new CustomResponse<ColaboradorSucursalRequestDto>
                 {
                     Success = false,
                     Message = $"Error al crear el registro: {ex.Message}"

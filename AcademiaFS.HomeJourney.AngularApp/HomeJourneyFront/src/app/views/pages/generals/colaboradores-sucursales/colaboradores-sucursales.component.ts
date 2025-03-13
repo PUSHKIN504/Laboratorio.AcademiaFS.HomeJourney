@@ -1,202 +1,149 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfigurationComponent } from '../../../components/configuration.component';
+import { Colaborador, ColaboradorGetAllDto, CreatePersonaColaboradorDto } from '../../../models/colaborador.model';
+import { ConfigurationBaseService } from '../../../services/configuration-base.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from '@angular/common/http';
+import { GoogleMapsModule } from '@angular/google-maps';
 import {
+  DxDataGridModule,
+  DxFormModule,
+  DxButtonModule,
   DxSelectBoxModule,
   DxNumberBoxModule,
-  DxButtonModule,
-  DxDataGridModule
+  DxCheckBoxModule,
+  DxTextBoxModule,
+  DxPopupModule,
+  DxScrollViewModule,
+  DxDataGridComponent
 } from 'devextreme-angular';
-import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { DxiColumnModule } from 'devextreme-angular/ui/nested';
-
-interface Colaborador {
-  personaId: number;
-  colaboradorId: number;
-  nombre: string;
-  apelllido: string;
-}
-
-interface Sucursal {
-  sucursalId: number;
-  nombre: string;
-  direccion: string;
-}
-
-export interface ColaboradorSucursalDto {
-  colaboradorsucursalId?: number;
-  colaboradorId: number;
-  sucursalId: number;
-  distanciaKilometro: number;
-  activo: boolean;
-  usuarioCrea: number;
-  fechaCrea: Date;
-  usuarioModifica?: number;
-  fechaModifica?: Date;
-}
+import { CommonModule } from '@angular/common';
+import { CustomForm } from "../../../../shared/custom-popup/custom-popup.component";
+import { ValidationPatterns } from '../../../../shared/validators/ValidationPatterns';
+import { ColaboradorSucursalDto } from '../../../models/colaboradorsucursal.model';
+import { SucursalService } from '../../../services/sucursal.service';
+import { ColaboradorService } from '../../../services/collaborator.service';
 
 @Component({
-  selector: 'app-colaborador-sucursales',
   templateUrl: './colaboradores-sucursales.component.html',
   styleUrls: ['./colaboradores-sucursales.component.scss'],
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
-    CommonModule,
+    DxDataGridModule,
+    DxFormModule,
+    CustomForm,
     ReactiveFormsModule,
+    DxPopupModule,
+    DxScrollViewModule,
+    DxButtonModule,
     DxSelectBoxModule,
     DxNumberBoxModule,
-    DxButtonModule,
-    DxDataGridModule,
-    DxiColumnModule,
+    DxCheckBoxModule,
+    DxTextBoxModule,
     MatToolbarModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule,
+    GoogleMapsModule
   ]
 })
-export class ColaboradorSucursalesComponent implements OnInit {
-  // Usamos _form para ajustarse al patrón de tu componente genérico
-  _form: FormGroup;
-  // Variables para la asignación
-  colaboradores: Colaborador[] = [];
-  sucursales: Sucursal[] = [];
-  assignedList: ColaboradorSucursalDto[] = [];
-  // Objeto popupOptions para usar en el custom-form
-  popupOptions = {
-    title: 'Asignar Sucursal a Colaborador',
-    visible: false,
-    loading: false
-  };
+export class ColaboradoresSucursalesComponent extends ConfigurationComponent<ColaboradorSucursalDto> implements OnInit {
+  collaborators: Array<ColaboradorGetAllDto> = [];
+  sucursales: Array<{ sucursalId: number, nombre: string }> = [];
 
-  // Configuración para los select boxes
-  collaboratorSelectOptions: any;
-  sucursalSelectOptions: any;
+  @ViewChild(DxDataGridComponent) dataGrid!: DxDataGridComponent;
 
   constructor(
-    private fb: FormBuilder,
-    private snackBar: MatSnackBar,
-    private http: HttpClient
+    snackBar: MatSnackBar,
+    private collaboratorService: ColaboradorService,
+    private sucursalService: SucursalService
   ) {
-    this._form = this.fb.group({
-      colaboradorId: [null, Validators.required],
-      sucursalId: [null, Validators.required],
-      distanciaKilometro: [null, [Validators.required, Validators.min(0.01), Validators.max(50)]]
-    });
+    super("academiafarsiman/colaboradoressucursales", "Colaborador", snackBar);
   }
 
   ngOnInit(): void {
-    this.loadColaboradores();
+    super.get(true);
+    this.loadCollaborators();
     this.loadSucursales();
-    this.getAssigned();
   }
 
-  loadColaboradores(): void {
-    // Se asume que el endpoint devuelve { data: Colaborador[] }
-    this.http.get<any>('http://localhost:36955/academiafarsiman/personascolaboradores').subscribe({
-      next: (res) => {
-        this.colaboradores = res.data;
-        this.collaboratorSelectOptions = {
-          dataSource: this.colaboradores,
-          displayExpr: this.getColaboradorDisplayName.bind(this),
-          valueExpr: 'personaId',
-          placeholder: 'Seleccione colaborador'
-        };
-      },
-      error: () => {
-        this.snackBar.open('Error al cargar colaboradores', 'Cerrar', { duration: 3000 });
-      }
-    });
+  loadCollaborators(): void {
+    this.collaboratorService.get()
+      .then(response => {
+        const data = Array.isArray(response) ? response : response.data || [];
+        this.collaborators = data.map(collab => ({
+          ...collab,
+          nombreCompleto: `${collab.nombre} ${collab.apellido}`
+        }));
+        if (this.dataGrid) {
+          this.dataGrid.instance.refresh();
+        }
+      })
+      .catch(error => {
+        console.error("Error al obtener colaboradores:", error);
+        this.collaborators = [];
+      });
   }
 
   loadSucursales(): void {
-    // Se asume que el endpoint devuelve { data: Sucursal[] }
-    this.http.get<any>('http://localhost:36955/academiafarsiman/sucursales/raw').subscribe({
-      next: (res) => {
-        this.sucursales = res.data;
-        this.sucursalSelectOptions = {
-          dataSource: this.sucursales,
-          displayExpr: 'nombre',
-          valueExpr: 'sucursalId',
-          placeholder: 'Seleccione sucursal'
-        };
-      },
-      error: () => {
-        this.snackBar.open('Error al cargar sucursales', 'Cerrar', { duration: 3000 });
-      }
+    this.sucursalService.get()
+      .then(response => {
+        this.sucursales = response.data.map(suc => ({
+          sucursalId: suc.sucursalId,
+          nombre: suc.nombre
+        }));
+      })
+      .catch(error => {
+        console.error("Error al obtener sucursales:", error);
+      });
+  }
+
+  // getColaboradorName(data: any): string {
+  //   console.log('colaboradoreslist', this.collaborators);
+  //   if (!this.collaborators || this.collaborators.length === 0) {
+  //     return 'Cargando...'; // Temporary placeholder while data loads
+  //   }
+
+  //   const collab = this.collaborators.find(c => c.colaboradorId === data.colaboradorId);
+  //   return collab ? (collab.nombreCompleto ?? collab.nombre ?? '') : 'No encontrado';
+  // }
+
+  // getSucursalName(data: any): string {
+  //   if (!this.sucursales || this.sucursales.length === 0) {
+  //     return 'Cargando...';
+  //   }
+  //   const suc = this.sucursales.find(s => s.sucursalId === data.sucursalId);
+  //   return suc ? (suc.nombre ?? '') : 'No encontrada';
+  // }
+
+  override onInitForm(): void {
+    this._form = new FormGroup({
+      colaboradorSucursalId: new FormControl(0),
+      colaboradorId: new FormControl(null, [Validators.required]),
+      sucursalId: new FormControl(null, [Validators.required]),
+      distanciaKilometro: new FormControl(0),
+      activo: new FormControl(true, [Validators.required]),
+      usuarioCrea: new FormControl(1),
+      fechaCrea: new FormControl(new Date()),
+      usuarioModifica: new FormControl(1),
+      fechaModifica: new FormControl(null),
     });
   }
 
-  getAssigned(): void {
-    // Se asume que el endpoint devuelve { data: ColaboradorSucursalDto[] }
-    this.http.get<any>('http://localhost:36955/academiafarsiman/colaboradoressucursales').subscribe({
-      next: (res) => {
-        this.assignedList = res.data;
-      },
-      error: () => {
-        this.snackBar.open('Error al cargar asignaciones', 'Cerrar', { duration: 3000 });
-      }
-    });
-  }
+  // Map-related properties (unchanged from your original code)
+  mapCenter: google.maps.LatLngLiteral = { lat: 15.5000, lng: -88.0333 };
+  mapZoom: number = 12;
+  markerPosition?: google.maps.LatLngLiteral;
 
-  openPopup(): void {
-    this.popupOptions.visible = true;
-    this._form.reset();
-  }
-
-  onClosePopup(): void {
-    this.popupOptions.visible = false;
-  }
-
-  onSave(): void {
-    if (this._form.invalid) {
-      this.snackBar.open('Complete todos los campos y verifique que la distancia esté entre 0 y 50 km', 'Cerrar', { duration: 3000 });
-      return;
-    }
-    const formValue = this._form.value as ColaboradorSucursalDto;
-    // Validar que el colaborador no tenga asignada la misma sucursal
-    const exists = this.assignedList.some(
-      asg => asg.colaboradorId === formValue.colaboradorId && asg.sucursalId === formValue.sucursalId
-    );
-    if (exists) {
-      this.snackBar.open('Este colaborador ya tiene asignada esta sucursal.', 'Cerrar', { duration: 3000 });
-      return;
-    }
-    // Completar valores adicionales
-    formValue.activo = true;
-    formValue.usuarioCrea = 1; // Ajusta según el usuario actual
-    formValue.fechaCrea = new Date();
-
-    this.http.post<any>('http://localhost:36955/academiafarsiman/colaboradoressucursales', formValue).subscribe({
-      next: () => {
-        this.snackBar.open('Sucursal asignada correctamente', 'Cerrar', { duration: 3000 });
-        this.getAssigned();
-        this.onClosePopup();
-      },
-      error: () => {
-        this.snackBar.open('Error al asignar sucursal', 'Cerrar', { duration: 3000 });
-      }
-    });
-  }
-
-  getColaboradorDisplayName(item: Colaborador): string {
-    return item ? `${item.nombre} ${item.apelllido}` : '';
-  }
-
-  // Para el grid: retorna el nombre completo del colaborador
   calculateFullName(data: any): string {
-    const colab = this.colaboradores.find(c => c.colaboradorId === data.colaboradorId);
-    return colab ? `${colab.nombre} ${colab.apelllido}` : data.colaboradorId;
-  }
-
-  // Para el grid: retorna el nombre de la sucursal
-  getSucursalName(data: any): string {
-    const suc = this.sucursales.find(s => s.sucursalId === data.sucursalId);
-    return suc ? suc.nombre : data.sucursalId;
+    const nombre = JSON.stringify(data.nombre);
+    const apellido = JSON.stringify(data.apellido);
+    return `${nombre.slice(1, -1)} ${apellido.slice(1, -1)}`;
   }
 }

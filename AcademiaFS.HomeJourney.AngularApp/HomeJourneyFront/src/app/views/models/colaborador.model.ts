@@ -28,20 +28,21 @@ export interface Colaborador {
   }
   
   export interface ColaboradorGetAllDto {
-    colaboradorId: number;
-    personaId: number;
-    nombre: string; // Desde Personas
-    apellido: string; // Desde Personas
-    rolId: number;
-    cargoId: number;
-    activo: boolean;
-    direccion: string;
-    usuarioCrea: number;
-    fechaCrea: Date;
+    colaboradorId?: number;
+    personaId?: number;
+    nombre?: string; // Desde Personas
+    apellido?: string; // Desde Personas
+    rolId?: number;
+    cargoId?: number;
+    activo?: boolean;
+    direccion?: string;
+    usuarioCrea?: number;
+    fechaCrea?: Date;
     usuarioModifica?: number;
     fechaModifica?: Date;
-    latitud: number;
-    longitud: number;
+    latitud?: number;
+    longitud?: number;
+    nombreCompleto?: string;
   }
   export interface CreatePersonaColaboradorDto {
     nombre: string;

@@ -39,6 +39,7 @@ export class SidebarComponent {
         { label: 'Paises', route: '/Paises' },
         { label: 'Test Directivas', route: '/Directivas' },
         { label: 'Colaboradores', route: '/Colaboradores' },
+        { label: 'Asignación Colaboradores', route: '/ColaboradoresSucursales' },
         { label: 'Otra Página', route: '/otra' },
         
       ]

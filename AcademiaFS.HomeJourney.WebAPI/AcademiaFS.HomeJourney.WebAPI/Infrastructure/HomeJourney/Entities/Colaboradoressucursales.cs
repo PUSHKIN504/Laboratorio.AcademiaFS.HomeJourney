@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 {
@@ -14,7 +16,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
         public DateTime Fechacrea { get; set; }
         public int? Usuariomodifica { get; set; }
         public DateTime? Fechamodifica { get; set; }
-
 
         // Relaciones
         public Colaboradores Colaborador { get; set; } = null!;

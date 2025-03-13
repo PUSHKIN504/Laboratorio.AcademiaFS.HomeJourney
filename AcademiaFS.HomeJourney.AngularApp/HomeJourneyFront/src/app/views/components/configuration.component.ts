@@ -3,6 +3,7 @@ import { FormControl, FormGroup, UntypedFormGroup, Validators } from "@angular/f
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfigurationBaseService } from "../services/configuration-base.service";
 import Swal from 'sweetalert2';
+import { JsonPipe } from '@angular/common';
 export class ConfigurationComponent<TEntity> {
     maxHeight: number = window.screen.height * 0.69;
     text: string = "Configuracion";
@@ -44,13 +45,79 @@ export class ConfigurationComponent<TEntity> {
                 }
             });
     }
-
+    // onSave(): void {
+    //   this.popupOptions.loading = true;
+    //   this.popupOptions.visible = false;
+    //   console.log(this._form);
+    //   if (this._form.invalid) {
+    //     Object.keys(this._form.controls).forEach(controlName => {
+    //       this._form.get(controlName)?.markAsTouched();
+    //     });
+    //     Swal.fire({
+    //       title: 'Error',
+    //       text: 'Por favor, complete los campos requeridos',
+    //       icon: 'warning',
+    //       confirmButtonText: 'Cerrar'
+    //     }).then(() => {
+    //       this.popupOptions.visible = true;
+    //       this.popupOptions.loading = false;
+    //     });
+    //     return;
+    //   }
+    
+    //   const { colaboradorSucursalId } = this._form.value;
+    //   const promise = colaboradorSucursalId == 0
+    //     ? this._baseService.add(<TEntity>this._form.value)
+    //     : this._baseService.update(<TEntity>this._form.value);
+    
+    //   promise.then(data => {
+    //     if (!data[0]) {
+    //       Swal.fire({
+    //         title: '¡Éxito!',
+    //         text: String(data[1]),
+    //         icon: 'success',
+    //         confirmButtonText: 'Cerrar',
+    //         customClass: {
+    //           popup: 'swal2-popup-custom'
+    //         }
+    //       }).then(() => {
+    //         this.popupOptions.loading = false;
+    //       });
+    //     }
+        
+    //     // En caso de éxito
+    //     this.get();
+    //     this.onClosePopup();
+    //     Swal.fire({
+    //       title: '¡Éxito!',
+    //       text: String(data[1]),
+    //       icon: 'success',
+    //       confirmButtonText: 'Cerrar',
+    //       customClass: {
+    //         popup: 'swal2-popup-custom'
+    //       }
+    //     }).then(() => {
+    //       this.popupOptions.loading = false;
+    //     });
+    //   }).catch(error => {
+    //     Swal.fire({
+    //       title: 'Error',
+    //       text: 'Error al guardar, comunicarse con soporte técnico: ' + String(Object.values(error)[0]),
+    //       icon: 'error',
+    //       confirmButtonText: 'Cerrar'
+    //     }).then(() => {
+    //       this.popupOptions.visible = true;
+    //       this.popupOptions.loading = false;
+    //     });
+    //     console.log(String(Object.values(error)[0]));
+    //   });
+    // }
+    
    
     onSave(): void {
         this.popupOptions.loading = true;
         this.popupOptions.visible = false;
         console.log(this._form);
-        // Si el formulario es inválido, marca todos los controles como tocados
         if (this._form.invalid) {
           Object.keys(this._form.controls).forEach(controlName => {
             this._form.get(controlName)?.markAsTouched();
@@ -67,18 +134,29 @@ export class ConfigurationComponent<TEntity> {
           return;
         }
       
-        const { colaboradorId } = this._form.value;
-        const promise = colaboradorId == 0
-          ? this._baseService.add(<TEntity>this._form.value)
-          : this._baseService.update(<TEntity>this._form.value);
+        // const { colaboradorSucursalId } = this._form.value;
+        // const promise = colaboradorSucursalId == 0
+        // const { colaboradorId } = this._form.value;
+        // const promise = colaboradorId == 0
+        const promise =  this._baseService.add(<TEntity>this._form.value)
       
         promise.then(data => {
           this.get();
           this.onClosePopup();
-      
+          if (!data[0]) {
+            Swal.fire({
+                  title: 'Error',
+                  text: `Error al guardar, ${data[1]}`,
+                  icon: 'error',
+                  confirmButtonText: 'Cerrar'
+                }).then(() => {
+                  this.popupOptions.visible = true;
+                  this.popupOptions.loading = false;
+                });
+          }
           Swal.fire({
             title: '¡Éxito!',
-            text: String(Object.values(data)[0]),
+            text: String(Object.values(data)[1]),
             icon: 'success',
             confirmButtonText: 'Cerrar',
             customClass: {
@@ -87,10 +165,12 @@ export class ConfigurationComponent<TEntity> {
           }).then(() => {
             this.popupOptions.loading = false;
           });
-        }).catch(error => {
+        })
+        .catch(error => {
+          console.log('errorsio'+String(error));
           Swal.fire({
             title: 'Error',
-            text: 'Error al guardar, comunicarse con soporte técnico',
+            text: `Error al guardar, ${String(error)}`,
             icon: 'error',
             confirmButtonText: 'Cerrar'
           }).then(() => {

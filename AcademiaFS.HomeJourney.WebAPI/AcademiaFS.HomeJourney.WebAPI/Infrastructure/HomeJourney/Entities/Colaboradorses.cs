@@ -3,7 +3,7 @@
 namespace AcademiaFS.HomeJourney.WebAPI.Infrastructure.HomeJourney.Entities
 
 {
-    public class Colaboradores
+    public class Colaboradores: IActivableInterface
     {
         public int ColaboradorId { get; set; }
         public int PersonaId { get; set; }

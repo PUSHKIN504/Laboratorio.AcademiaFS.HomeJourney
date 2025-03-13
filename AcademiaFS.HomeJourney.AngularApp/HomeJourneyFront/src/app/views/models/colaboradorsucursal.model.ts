@@ -1,5 +1,5 @@
 export interface ColaboradorSucursalDto {
-    colaboradorSucursalId: number;
+    colaboradorsucursalId: number;
     colaboradorId: number;
     sucursalId: number;
     distanciaKilometro: number;
@@ -8,5 +8,7 @@ export interface ColaboradorSucursalDto {
     fechaCrea: Date;
     usuarioModifica?: number;
     fechaModifica?: Date;
+    nombreColaborador?:string;
+    nombreSucursal?:string;
   }
   
