@@ -13,8 +13,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     [Route("academiafarsiman/sucursales")]
     public class SucursalesController : Controller
     {
-        //private readonly string _connectionString = "Data Source=localhost,1433;Initial Catalog=HomeJourney;User ID=sa;Password=TuContraseñaSegura123;Encrypt=True;TrustServerCertificate=True;";
-        private readonly string _connectionString = "Data Source=192.168.1.33\\academiagfs,49194;Initial Catalog=HomeJourney;User ID=AcademiaDEV;Password=Academia.1;Encrypt=True;TrustServerCertificate=True;";
+        private readonly string _connectionString = "Data Source=localhost,1433;Initial Catalog=HomeJourney;User ID=sa;Password=TuContraseñaSegura123;Encrypt=True;TrustServerCertificate=True;";
+        //private readonly string _connectionString = "Data Source=192.168.1.33\\academiagfs,49194;Initial Catalog=HomeJourney;User ID=AcademiaDEV;Password=Academia.1;Encrypt=True;TrustServerCertificate=True;";
 
         [HttpGet()]
         public async Task<ActionResult<CustomResponse<IEnumerable<Sucursales>>>> GetAllRaw()
@@ -29,9 +29,10 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
                     string query = @"SELECT Sucursal_id, Nombre, Direccion, Activo, 
                                             Usuariocrea, Fechacrea, Usuariomodifica, 
-                                            Fechamodifica, Latitud, Longitud, Jefe_Id 
+                                            Fechamodifica, Latitud, Longitud,
+                                            Jefe_Id
                                      FROM Sucursales";
-
+                                            //--JefeId
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = await command.ExecuteReaderAsync())
@@ -57,6 +58,9 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
                                     JefeId = reader.IsDBNull(reader.GetOrdinal("Jefe_Id"))
                                                         ? (int?)null
                                                         : reader.GetInt32(reader.GetOrdinal("Jefe_Id"))
+                                    //JefeId = reader.IsDBNull(reader.GetOrdinal("JefeId"))
+                                    //                    ? (int?)null
+                                    //                    : reader.GetInt32(reader.GetOrdinal("JefeId"))
                                 };
 
                                 sucursales.Add(sucursal);

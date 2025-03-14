@@ -153,7 +153,7 @@ public class DomainServiceClustering
         {
             SucursalId = tripDto.SucursalId,
             TransportistaId = transportistaId,
-            EstadoId = 5,
+            EstadoId = tripDto.EstadoId,
             Viajehora = tripDto.Viajehora,
             Viajefecha = tripDto.Viajefecha,
             Totalkilometros = tripDetails.Sum(d => d.Distanciakilometros),

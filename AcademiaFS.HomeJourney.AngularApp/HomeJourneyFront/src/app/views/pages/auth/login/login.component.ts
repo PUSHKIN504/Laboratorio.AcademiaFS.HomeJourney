@@ -43,8 +43,10 @@ export class LoginComponent {
     this.authService.login(request)
       .then((response: UsuarioDto) => {
         this.loginValid = true;
+        localStorage.setItem('user', JSON.stringify(response));
+        console.log(response);
         this.snackBar.open('Login exitoso', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['index']);
+        this.router.navigate(['Colaboradores']);
       })
       .catch((error: any) => {
         this.loginValid = false;

@@ -118,7 +118,6 @@ export class ColaboradoresSucursalesComponent extends ConfigurationComponent<Col
     });
   }
 
-  // Map-related properties (unchanged from your original code)
   mapCenter: google.maps.LatLngLiteral = { lat: 15.5000, lng: -88.0333 };
   mapZoom: number = 12;
   markerPosition?: google.maps.LatLngLiteral;

@@ -25,6 +25,12 @@ namespace AcademiaFS.HomeJourney.WebAPI._Features.Generals.Dto
         [BindNever]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public string NombreSucursal { get; set; } = string.Empty;
+        [BindNever]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public decimal Latitud { get; set; }
+        [BindNever]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public decimal Longitud { get; set; }
     }
     [ExcludeFromCodeCoverage]
     public class ColaboradorSucursalRequestDto 

@@ -19,3 +19,45 @@ mat-expansion-panel-header {
 mat-icon {
   margin-right: 8px;
 }
+.sidenav-container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 250px;
+}
+
+/* Aplica flex layout al mat-nav-list */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0; /* Ajusta según tus necesidades */
+}
+
+/* Contenedor de items de menú */
+.menu-items {
+  /* Deja que crezcan los items y empujen el botón al fondo */
+  flex: 1;
+  /* Opcionalmente, puedes agregar scroll si hay muchos items */
+  overflow-y: auto;
+}
+
+/* Sección de logout al final */
+.logout-section {
+  padding: 16px;
+  text-align: center;
+
+  button {
+    width: 100%;
+    font-weight: bold;
+    border-radius: 4px;
+    background-color: #f44336; // Color rojo (Material Design warn)
+    color: #fff;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #d32f2f;
+    }
+  }
+}

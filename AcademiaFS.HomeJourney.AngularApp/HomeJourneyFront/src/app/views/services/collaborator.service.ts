@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ConfigurationBaseService } from './configuration-base.service';
-import { ColaboradorSucursalDto } from '../../views/models/grals.model';
+import { ColaboradorSucursalDto, SucursalDto } from '../../views/models/grals.model';
 import { ColaboradorGetAllDto } from '../models/colaborador.model';
+import { Transportistas } from '../models/Transportista.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,21 @@ export class ColaboradorService extends ConfigurationBaseService<ColaboradorGetA
 export class colaboradoressucursales extends ConfigurationBaseService<ColaboradorSucursalDto> {
   constructor() {
     super("academiafarsiman/colaboradoressucursales");
+  }
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class transportistas extends ConfigurationBaseService<Transportistas> {
+  constructor() {
+    super("academiafarsiman/transportistas");
+  }
+}
+@Injectable({
+  providedIn: 'root'
+})
+export class SicursalesService extends ConfigurationBaseService<SucursalDto> {
+  constructor() {
+    super("academiafarsiman/sucursales");
   }
 }

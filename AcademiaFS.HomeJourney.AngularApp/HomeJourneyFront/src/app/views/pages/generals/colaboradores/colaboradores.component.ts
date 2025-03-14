@@ -76,10 +76,6 @@ export class ColaboradoresComponent extends ConfigurationComponent<CreatePersona
   mapZoom: number = 12;
   markerPosition?: google.maps.LatLngLiteral;
 
-  // calculateFullName(data: any): string {
-  //   console.log(JSON.stringify(data));
-  //   return `${data.nombre} ${data.apelllido}`;
-  // }
   calculateFullName(data: any): string {
     const nombre = JSON.stringify(data.nombre);
     const apellido = JSON.stringify(data.apellido);

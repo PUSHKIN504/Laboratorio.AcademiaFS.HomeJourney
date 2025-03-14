@@ -74,7 +74,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
 
                 var sucursal = sucursales.FirstOrDefault(s => s.SucursalId == entity.SucursalId);
                 dto.NombreSucursal = sucursal?.Nombre ?? "Sucursal no disponible";
-
+                dto.Latitud = sucursal?.Latitud ?? 0;
+                dto.Longitud = sucursal?.Longitud ?? 0;
                 return dto;
             });
 

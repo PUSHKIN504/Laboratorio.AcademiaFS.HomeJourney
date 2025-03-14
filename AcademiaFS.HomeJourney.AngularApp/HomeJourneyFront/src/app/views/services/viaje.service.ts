@@ -5,7 +5,8 @@ import {
   ViajesdetallesCreateClusteredDto, 
   ViajesCreateClusteredDto, 
   CreateViajesRequest 
-} from '../models/viaje.model'; // Ajusta la ruta según tu proyecto
+} from '../models/viaje.model';
+import { ColaboradorSucursalDto } from '../models/colaboradorsucursal.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,16 +17,10 @@ export class ViajesService {
 
   constructor(private http: HttpClient) { }
 
-  /**
-   * Llama al endpoint cluster-employees para agrupar empleados.
-   * @param usuarioCrea El id del usuario que crea.
-   * @param employees Array de empleados a agrupar.
-   * @param distanceThreshold Límite de distancia.
-   * @returns Promise con el array de ViajesdetallesCreateClusteredDto
-   */
+ 
   clusterEmployees(
     usuarioCrea: number, 
-    employees: ViajesdetallesCreateClusteredDto[], 
+    employees: ColaboradorSucursalDto[], 
     distanceThreshold: number
   ): Promise<ViajesdetallesCreateClusteredDto[]> {
     const params = new HttpParams()
@@ -37,12 +32,7 @@ export class ViajesService {
     );
   }
 
-  /**
-   * Llama al endpoint create-trips-from-clusters para crear viajes a partir de clusters.
-   * @param usuarioCrea El id del usuario que crea.
-   * @param request Objeto CreateViajesRequest con los datos del viaje y empleados agrupados.
-   * @returns Promise con la respuesta del endpoint.
-   */
+ 
   createTripsFromClusters(
     usuarioCrea: number, 
     request: CreateViajesRequest

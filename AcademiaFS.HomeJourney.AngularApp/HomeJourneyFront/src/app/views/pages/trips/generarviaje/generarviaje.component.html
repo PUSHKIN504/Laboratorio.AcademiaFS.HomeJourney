@@ -1,16 +1,16 @@
 <mat-toolbar color="primary">
-    <span>Gestión de Colaboradores</span>
+    <span>Gestión de Viajes</span>
   </mat-toolbar>
   <div class="container" style="padding: 16px;">
     <mat-tab-group [(selectedIndex)]="currentTab">
-      <mat-tab label="Seleccionar Colaboradores">
+      <mat-tab disabled="true" label="Seleccionar Colaboradores">
         <div style="margin: 16px 0;">
           <dx-data-grid
             [dataSource]="collaborators"
             [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
             (onSelectionChanged)="selectedCollaborators = $event.selectedRowsData">
             <dxi-column dataField="colaboradorsucursalId" caption="ID" width="50"></dxi-column>
-            <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+            <dxi-column dataField="nombreColaborador" caption="Nombre"></dxi-column>
           </dx-data-grid>
         </div>
         <div class="form-buttons" style="text-align: right; margin-top: 16px;">
@@ -18,7 +18,7 @@
         </div>
       </mat-tab>
     
-      <mat-tab label="Transportistas y Viaje">
+      <mat-tab disabled="true" label="Transportistas y Viaje">
         <div style="margin: 16px 0;">
           <dx-data-grid
             [dataSource]="transportistas"
@@ -43,11 +43,12 @@
             </div>
             <div class="form-field">
               <label>Hora de Viaje</label>
-              <dx-text-box
+              <dx-select-box 
                 formControlName="viajehora"
-                placeholder="Ingrese hora (HH:mm)"
+                [dataSource]="timeOptions"
+                placeholder="Seleccione hora (HH:mm:ss)"
                 [isRequired]="true">
-              </dx-text-box>
+              </dx-select-box>
             </div>
             <div class="form-field">
               <label>Fecha de Viaje</label>

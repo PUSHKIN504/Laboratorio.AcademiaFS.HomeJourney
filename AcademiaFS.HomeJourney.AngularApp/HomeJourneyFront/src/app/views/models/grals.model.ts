@@ -53,6 +53,8 @@ export interface PersonaDto {
     fechacrea: Date;
     usuarioModifica?: number;
     fechamodifica?: Date;
+    latitud?: number;
+    longitud?: number;
   }
   export interface SucursalDto {
     sucursalId: number;
