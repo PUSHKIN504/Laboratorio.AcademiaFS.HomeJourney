@@ -38,7 +38,7 @@ export class ViajesClusteredComponent implements OnInit {
   viajeForm!: FormGroup;
   timeOptions: string[] = [];
   clusteredEmployees: ViajesdetallesCreateClusteredDto[] = [];
-
+  previousSelectedTransportistas: any[] = [];
   @ViewChild(DxDataGridComponent) dataGrid!: DxDataGridComponent;
 
   constructor(
@@ -75,6 +75,51 @@ export class ViajesClusteredComponent implements OnInit {
       monedaId: new FormControl(null)
     });
   }
+  // onTransportistasSelectionChanged(event: any): void {
+  //   const selected = event.selectedRowsData;
+  //   if (selected.length > this.clusteredEmployees.length) {
+  //     Swal.fire({
+  //       title: 'Error',
+  //       text: `Solo se pueden asignar ${this.clusteredEmployees.length} transportistas.`,
+  //       icon: 'error',
+  //       confirmButtonText: 'Cerrar'
+  //     });
+  //     this.selectedTransportistas = [...this.previousSelectedTransportistas];
+  //     return;
+
+  //   } else {
+  //     this.selectedTransportistas = selected;
+  //     this.previousSelectedTransportistas = [...selected];
+  //   }
+  // }
+
+  
+  onTransportistasSelectionChanged(event: any): void {
+    const selected = event.selectedRowsData;
+    const maxAllowed = this.clusteredEmployees.length; 
+    console.log(event)
+    if (selected.length > maxAllowed) {
+      const removed = selected.pop();
+      Swal.fire({
+        title: 'Error',
+        text: `Solo se pueden asignar ${maxAllowed} transportistas. Se ha deseleccionado: ${removed.nombre || ''}`,
+        icon: 'error',
+        confirmButtonText: 'Cerrar'
+      });
+      
+        event.component.option("selectedRowKeys", selected.map((t: any) => t.transportistaId));
+      
+        console.log('refresh')
+        console.dir(selected)
+        this.selectedTransportistas = [...selected];
+      // console.log('transportistaObject'+this.transportistas)
+      // console.log('selectedTransportistas'+JSON.stringify(this.selectedTransportistas))
+
+    } else {
+      this.selectedTransportistas = [...selected];
+    }
+  }
+  
 
   loadCollaborators(): void {
     this.collaboratorService.get()
@@ -151,6 +196,12 @@ export class ViajesClusteredComponent implements OnInit {
         this.clusteredEmployees = response[0];
         console.log(this.clusteredEmployees);
         this.currentTab = 1;
+        Swal.fire({
+          title: 'Información',
+          text: 'Solo se puede seleccionar '+this.clusteredEmployees.length+' transportista(s)',
+          icon: 'warning',
+          confirmButtonText: 'cerrar'
+        });
       })
       .catch((error:any) => {
         let errorMsg = 'Error al agrupar colaboradores';
@@ -221,7 +272,14 @@ export class ViajesClusteredComponent implements OnInit {
           text: 'Viaje(s) creado(s) correctamente',
           icon: 'success',
           confirmButtonText: 'Cerrar'
-        });
+        }).then(() => {
+        window.location.reload();
+
+        })
+
+
+        this.ngOnInit();
+
       })
       .catch((error: any) => {
         let errorMsg = 'Error al crear viajes';

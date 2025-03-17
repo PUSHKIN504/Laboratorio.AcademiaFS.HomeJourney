@@ -13,8 +13,8 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Generals
     [Route("academiafarsiman/sucursales")]
     public class SucursalesController : Controller
     {
-        private readonly string _connectionString = "Data Source=localhost,1433;Initial Catalog=HomeJourney;User ID=sa;Password=TuContraseñaSegura123;Encrypt=True;TrustServerCertificate=True;";
-        //private readonly string _connectionString = "Data Source=192.168.1.33\\academiagfs,49194;Initial Catalog=HomeJourney;User ID=AcademiaDEV;Password=Academia.1;Encrypt=True;TrustServerCertificate=True;";
+        //private readonly string _connectionString = "Data Source=localhost,1433;Initial Catalog=HomeJourney;User ID=sa;Password=TuContraseñaSegura123;Encrypt=True;TrustServerCertificate=True;";
+        private readonly string _connectionString = "Data Source=192.168.1.33\\academiagfs,49194;Initial Catalog=HomeJourney;User ID=AcademiaDEV;Password=Academia.1;Encrypt=True;TrustServerCertificate=True;";
 
         [HttpGet()]
         public async Task<ActionResult<CustomResponse<IEnumerable<Sucursales>>>> GetAllRaw()

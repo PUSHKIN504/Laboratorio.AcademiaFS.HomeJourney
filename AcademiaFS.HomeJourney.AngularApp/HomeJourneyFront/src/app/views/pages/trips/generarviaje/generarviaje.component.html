@@ -11,6 +11,7 @@
             (onSelectionChanged)="selectedCollaborators = $event.selectedRowsData">
             <dxi-column dataField="colaboradorsucursalId" caption="ID" width="50"></dxi-column>
             <dxi-column dataField="nombreColaborador" caption="Nombre"></dxi-column>
+            <dxi-column dataField="distanciaKilometro" caption="Distancia (Km)"></dxi-column>
           </dx-data-grid>
         </div>
         <div class="form-buttons" style="text-align: right; margin-top: 16px;">
@@ -19,13 +20,34 @@
       </mat-tab>
     
       <mat-tab disabled="true" label="Transportistas y Viaje">
-        <div style="margin: 16px 0;">
+        <!-- <div style="margin: 16px 0;">
           <dx-data-grid
             [dataSource]="transportistas"
             [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
             (onSelectionChanged)="selectedTransportistas = $event.selectedRowsData">
             <dxi-column dataField="transportistaId" caption="ID" width="50"></dxi-column>
             <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+          </dx-data-grid>
+        </div> -->
+
+
+        <!-- <div style="margin: 16px 0;">
+          <dx-data-grid
+            [dataSource]="transportistas"
+            [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
+            (onSelectionChanged)="onTransportistasSelectionChanged($event)">
+            <dxi-column dataField="transportistaId" caption="ID" width="50"></dxi-column>
+            <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+          </dx-data-grid>
+        </div> -->
+        <div style="margin: 16px 0;">
+          <dx-data-grid
+            [dataSource]="transportistas"
+            [selection]="{ mode: 'multiple', showCheckBoxesMode: 'always' }"
+            (onSelectionChanged)="onTransportistasSelectionChanged($event)">
+            <dxi-column dataField="transportistaId" caption="ID" width="50"></dxi-column>
+            <dxi-column dataField="nombre" caption="Nombre"></dxi-column>
+            <dxi-column dataField="tarifaporkilometro" caption="Tarifa Por Kilometro (LPS)"></dxi-column>
           </dx-data-grid>
         </div>
         <div style="margin: 16px 0;">

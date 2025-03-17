@@ -66,12 +66,12 @@ export class ConfigurationComponent<TEntity> {
         return;
       }
     
-      const { colaboradorSucursalId } = this._form.value;
-      const promise = colaboradorSucursalId == 0
+      // const { colaboradorSucursalId } = this._form.value;
+      // const promise = colaboradorSucursalId == 0
       // const { colaboradorId } = this._form.value;
       // const promise = colaboradorId == 0
-        ? this._baseService.add(<TEntity>this._form.value)
-        : this._baseService.update(<TEntity>this._form.value);
+      const promise = this._baseService.add(<TEntity>this._form.value)
+        // : this._baseService.update(<TEntity>this._form.value);
     
       promise.then(data => {
         this.get();
