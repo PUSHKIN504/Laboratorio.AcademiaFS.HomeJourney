@@ -36,10 +36,6 @@ namespace AcademiaFS.HomeJourney.WebAPI.Controllers.Auth
                 });
                 //return Unauthorized(new { Message = ex.Message });
             }
-
         }
-
     }
-
-
 }
